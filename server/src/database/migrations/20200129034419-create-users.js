@@ -20,28 +20,13 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      type: {
-        type: Sequelize.CHAR(1),
+      administrator: {
+        type: Sequelize.BOOLEAN,
         allowNull: false,
       },
-      cpf: {
-        type: Sequelize.STRING(14),
-      },
-      cnpj: {
-        type: Sequelize.STRING(18),
-      },
-      rg: {
-        type: Sequelize.STRING(20),
-      },
-      ie: {
-        type: Sequelize.STRING(20),
-      },
-      birthdate: {
-        type: Sequelize.DATEONLY,
+      active: {
+        type: Sequelize.BOOLEAN,
         allowNull: false,
-      },
-      sex: {
-        type: Sequelize.CHAR(1),
       },
       created_at: {
         type: Sequelize.DATE,
