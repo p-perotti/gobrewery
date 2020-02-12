@@ -2,6 +2,18 @@ import * as Yup from 'yup';
 import User from '../models/User';
 
 class UserController {
+  async index(req, res) {
+    const { page = 1 } = req.query;
+
+    const users = await User.findAll({
+      order: ['name'],
+      limit: 20,
+      offset: (page - 1) * 20,
+      attributes: ['id', 'name', 'email', 'administrator', 'active'],
+    });
+    return res.json(users);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       email: Yup.string()
