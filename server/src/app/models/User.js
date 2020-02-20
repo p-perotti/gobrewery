@@ -12,9 +12,7 @@ class User extends Model {
         administrator: Sequelize.BOOLEAN,
         active: Sequelize.BOOLEAN,
       },
-      {
-        sequelize,
-      }
+      { sequelize }
     );
 
     this.addHook('beforeSave', async user => {
