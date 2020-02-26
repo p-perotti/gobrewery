@@ -16,7 +16,7 @@ class PackageController {
 
   async store(req, res) {
     const schema = Yup.object().shape({
-      description: Yup.string(),
+      description: Yup.string().required(),
       active: Yup.boolean().required(),
     });
 
