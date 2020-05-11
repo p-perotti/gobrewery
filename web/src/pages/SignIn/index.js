@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
@@ -22,6 +22,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.auth.loading);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -75,7 +76,7 @@ export default function SignIn() {
             color="primary"
             className={classes.submit}
           >
-            Entrar
+            {loading ? 'Carregando...' : 'Acessar'}
           </Button>
           <Grid container>
             <Grid item xs>
