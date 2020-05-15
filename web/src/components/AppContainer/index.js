@@ -1,18 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import AppMenu from '~/components/AppMenu';
+
+import { signOut } from '~/store/modules/auth/actions';
 
 import useStyles from './styles';
 
 function AppContainer({ children }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenu = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  function handleSignOut() {
+    dispatch(signOut());
+  }
 
   return (
     <div className={classes.root}>
@@ -21,9 +43,35 @@ function AppContainer({ children }) {
           <Typography variant="h6" className={classes.title}>
             GoBrewery
           </Typography>
-          <Button color="inherit">
+          <IconButton
+            aria-label="Usuário"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
             <AccountCircle />
-          </Button>
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={open}
+            onClose={handleClose}
+          >
+            <MenuItem component={Link} to="/profile">
+              Perfil
+            </MenuItem>
+            <MenuItem onClick={handleSignOut}>Sair</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Drawer
