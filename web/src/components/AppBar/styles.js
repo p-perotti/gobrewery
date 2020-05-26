@@ -1,17 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const style = makeStyles((theme) => ({
-  root: {
-    height: '100%',
-    display: 'flex',
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
   },
-  main: {
-    height: '100%',
+  title: {
     flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  content: {
-    height: '100%',
   },
 }));
 
