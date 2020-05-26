@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 
+import AppContainer from '~/components/AppContainer';
+
 import { store } from '~/store';
 
 export default function RouteWrapper({
@@ -19,7 +21,18 @@ export default function RouteWrapper({
     return <Redirect to="/dashboard" />;
   }
 
-  return <Route {...rest} component={Component} />;
+  const AppLayout = signed ? AppContainer : React.Fragment;
+
+  return (
+    <Route
+      {...rest}
+      render={(props) => (
+        <AppLayout>
+          <Component {...props} />
+        </AppLayout>
+      )}
+    />
+  );
 }
 
 RouteWrapper.propTypes = {
