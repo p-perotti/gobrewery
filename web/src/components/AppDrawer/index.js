@@ -18,7 +18,7 @@ import {
   Storefront,
   InsertChart,
   TableChart,
-} from '@material-ui/icons/ExpandLess';
+} from '@material-ui/icons';
 
 import style from './styles';
 

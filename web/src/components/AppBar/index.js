@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
-  AppBarComponent,
+  AppBar as AppBarComponent,
   Toolbar,
   Typography,
   IconButton,
   Menu,
   MenuItem,
-  AccountCircle,
 } from '@material-ui/core';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import { signOut } from '~/store/modules/auth/actions';
 
