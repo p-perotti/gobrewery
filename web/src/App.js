@@ -9,10 +9,13 @@ import { store, persistor } from './store';
 import Routes from './routes';
 import history from './services/history';
 
+import SnackbarProvider from '~/components/SnackbarProvider';
+
 function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
+        <SnackbarProvider />
         <Router history={history}>
           <Routes />
         </Router>
