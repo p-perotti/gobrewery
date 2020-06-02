@@ -8,12 +8,10 @@ function Users() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    async function loadData() {
+    (async function loadData() {
       const response = await api.get('users');
-
       setData(response.data);
-    }
-    loadData();
+    })();
   }, []);
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -13,16 +13,15 @@ import { Formik, Field, Form as FormComponent } from 'formik';
 import { TextField, Switch } from 'formik-material-ui';
 import * as Yup from 'yup';
 
-import { showSnackbar } from '~/store/modules/ui/actions';
-
 import api from '~/services/api';
+import history from '~/services/history';
+
+import { showSnackbar } from '~/store/modules/ui/actions';
 
 import style from './styles';
 
 const Form = () => {
   const classes = style();
-
-  const history = useHistory();
 
   const dispatch = useDispatch();
 
