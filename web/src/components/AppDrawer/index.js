@@ -14,8 +14,6 @@ import {
   ExpandMore,
   Dashboard,
   Storage,
-  People,
-  Storefront,
   InsertChart,
   TableChart,
 } from '@material-ui/icons';
@@ -66,16 +64,15 @@ function AppMenu() {
                 component={Link}
                 to="/users"
               >
-                <ListItemIcon>
-                  <People />
-                </ListItemIcon>
                 <ListItemText primary="Usuários" />
               </ListItem>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <Storefront />
-                </ListItemIcon>
-                <ListItemText primary="Produtos" />
+              <ListItem
+                button
+                className={classes.nested}
+                component={Link}
+                to="/packages"
+              >
+                <ListItemText primary="Embalagens" />
               </ListItem>
             </List>
           </Collapse>
