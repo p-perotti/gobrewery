@@ -23,12 +23,7 @@ export function* signIn({ payload }) {
 
     history.push('/dashboard');
   } catch (err) {
-    yield put(
-      showSnackbar(
-        'error',
-        'Erro ao acessar, verifique os dados e tente novamente.'
-      )
-    );
+    yield put(showSnackbar('warning', 'Verifique os dados e tente novamente.'));
     yield put(signFailure());
   }
 }
