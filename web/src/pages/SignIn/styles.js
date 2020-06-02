@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
-  wrapper: {
+const style = makeStyles((theme) => ({
+  root: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -32,4 +32,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default useStyles;
+export default style;

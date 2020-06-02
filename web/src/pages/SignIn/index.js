@@ -1,28 +1,26 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import Link from '@material-ui/core/Link';
+// import Grid from '@material-ui/core/Grid';
+// import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import useStyles from './styles';
+import style from './styles';
 
 import { signInRequest } from '~/store/modules/auth/actions';
 
 export default function SignIn() {
-  const classes = useStyles();
+  const classes = style();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.auth.loading);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -30,14 +28,11 @@ export default function SignIn() {
   }
 
   return (
-    <Container component="main" maxWidth="sm" className={classes.wrapper}>
+    <Container component="main" maxWidth="sm" className={classes.root}>
       <Paper className={classes.paper}>
         <Typography component="h1" variant="h3" className={classes.title}>
           GoBrewery
         </Typography>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
@@ -65,10 +60,10 @@ export default function SignIn() {
             value={password}
             onInput={(e) => setPassword(e.target.value)}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Lembrar-me"
-          />
+          /> */}
           <Button
             type="submit"
             fullWidth
@@ -76,15 +71,15 @@ export default function SignIn() {
             color="primary"
             className={classes.submit}
           >
-            {loading ? 'Carregando...' : 'Acessar'}
+            Acessar
           </Button>
-          <Grid container>
+          {/* <Grid container>
             <Grid item xs>
               <Link href="/" variant="body2">
                 Esqueceu a senha?
               </Link>
             </Grid>
-          </Grid>
+          </Grid> */}
         </form>
       </Paper>
     </Container>
