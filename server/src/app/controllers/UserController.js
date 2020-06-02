@@ -3,14 +3,14 @@ import User from '../models/User';
 
 class UserController {
   async index(req, res) {
-    const { page = 1 } = req.query;
+    const attributes = ['id', 'name', 'email', 'administrator', 'active'];
 
-    const users = await User.findAll({
-      order: ['name'],
-      limit: 20,
-      offset: (page - 1) * 20,
-      attributes: ['id', 'name', 'email', 'administrator', 'active'],
-    });
+    if (req.params.id) {
+      const user = await User.findByPk(req.params.id, { attributes });
+      return res.json(user);
+    }
+
+    const users = await User.findAll({ attributes });
     return res.json(users);
   }
 
@@ -71,13 +71,13 @@ class UserController {
 
     const { email, oldPassword } = req.body;
 
-    const user = await User.findByPk(req.userId);
+    const user = await User.findByPk(req.params.id);
 
     if (email && email !== user.email) {
       const userExists = await User.findOne({ where: { email } });
 
       if (userExists) {
-        return res.status(400).json({ error: 'User already exists.' });
+        return res.status(400).json({ error: 'E-mail already exists.' });
       }
     }
 
