@@ -3,14 +3,14 @@ import Product from '../models/Product';
 
 class ProductController {
   async index(req, res) {
-    const { page = 1 } = req.query;
+    const attributes = ['id', 'name', 'description', 'active'];
 
-    const products = await Product.findAll({
-      order: ['name'],
-      limit: 20,
-      offset: (page - 1) * 20,
-      attributes: ['id', 'name', 'description', 'active'],
-    });
+    if (req.params.id) {
+      const product = await Product.findByPk(req.params.id, { attributes });
+      return res.json(product);
+    }
+
+    const products = await Product.findAll({ attributes });
     return res.json(products);
   }
 

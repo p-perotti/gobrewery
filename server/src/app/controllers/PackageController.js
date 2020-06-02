@@ -3,14 +3,16 @@ import Package from '../models/Package';
 
 class PackageController {
   async index(req, res) {
-    const { page = 1 } = req.query;
+    const attributes = ['id', 'description', 'active'];
 
-    const packages = await Package.findAll({
-      order: ['description'],
-      limit: 20,
-      offset: (page - 1) * 20,
-      attributes: ['id', 'description'],
-    });
+    if (req.params.id) {
+      const productPackage = await Package.findByPk(req.params.id, {
+        attributes,
+      });
+      return res.json(productPackage);
+    }
+
+    const packages = await Package.findAll({ attributes });
     return res.json(packages);
   }
 
