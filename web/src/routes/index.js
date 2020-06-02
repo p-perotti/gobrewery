@@ -13,6 +13,9 @@ import UserForm from '~/pages/Users/Form';
 import Packages from '~/pages/Packages';
 import PackageForm from '~/pages/Packages/Form';
 
+import Products from '~/pages/Products';
+import ProductForm from '~/pages/Products/Form';
+
 export default function Routes() {
   return (
     <Switch>
@@ -28,6 +31,10 @@ export default function Routes() {
       <Route path="/packages" exact component={Packages} isPrivate />
       <Route path="/packages/new" exact component={PackageForm} isPrivate />
       <Route path="/packages/:id" component={PackageForm} isPrivate />
+
+      <Route path="/products" exact component={Products} isPrivate />
+      <Route path="/products/new" exact component={ProductForm} isPrivate />
+      <Route path="/products/:id" component={ProductForm} isPrivate />
     </Switch>
   );
 }

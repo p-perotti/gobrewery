@@ -74,6 +74,14 @@ function AppMenu() {
               >
                 <ListItemText primary="Embalagens" />
               </ListItem>
+              <ListItem
+                button
+                className={classes.nested}
+                component={Link}
+                to="/products"
+              >
+                <ListItemText primary="Produtos" />
+              </ListItem>
             </List>
           </Collapse>
           <ListItem
