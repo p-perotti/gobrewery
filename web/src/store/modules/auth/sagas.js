@@ -1,6 +1,7 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
 
 import { signInSuccess, signFailure } from './actions';
+import { showSnackbar } from '~/store/modules/ui/actions';
 
 import history from '~/services/history';
 import api from '~/services/api';
@@ -22,6 +23,12 @@ export function* signIn({ payload }) {
 
     history.push('/dashboard');
   } catch (err) {
+    yield put(
+      showSnackbar(
+        'error',
+        'Erro ao acessar, verifique os dados e tente novamente.'
+      )
+    );
     yield put(signFailure());
   }
 }
