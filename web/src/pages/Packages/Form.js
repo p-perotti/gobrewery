@@ -51,6 +51,7 @@ const Form = () => {
 
   const validationSchema = Yup.object().shape({
     description: Yup.string().required('Obrigatório.'),
+    active: Yup.boolean().required(),
   });
 
   const handleSubmit = async (values) => {

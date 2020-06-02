@@ -52,7 +52,7 @@ const Form = () => {
   }, [id]);
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(),
+    name: Yup.string().required('Obrigatório.'),
     description: Yup.string(),
     active: Yup.boolean().required(),
   });

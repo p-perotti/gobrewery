@@ -55,6 +55,8 @@ const Form = () => {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Obrigatório.'),
     email: Yup.string().email('E-mail inválido.').required('Obrigatório.'),
+    administrator: Yup.boolean().required(),
+    active: Yup.boolean().required(),
   });
 
   const handleSubmit = async (values) => {
