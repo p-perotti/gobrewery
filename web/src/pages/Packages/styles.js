@@ -15,6 +15,9 @@ const style = makeStyles((theme) => ({
   button: {
     marginLeft: theme.spacing(1),
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
 }));
 
 export default style;

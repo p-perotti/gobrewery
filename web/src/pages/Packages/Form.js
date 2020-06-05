@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
 import {
   Paper,
   Typography,
   Grid,
   FormControlLabel,
   Button,
+  Backdrop,
+  CircularProgress,
 } from '@material-ui/core';
 import { Formik, Field, Form as FormComponent } from 'formik';
 import { TextField, Switch } from 'formik-material-ui';
 import * as Yup from 'yup';
+
+import Loader from '~/components/Loader';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -19,34 +22,28 @@ import history from '~/services/history';
 import { showSnackbar } from '~/store/modules/ui/actions';
 import style from './styles';
 
-const Form = () => {
+function Form() {
   const classes = style();
 
   const dispatch = useDispatch();
 
   const { id } = useParams();
 
-  const [state, setState] = useState({
-    isLoading: true,
-    isSubmitting: false,
-  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [initialValues, setInitialValues] = useState({
     description: '',
     active: true,
   });
 
-  useEffect(() => {
-    (async function loadInitialValues() {
-      if (id) {
-        const res = await api.get(`packages/${id}`);
-        if (res.data) {
-          const { description, active } = res.data;
-          setInitialValues({ description, active });
-        }
+  const loadValues = useCallback(async () => {
+    if (id) {
+      const res = await api.get(`packages/${id}`);
+      if (res.data) {
+        const { description, active } = res.data;
+        setInitialValues({ description, active });
       }
-      setState({ isLoading: false });
-    })();
+    }
   }, [id]);
 
   const validationSchema = Yup.object().shape({
@@ -55,27 +52,25 @@ const Form = () => {
   });
 
   const handleSubmit = async (values) => {
-    setState({ ...state, isSubmitting: true });
     try {
+      setIsSubmitting(true);
       if (id) {
         await api.put(`packages/${id}`, values);
       } else {
         await api.post('/packages', values);
       }
+      setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));
       history.push('/packages');
     } catch (err) {
-      dispatch(showSnackbar('error', 'Erro ao salvar.'));
+      setIsSubmitting(false);
+      dispatch(showSnackbar('error', 'Não foi possível salvar.'));
     }
-    setState({ ...state, isSubmitting: false });
   };
 
   return (
     <Paper>
-      <Typography variant="h6" className={classes.title}>
-        {id ? 'Editar Embalagem' : 'Nova Embalagem'}
-      </Typography>
-      {!state.isLoading && (
+      <Loader loadFunction={loadValues}>
         <Formik
           enableReinitialize
           initialValues={initialValues}
@@ -83,6 +78,9 @@ const Form = () => {
           onSubmit={handleSubmit}
         >
           <FormComponent>
+            <Typography variant="h6" className={classes.title}>
+              {id ? 'Editar Embalagem' : 'Nova Embalagem'}
+            </Typography>
             <Grid container spacing={1} className={classes.container}>
               <Grid item xs={12} className={classes.field}>
                 <Field
@@ -108,8 +106,8 @@ const Form = () => {
                   type="submit"
                   variant="contained"
                   color="primary"
+                  disabled={isSubmitting}
                   className={classes.button}
-                  disabled={state.isSubmitting}
                 >
                   Salvar
                 </Button>
@@ -126,17 +124,14 @@ const Form = () => {
             </Grid>
           </FormComponent>
         </Formik>
+      </Loader>
+      {isSubmitting && (
+        <Backdrop open className={classes.backdrop}>
+          <CircularProgress color="primary" />
+        </Backdrop>
       )}
     </Paper>
   );
-};
-
-Form.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-};
+}
 
 export default Form;
