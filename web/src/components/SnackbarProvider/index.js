@@ -12,8 +12,12 @@ function SnackbarProvider() {
     (state) => state.ui
   );
 
-  function handleClose() {
+  function handleCloseAction() {
     dispatch(dismissSnackbar());
+  }
+
+  function handleCloseSnackbar(_e, reason) {
+    if (reason === 'timeout') dispatch(dismissSnackbar());
   }
 
   return (
@@ -24,13 +28,13 @@ function SnackbarProvider() {
       }}
       open={snackbarOpen}
       autoHideDuration={5000}
-      onClose={handleClose}
+      onClose={handleCloseSnackbar}
     >
       <Alert
-        onClose={handleClose}
         severity={snackbarSeverity}
         elevation={6}
         variant="filled"
+        onClose={handleCloseAction}
       >
         {snackbarMessage}
       </Alert>
