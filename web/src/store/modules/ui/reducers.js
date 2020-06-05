@@ -17,6 +17,8 @@ export default function auth(state = INITIAL_STATE, action) {
       }
       case '@ui/SNACKBAR_DISMISS': {
         draft.snackbarOpen = false;
+        draft.snackbarSeverity = '';
+        draft.snackbarMessage = '';
         break;
       }
       default:

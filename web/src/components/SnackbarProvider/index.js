@@ -17,7 +17,7 @@ function SnackbarProvider() {
   }
 
   function handleCloseSnackbar(_e, reason) {
-    if (reason === 'timeout') dispatch(dismissSnackbar());
+    if (snackbarOpen && reason === 'timeout') dispatch(dismissSnackbar());
   }
 
   return (
