@@ -2,14 +2,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const style = makeStyles((theme) => ({
   title: {
-    paddingLeft: theme.spacing(3),
-    paddingTop: theme.spacing(2),
+    padding: theme.spacing(2, 3),
   },
   container: {
     padding: theme.spacing(1, 2),
-  },
-  tabs: {
-    padding: 'unset',
   },
   buttons: {
     display: 'flex',
