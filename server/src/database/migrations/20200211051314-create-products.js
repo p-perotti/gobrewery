@@ -14,6 +14,9 @@ module.exports = {
       description: {
         type: Sequelize.STRING,
       },
+      barcode: {
+        type: Sequelize.STRING,
+      },
       active: {
         type: Sequelize.BOOLEAN,
         allowNull: false,

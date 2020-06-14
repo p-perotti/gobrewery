@@ -3,20 +3,21 @@ import Product from '../models/Product';
 
 class ProductController {
   async index(req, res) {
-    const attributes = ['id', 'name', 'description', 'active'];
+    const attributes = ['id', 'name', 'barcode', 'description', 'active'];
 
     if (req.params.id) {
       const product = await Product.findByPk(req.params.id, { attributes });
       return res.json(product);
     }
 
-    const products = await Product.findAll({ attributes });
+    const products = await Product.findAll({ attributes, order: ['name'] });
     return res.json(products);
   }
 
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
+      barcode: Yup.string(),
       description: Yup.string(),
       active: Yup.boolean().required(),
     });
@@ -25,11 +26,14 @@ class ProductController {
       return res.status(400).json({ error: 'Validation fails.' });
     }
 
-    const { id, name, description, active } = await Product.create(req.body);
+    const { id, name, barcode, description, active } = await Product.create(
+      req.body
+    );
 
     return res.json({
       id,
       name,
+      barcode,
       description,
       active,
     });
@@ -38,6 +42,7 @@ class ProductController {
   async update(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string(),
+      barcode: Yup.string(),
       description: Yup.string(),
       active: Yup.boolean(),
     });
@@ -54,11 +59,14 @@ class ProductController {
       });
     }
 
-    const { id, name, description, active } = await product.update(req.body);
+    const { id, name, barcode, description, active } = await product.update(
+      req.body
+    );
 
     return res.json({
       id,
       name,
+      barcode,
       description,
       active,
     });

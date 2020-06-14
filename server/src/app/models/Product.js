@@ -6,6 +6,7 @@ class Product extends Model {
       {
         name: Sequelize.STRING,
         description: Sequelize.STRING,
+        barcode: Sequelize.STRING,
         active: Sequelize.BOOLEAN,
       },
       { sequelize }
