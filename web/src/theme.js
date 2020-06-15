@@ -7,7 +7,8 @@ const theme = createMuiTheme({
       contrastText: '#fff',
     },
     secondary: {
-      main: '#ffeB3b',
+      main: '#f6b23d',
+      contrastText: '#fff',
     },
   },
 });
