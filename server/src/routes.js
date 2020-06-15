@@ -33,6 +33,7 @@ routes.post('/products/:productId/prices', ProductPriceController.store);
 routes.put('/products/:productId/prices/:id', ProductPriceController.update);
 
 routes.get('/coupons', CouponController.index);
+routes.get('/coupons/:id', CouponController.index);
 routes.post('/coupons', CouponController.store);
 routes.put('/coupons/:id', CouponController.update);
 
