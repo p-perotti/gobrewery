@@ -10,7 +10,7 @@ import {
   Backdrop,
   CircularProgress,
 } from '@material-ui/core';
-import { Formik, Field, Form as FormComponent } from 'formik';
+import { Formik, Field as FormikField, Form as FormikForm } from 'formik';
 import { TextField, Switch } from 'formik-material-ui';
 import * as Yup from 'yup';
 
@@ -52,8 +52,6 @@ function Form() {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Obrigatório.'),
     email: Yup.string().email('E-mail inválido.').required('Obrigatório.'),
-    administrator: Yup.boolean().required(),
-    active: Yup.boolean().required(),
   });
 
   const handleSubmit = async (values) => {
@@ -83,13 +81,13 @@ function Form() {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          <FormComponent>
+          <FormikForm>
             <Typography variant="h6" className={classes.title}>
               {id ? 'Editar Usuário' : 'Novo Usuário'}
             </Typography>
             <Grid container spacing={1} className={classes.container}>
               <Grid item xs={6} className={classes.field}>
-                <Field
+                <FormikField
                   component={TextField}
                   type="text"
                   label="Nome"
@@ -100,7 +98,7 @@ function Form() {
                 />
               </Grid>
               <Grid item xs={6} className={classes.field}>
-                <Field
+                <FormikField
                   component={TextField}
                   type="text"
                   label="E-mail"
@@ -113,13 +111,17 @@ function Form() {
               <Grid item xs={12} className={classes.field}>
                 <FormControlLabel
                   control={
-                    <Field component={Switch} name="active" type="checkbox" />
+                    <FormikField
+                      component={Switch}
+                      name="active"
+                      type="checkbox"
+                    />
                   }
                   label="Ativo"
                 />
                 <FormControlLabel
                   control={
-                    <Field
+                    <FormikField
                       component={Switch}
                       name="administrator"
                       type="checkbox"
@@ -149,7 +151,7 @@ function Form() {
                 </Button>
               </Grid>
             </Grid>
-          </FormComponent>
+          </FormikForm>
         </Formik>
       </Loader>
       {isSubmitting && (

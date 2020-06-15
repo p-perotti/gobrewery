@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
-  AppBar as AppBarComponent,
+  AppBar as AppBarMUI,
   Toolbar,
   Typography,
   IconButton,
@@ -35,7 +35,7 @@ function AppBar() {
   }
 
   return (
-    <AppBarComponent position="fixed" className={classes.appBar}>
+    <AppBarMUI position="fixed" className={classes.appBar}>
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
           GoBrewery
@@ -70,7 +70,7 @@ function AppBar() {
           <MenuItem onClick={handleSignOut}>Sair</MenuItem>
         </Menu>
       </Toolbar>
-    </AppBarComponent>
+    </AppBarMUI>
   );
 }
 

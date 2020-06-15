@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import MaterialTable from 'material-table';
+
 import { options, localization } from '~/config/MaterialTableConfig';
 
 import api from '~/services/api';

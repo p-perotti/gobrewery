@@ -8,8 +8,9 @@ import {
   Button,
   Backdrop,
   CircularProgress,
+  TextField as TextFieldMUI,
 } from '@material-ui/core';
-import { Formik, Field, Form as FormComponent } from 'formik';
+import { Formik, Field as FormikField, Form as FormikForm } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { DateTimePicker } from 'formik-material-ui-pickers';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -34,11 +35,15 @@ function Form() {
 
   const { productId, id } = useParams();
 
+  const [productName, setProductName] = useState('');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [initialValues, setInitialValues] = useState({
+    starting_date: new Date(),
+    expiration_date: new Date(),
+    price: '',
     description: '',
-    active: true,
   });
 
   const loadValues = useCallback(async () => {
@@ -64,18 +69,14 @@ function Form() {
       const res = await api.get(`products/${productId}`);
       if (res.data) {
         const { name } = res.data;
-        setInitialValues({
-          productName: name,
-          starting_date: new Date(),
-          expiration_date: new Date(),
-        });
+        setProductName(name);
       }
     }
   }, [productId, id]);
 
   const validationSchema = Yup.object().shape({
-    price: Yup.number().required('Obrigatório.'),
-    description: Yup.string(),
+    price: Yup.string().required('Obrigatório.'),
+    description: Yup.string().required('Obrigatório.'),
   });
 
   const handleSubmit = async (values) => {
@@ -130,95 +131,96 @@ function Form() {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          <FormComponent>
-            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
-              <Grid container spacing={1} className={classes.container}>
-                <Grid item xs={6} className={classes.field}>
-                  <Field
-                    component={TextField}
-                    type="text"
-                    label="Produto"
-                    name="productName"
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    disabled
-                  />
+          {({ values }) => (
+            <FormikForm>
+              <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
+                <Grid container spacing={1} className={classes.container}>
+                  <Grid item xs={6} className={classes.field}>
+                    <TextFieldMUI
+                      label="Produto"
+                      value={productName}
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={2} className={classes.field}>
+                    <FormikField
+                      component={DateTimePicker}
+                      label="Início"
+                      name="starting_date"
+                      inputVariant="outlined"
+                      size="small"
+                      fullWidth
+                      ampm={false}
+                      format="dd/MM/yyyy HH:mm"
+                      maxDate={values.expiration_date}
+                    />
+                  </Grid>
+                  <Grid item xs={2} className={classes.field}>
+                    <FormikField
+                      component={DateTimePicker}
+                      label="Expiração"
+                      name="expiration_date"
+                      inputVariant="outlined"
+                      size="small"
+                      fullWidth
+                      ampm={false}
+                      format="dd/MM/yyyy HH:mm"
+                      minDate={values.starting_date}
+                    />
+                  </Grid>
+                  <Grid item xs={2} className={classes.field}>
+                    <FormikField
+                      component={TextField}
+                      type="text"
+                      label="Preço"
+                      name="price"
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                      InputProps={{
+                        inputComponent: CurrencyFormat,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} className={classes.field}>
+                    <FormikField
+                      component={TextField}
+                      type="text"
+                      label="Descrição"
+                      name="description"
+                      variant="outlined"
+                      size="small"
+                      multiline
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} className={classes.buttons}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      disabled={isSubmitting}
+                      className={classes.button}
+                    >
+                      Salvar
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outlined"
+                      color="primary"
+                      component={Link}
+                      to={`/products/${productId}`}
+                    >
+                      Voltar
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={2} className={classes.field}>
-                  <Field
-                    component={DateTimePicker}
-                    label="Início"
-                    name="starting_date"
-                    inputVariant="outlined"
-                    size="small"
-                    fullWidth
-                    ampm={false}
-                    format="dd/MM/yyyy HH:mm"
-                  />
-                </Grid>
-                <Grid item xs={2} className={classes.field}>
-                  <Field
-                    component={DateTimePicker}
-                    label="Expiração"
-                    name="expiration_date"
-                    inputVariant="outlined"
-                    size="small"
-                    fullWidth
-                    ampm={false}
-                    format="dd/MM/yyyy HH:mm"
-                  />
-                </Grid>
-                <Grid item xs={2} className={classes.field}>
-                  <Field
-                    component={TextField}
-                    type="text"
-                    label="Preço"
-                    name="price"
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    InputProps={{
-                      inputComponent: CurrencyFormat,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} className={classes.field}>
-                  <Field
-                    component={TextField}
-                    type="text"
-                    label="Descrição"
-                    name="description"
-                    variant="outlined"
-                    size="small"
-                    multiline
-                    rowsMax={5}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} className={classes.buttons}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={isSubmitting}
-                    className={classes.button}
-                  >
-                    Salvar
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outlined"
-                    color="primary"
-                    component={Link}
-                    to={`/products/${productId}`}
-                  >
-                    Voltar
-                  </Button>
-                </Grid>
-              </Grid>
-            </MuiPickersUtilsProvider>
-          </FormComponent>
+              </MuiPickersUtilsProvider>
+            </FormikForm>
+          )}
         </Formik>
       </Loader>
       {isSubmitting && (

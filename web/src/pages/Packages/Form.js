@@ -10,7 +10,7 @@ import {
   Backdrop,
   CircularProgress,
 } from '@material-ui/core';
-import { Formik, Field, Form as FormComponent } from 'formik';
+import { Formik, Field as FormikField, Form as FormikForm } from 'formik';
 import { TextField, Switch } from 'formik-material-ui';
 import * as Yup from 'yup';
 
@@ -48,7 +48,6 @@ function Form() {
 
   const validationSchema = Yup.object().shape({
     description: Yup.string().required('Obrigatório.'),
-    active: Yup.boolean().required(),
   });
 
   const handleSubmit = async (values) => {
@@ -77,13 +76,13 @@ function Form() {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          <FormComponent>
+          <FormikForm>
             <Typography variant="h6" className={classes.title}>
               {id ? 'Editar Embalagem' : 'Nova Embalagem'}
             </Typography>
             <Grid container spacing={1} className={classes.container}>
               <Grid item xs={12} className={classes.field}>
-                <Field
+                <FormikField
                   component={TextField}
                   type="text"
                   label="Descrição"
@@ -96,7 +95,11 @@ function Form() {
               <Grid item xs={12} className={classes.field}>
                 <FormControlLabel
                   control={
-                    <Field component={Switch} name="active" type="checkbox" />
+                    <FormikField
+                      component={Switch}
+                      name="active"
+                      type="checkbox"
+                    />
                   }
                   label="Ativo"
                 />
@@ -122,7 +125,7 @@ function Form() {
                 </Button>
               </Grid>
             </Grid>
-          </FormComponent>
+          </FormikForm>
         </Formik>
       </Loader>
       {isSubmitting && (

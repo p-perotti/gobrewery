@@ -13,7 +13,7 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import { TabContext, TabPanel } from '@material-ui/lab';
-import { Formik, Field, Form as FormComponent } from 'formik';
+import { Formik, Field as FormikField, Form as FormikForm } from 'formik';
 import { TextField, Switch } from 'formik-material-ui';
 import * as Yup from 'yup';
 
@@ -40,6 +40,7 @@ function Form() {
 
   const [initialValues, setInitialValues] = useState({
     name: '',
+    barcode: '',
     description: '',
     active: true,
   });
@@ -60,8 +61,6 @@ function Form() {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Obrigatório.'),
-    description: Yup.string(),
-    active: Yup.boolean().required(),
   });
 
   const handleSubmit = async (values) => {
@@ -105,10 +104,10 @@ function Form() {
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
-              <FormComponent>
+              <FormikForm>
                 <Grid container spacing={1} className={classes.container}>
                   <Grid item xs={9} className={classes.field}>
-                    <Field
+                    <FormikField
                       component={TextField}
                       type="text"
                       label="Nome"
@@ -119,7 +118,7 @@ function Form() {
                     />
                   </Grid>
                   <Grid item xs={3} className={classes.field}>
-                    <Field
+                    <FormikField
                       component={TextField}
                       type="text"
                       label="Código de Barras"
@@ -130,7 +129,7 @@ function Form() {
                     />
                   </Grid>
                   <Grid item xs={12} className={classes.field}>
-                    <Field
+                    <FormikField
                       component={TextField}
                       type="text"
                       label="Descrição"
@@ -145,7 +144,7 @@ function Form() {
                   <Grid item xs={12} className={classes.field}>
                     <FormControlLabel
                       control={
-                        <Field
+                        <FormikField
                           component={Switch}
                           name="active"
                           type="checkbox"
@@ -175,7 +174,7 @@ function Form() {
                     </Button>
                   </Grid>
                 </Grid>
-              </FormComponent>
+              </FormikForm>
             </Formik>
           </TabPanel>
           <TabPanel value="2" className={classes.tabs}>

@@ -24,8 +24,8 @@ function AppContainer({ children }) {
   );
 }
 
-export default AppContainer;
-
 AppContainer.propTypes = {
   children: PropTypes.element.isRequired,
 };
+
+export default AppContainer;
