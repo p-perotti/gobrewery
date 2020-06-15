@@ -12,7 +12,10 @@ class PackageController {
       return res.json(productPackage);
     }
 
-    const packages = await Package.findAll({ attributes });
+    const packages = await Package.findAll({
+      attributes,
+      order: ['description'],
+    });
     return res.json(packages);
   }
 
@@ -36,6 +39,14 @@ class PackageController {
   }
 
   async update(req, res) {
+    const productPackage = await Package.findByPk(req.params.id);
+
+    if (!productPackage) {
+      return res.status(404).json({
+        error: 'Package with this given ID was not found.',
+      });
+    }
+
     const schema = Yup.object().shape({
       description: Yup.string(),
       active: Yup.boolean(),
@@ -43,14 +54,6 @@ class PackageController {
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails.' });
-    }
-
-    const productPackage = await Package.findByPk(req.params.id);
-
-    if (!productPackage) {
-      return res.status(404).json({
-        error: 'Package with this given ID was not found.',
-      });
     }
 
     const { id, description, active } = await productPackage.update(req.body);

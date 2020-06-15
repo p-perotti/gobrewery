@@ -49,7 +49,7 @@ class ProductPriceController {
     }
 
     const schema = Yup.object().shape({
-      description: Yup.string(),
+      description: Yup.string().required(),
       starting_date: Yup.date().required(),
       expiration_date: Yup.date().required(),
       price: Yup.number()
@@ -62,17 +62,6 @@ class ProductPriceController {
     }
 
     if (
-      isBefore(
-        parseISO(req.body.expiration_date),
-        parseISO(req.body.starting_date)
-      )
-    ) {
-      return res
-        .status(400)
-        .json({ error: `Expiration date can't be before starting date.` });
-    }
-
-    if (
       isAfter(
         parseISO(req.body.starting_date),
         parseISO(req.body.expiration_date)
@@ -80,7 +69,18 @@ class ProductPriceController {
     ) {
       return res
         .status(400)
-        .json({ error: `Starting date can't be after expiration date.` });
+        .json({ error: `Starting date must be before expiration date.` });
+    }
+
+    if (
+      isBefore(
+        parseISO(req.body.expiration_date),
+        parseISO(req.body.starting_date)
+      )
+    ) {
+      return res
+        .status(400)
+        .json({ error: `Expiration date must be after starting date.` });
     }
 
     const {
@@ -110,7 +110,7 @@ class ProductPriceController {
     }
 
     const schema = Yup.object().shape({
-      description: Yup.string(),
+      description: Yup.string().required(),
       starting_date: Yup.date().required(),
       expiration_date: Yup.date().required(),
       price: Yup.number()
@@ -122,16 +122,26 @@ class ProductPriceController {
       return res.status(400).json({ error: 'Validation fails.' });
     }
 
-    if (isBefore(req.body.expiration_date, req.body.starting_date)) {
+    if (
+      isAfter(
+        parseISO(req.body.starting_date),
+        parseISO(req.body.expiration_date)
+      )
+    ) {
       return res
         .status(400)
-        .json({ error: `Expiration date can't be before starting date.` });
+        .json({ error: `Starting date must be before expiration date.` });
     }
 
-    if (isAfter(req.body.starting_date, req.body.expiration_date)) {
+    if (
+      isBefore(
+        parseISO(req.body.expiration_date),
+        parseISO(req.body.starting_date)
+      )
+    ) {
       return res
         .status(400)
-        .json({ error: `Starting date can't be after expiration date.` });
+        .json({ error: `Expiration date must be after starting date.` });
     }
 
     const {

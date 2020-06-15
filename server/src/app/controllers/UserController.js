@@ -10,7 +10,7 @@ class UserController {
       return res.json(user);
     }
 
-    const users = await User.findAll({ attributes });
+    const users = await User.findAll({ attributes, order: ['name'] });
     return res.json(users);
   }
 
@@ -51,6 +51,14 @@ class UserController {
   }
 
   async update(req, res) {
+    const user = await User.findByPk(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        error: 'User with this given ID was not found.',
+      });
+    }
+
     const schema = Yup.object().shape({
       name: Yup.string(),
       email: Yup.string().email(),
@@ -70,8 +78,6 @@ class UserController {
     }
 
     const { email, oldPassword } = req.body;
-
-    const user = await User.findByPk(req.params.id);
 
     if (email && email !== user.email) {
       const userExists = await User.findOne({ where: { email } });
