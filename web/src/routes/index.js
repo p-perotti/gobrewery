@@ -8,14 +8,17 @@ import Dashboard from '~/pages/Dashboard';
 import Profile from '~/pages/Profile';
 
 import Users from '~/pages/Users';
-import UserForm from '~/pages/Users/Form';
+import UserForm from '~/pages/Users/UserForm';
 
 import Packages from '~/pages/Packages';
-import PackageForm from '~/pages/Packages/Form';
+import PackageForm from '~/pages/Packages/PackageForm';
 
 import Products from '~/pages/Products';
-import ProductForm from '~/pages/Products/Form';
-import ProductPricesForm from '~/pages/Products/Prices/Form';
+import ProductForm from '~/pages/Products/ProductForm';
+import ProductPricesForm from '~/pages/Products/ProductPrices/ProductPriceForm';
+
+import Coupons from '~/pages/Coupons';
+import CouponForm from '~/pages/Coupons/CouponForm';
 
 export default function Routes() {
   return (
@@ -48,6 +51,10 @@ export default function Routes() {
         component={ProductPricesForm}
         isPrivate
       />
+
+      <Route path="/coupons" exact component={Coupons} isPrivate />
+      <Route path="/coupons/new" exact component={CouponForm} isPrivate />
+      <Route path="/coupons/:id" exact component={CouponForm} isPrivate />
     </Switch>
   );
 }

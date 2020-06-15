@@ -14,6 +14,7 @@ import {
   ExpandMore,
   Dashboard,
   Storage,
+  ListAlt,
   InsertChart,
   TableChart,
 } from '@material-ui/icons';
@@ -24,6 +25,7 @@ function AppMenu() {
   const classes = style();
 
   const [registerOpen, setRegisterOpen] = useState(false);
+  const [maintenanceOpen, setMaintenanceOpen] = useState(false);
   const [graphsOpen, setGraphsOpen] = useState(false);
   const [reportsOpen, setReportsOpen] = useState(false);
 
@@ -81,6 +83,33 @@ function AppMenu() {
                 to="/products"
               >
                 <ListItemText primary="Produtos" />
+              </ListItem>
+              <ListItem
+                button
+                className={classes.nested}
+                component={Link}
+                to="/coupons"
+              >
+                <ListItemText primary="Cupons" />
+              </ListItem>
+            </List>
+          </Collapse>
+          <ListItem
+            button
+            onClick={() => {
+              setMaintenanceOpen(!maintenanceOpen);
+            }}
+          >
+            <ListItemIcon>
+              <ListAlt />
+            </ListItemIcon>
+            <ListItemText primary="Manutenções" />
+            {maintenanceOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={maintenanceOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem button className={classes.nested}>
+                <ListItemText primary="Estoque" />
               </ListItem>
             </List>
           </Collapse>

@@ -14,7 +14,7 @@ import { options, localization } from '~/config/MaterialTableConfig';
 import api from '~/services/api';
 import history from '~/services/history';
 
-function Prices() {
+function ProductPrices() {
   const { id } = useParams();
 
   const [data, setData] = useState([]);
@@ -84,4 +84,4 @@ function Prices() {
   );
 }
 
-export default Prices;
+export default ProductPrices;

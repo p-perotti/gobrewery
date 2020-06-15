@@ -10,7 +10,7 @@ import {
   Backdrop,
   CircularProgress,
 } from '@material-ui/core';
-import { Formik, Field as FormikField, Form as FormikForm } from 'formik';
+import { Formik, Field, Form } from 'formik';
 import { TextField, Switch } from 'formik-material-ui';
 import * as Yup from 'yup';
 
@@ -22,7 +22,7 @@ import history from '~/services/history';
 import { showSnackbar } from '~/store/modules/ui/actions';
 import style from './styles';
 
-function Form() {
+function PackageForm() {
   const classes = style();
 
   const dispatch = useDispatch();
@@ -76,13 +76,13 @@ function Form() {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          <FormikForm>
+          <Form>
             <Typography variant="h6" className={classes.title}>
               {id ? 'Editar Embalagem' : 'Nova Embalagem'}
             </Typography>
             <Grid container spacing={1} className={classes.container}>
               <Grid item xs={12} className={classes.field}>
-                <FormikField
+                <Field
                   component={TextField}
                   type="text"
                   label="Descrição"
@@ -95,11 +95,7 @@ function Form() {
               <Grid item xs={12} className={classes.field}>
                 <FormControlLabel
                   control={
-                    <FormikField
-                      component={Switch}
-                      name="active"
-                      type="checkbox"
-                    />
+                    <Field component={Switch} name="active" type="checkbox" />
                   }
                   label="Ativo"
                 />
@@ -125,7 +121,7 @@ function Form() {
                 </Button>
               </Grid>
             </Grid>
-          </FormikForm>
+          </Form>
         </Formik>
       </Loader>
       {isSubmitting && (
@@ -137,4 +133,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default PackageForm;

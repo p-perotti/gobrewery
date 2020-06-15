@@ -10,7 +10,7 @@ import {
   Backdrop,
   CircularProgress,
 } from '@material-ui/core';
-import { Formik, Field as FormikField, Form as FormikForm } from 'formik';
+import { Formik, Field, Form } from 'formik';
 import { TextField, Switch } from 'formik-material-ui';
 import * as Yup from 'yup';
 
@@ -23,7 +23,7 @@ import { showSnackbar } from '~/store/modules/ui/actions';
 
 import style from './styles';
 
-function Form() {
+function UserForm() {
   const classes = style();
 
   const dispatch = useDispatch();
@@ -81,13 +81,13 @@ function Form() {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          <FormikForm>
+          <Form>
             <Typography variant="h6" className={classes.title}>
               {id ? 'Editar Usuário' : 'Novo Usuário'}
             </Typography>
             <Grid container spacing={1} className={classes.container}>
               <Grid item xs={6} className={classes.field}>
-                <FormikField
+                <Field
                   component={TextField}
                   type="text"
                   label="Nome"
@@ -98,7 +98,7 @@ function Form() {
                 />
               </Grid>
               <Grid item xs={6} className={classes.field}>
-                <FormikField
+                <Field
                   component={TextField}
                   type="text"
                   label="E-mail"
@@ -111,17 +111,13 @@ function Form() {
               <Grid item xs={12} className={classes.field}>
                 <FormControlLabel
                   control={
-                    <FormikField
-                      component={Switch}
-                      name="active"
-                      type="checkbox"
-                    />
+                    <Field component={Switch} name="active" type="checkbox" />
                   }
                   label="Ativo"
                 />
                 <FormControlLabel
                   control={
-                    <FormikField
+                    <Field
                       component={Switch}
                       name="administrator"
                       type="checkbox"
@@ -151,7 +147,7 @@ function Form() {
                 </Button>
               </Grid>
             </Grid>
-          </FormikForm>
+          </Form>
         </Formik>
       </Loader>
       {isSubmitting && (
@@ -163,4 +159,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default UserForm;

@@ -5,15 +5,6 @@ import NumberFormat from 'react-number-format';
 function CurrencyFormat(props) {
   const { inputRef, onChange, ...other } = props;
 
-  function currencyFormatter(value) {
-    if (!Number(value)) return '';
-
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value / 100);
-  }
-
   return (
     <NumberFormat
       {...other}
@@ -26,13 +17,11 @@ function CurrencyFormat(props) {
           },
         });
       }}
-      prefix="R$ "
       decimalScale={2}
       decimalSeparator=","
       fixedDecimalScale
       thousandSeparator="."
       isNumericString
-      format={currencyFormatter}
     />
   );
 }

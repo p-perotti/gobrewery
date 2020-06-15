@@ -5,13 +5,16 @@ import {
   Paper,
   Typography,
   Grid,
+  FormControl,
+  InputLabel,
+  InputAdornment,
+  MenuItem,
   Button,
   Backdrop,
   CircularProgress,
-  TextField as TextFieldMUI,
 } from '@material-ui/core';
-import { Formik, Field as FormikField, Form as FormikForm } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { Formik, Field, Form } from 'formik';
+import { TextField, Select } from 'formik-material-ui';
 import { DateTimePicker } from 'formik-material-ui-pickers';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { parseISO, setSeconds, setMilliseconds } from 'date-fns';
@@ -28,55 +31,53 @@ import history from '~/services/history';
 import { showSnackbar } from '~/store/modules/ui/actions';
 import style from './styles';
 
-function Form() {
+function CouponForm() {
   const classes = style();
 
   const dispatch = useDispatch();
 
-  const { productId, id } = useParams();
-
-  const [productName, setProductName] = useState('');
+  const { id } = useParams();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [initialValues, setInitialValues] = useState({
+    name: '',
+    description: '',
     starting_date: new Date(),
     expiration_date: new Date(),
-    price: '',
-    description: '',
+    type: 'P',
+    value: '',
   });
 
   const loadValues = useCallback(async () => {
     if (id) {
-      const res = await api.get(`products/${productId}/prices/${id}`);
+      const res = await api.get(`coupons/${id}`);
       if (res.data) {
         const {
-          product,
+          name,
+          description,
           starting_date,
           expiration_date,
-          price,
-          description,
+          type,
+          value,
         } = res.data;
         setInitialValues({
-          productName: product.name,
+          name,
+          description,
           starting_date: parseISO(starting_date),
           expiration_date: parseISO(expiration_date),
-          price: price * 100,
-          description,
+          type,
+          value,
         });
       }
-    } else {
-      const res = await api.get(`products/${productId}`);
-      if (res.data) {
-        const { name } = res.data;
-        setProductName(name);
-      }
     }
-  }, [productId, id]);
+  }, [id]);
 
   const validationSchema = Yup.object().shape({
-    price: Yup.string().required('Obrigatório.'),
-    description: Yup.string().required('Obrigatório.'),
+    name: Yup.string().required('Obrigatório.'),
+    value: Yup.number()
+      .required('Obrigatório.')
+      .moreThan(0, 'Valor deve ser maior que 0.'),
   });
 
   const handleSubmit = async (values) => {
@@ -93,26 +94,28 @@ function Form() {
         59
       );
 
-      const price = values.price / 100;
-
       if (id) {
-        await api.put(`products/${productId}/prices/${id}`, {
+        await api.put(`coupons/${id}`, {
+          name: values.name,
           starting_date,
           expiration_date,
-          price,
+          type: values.type,
+          value: values.value,
           description: values.description,
         });
       } else {
-        await api.post(`products/${productId}/prices`, {
+        await api.post('/coupons', {
+          name: values.name,
           starting_date,
           expiration_date,
-          price,
+          type: values.type,
+          value: values.value,
           description: values.description,
         });
       }
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));
-      history.push(`/products/${productId}`);
+      history.push('/coupons');
     } catch (err) {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível salvar.'));
@@ -121,9 +124,6 @@ function Form() {
 
   return (
     <Paper>
-      <Typography variant="h6" className={classes.title}>
-        {id ? 'Editar Preço' : 'Novo Preço'}
-      </Typography>
       <Loader loadFunction={loadValues}>
         <Formik
           enableReinitialize
@@ -132,21 +132,25 @@ function Form() {
           onSubmit={handleSubmit}
         >
           {({ values }) => (
-            <FormikForm>
+            <Form>
               <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
+                <Typography variant="h6" className={classes.title}>
+                  {id ? 'Editar Cupom' : 'Novo Cupom'}
+                </Typography>
                 <Grid container spacing={1} className={classes.container}>
-                  <Grid item xs={6} className={classes.field}>
-                    <TextFieldMUI
-                      label="Produto"
-                      value={productName}
+                  <Grid item xs={12} className={classes.field}>
+                    <Field
+                      component={TextField}
+                      type="text"
+                      label="Nome"
+                      name="name"
                       variant="outlined"
                       size="small"
                       fullWidth
-                      disabled
                     />
                   </Grid>
-                  <Grid item xs={2} className={classes.field}>
-                    <FormikField
+                  <Grid item xs={3} className={classes.field}>
+                    <Field
                       component={DateTimePicker}
                       label="Início"
                       name="starting_date"
@@ -155,11 +159,10 @@ function Form() {
                       fullWidth
                       ampm={false}
                       format="dd/MM/yyyy HH:mm"
-                      maxDate={values.expiration_date}
                     />
                   </Grid>
-                  <Grid item xs={2} className={classes.field}>
-                    <FormikField
+                  <Grid item xs={3} className={classes.field}>
+                    <Field
                       component={DateTimePicker}
                       label="Expiração"
                       name="expiration_date"
@@ -168,25 +171,68 @@ function Form() {
                       fullWidth
                       ampm={false}
                       format="dd/MM/yyyy HH:mm"
-                      minDate={values.starting_date}
                     />
                   </Grid>
-                  <Grid item xs={2} className={classes.field}>
-                    <FormikField
-                      component={TextField}
-                      type="text"
-                      label="Preço"
-                      name="price"
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      InputProps={{
-                        inputComponent: CurrencyFormat,
-                      }}
-                    />
+                  <Grid item xs={3} className={classes.field}>
+                    <FormControl variant="outlined" size="small" fullWidth>
+                      <InputLabel htmlFor="type-simple">Tipo</InputLabel>
+                      <Field
+                        component={Select}
+                        label="Tipo"
+                        name="type"
+                        inputProps={{
+                          id: 'type-simple',
+                        }}
+                      >
+                        <MenuItem value="P">Percentual</MenuItem>
+                        <MenuItem value="V">Valor</MenuItem>
+                      </Field>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={3} className={classes.field}>
+                    {values.type === 'P' && (
+                      <Field
+                        component={TextField}
+                        type="number"
+                        label="Valor"
+                        name="value"
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                        inputProps={{
+                          step: 1,
+                          min: 1,
+                          max: 100,
+                          type: 'number',
+                        }}
+                        // eslint-disable-next-line react/jsx-no-duplicate-props
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">%</InputAdornment>
+                          ),
+                        }}
+                      />
+                    )}
+                    {values.type === 'V' && (
+                      <Field
+                        component={TextField}
+                        type="text"
+                        label="Valor"
+                        name="value"
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                        InputProps={{
+                          inputComponent: CurrencyFormat,
+                          startAdornment: (
+                            <InputAdornment position="start">R$</InputAdornment>
+                          ),
+                        }}
+                      />
+                    )}
                   </Grid>
                   <Grid item xs={12} className={classes.field}>
-                    <FormikField
+                    <Field
                       component={TextField}
                       type="text"
                       label="Descrição"
@@ -194,6 +240,7 @@ function Form() {
                       variant="outlined"
                       size="small"
                       multiline
+                      rowsMax={5}
                       fullWidth
                     />
                   </Grid>
@@ -212,14 +259,14 @@ function Form() {
                       variant="outlined"
                       color="primary"
                       component={Link}
-                      to={`/products/${productId}`}
+                      to="/coupons"
                     >
                       Voltar
                     </Button>
                   </Grid>
                 </Grid>
               </MuiPickersUtilsProvider>
-            </FormikForm>
+            </Form>
           )}
         </Formik>
       </Loader>
@@ -232,4 +279,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default CouponForm;

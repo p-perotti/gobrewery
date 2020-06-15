@@ -13,21 +13,22 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import { TabContext, TabPanel } from '@material-ui/lab';
-import { Formik, Field as FormikField, Form as FormikForm } from 'formik';
+import { Formik, Field, Form } from 'formik';
 import { TextField, Switch } from 'formik-material-ui';
 import * as Yup from 'yup';
 
 import Loader from '~/components/Loader';
-import Prices from './Prices';
 
 import api from '~/services/api';
 import history from '~/services/history';
 
 import { showSnackbar } from '~/store/modules/ui/actions';
 
+import ProductsPrices from '../ProductPrices';
+
 import style from './styles';
 
-function Form() {
+function ProductForm() {
   const classes = style();
 
   const dispatch = useDispatch();
@@ -104,10 +105,10 @@ function Form() {
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
-              <FormikForm>
+              <Form>
                 <Grid container spacing={1} className={classes.container}>
                   <Grid item xs={9} className={classes.field}>
-                    <FormikField
+                    <Field
                       component={TextField}
                       type="text"
                       label="Nome"
@@ -118,7 +119,7 @@ function Form() {
                     />
                   </Grid>
                   <Grid item xs={3} className={classes.field}>
-                    <FormikField
+                    <Field
                       component={TextField}
                       type="text"
                       label="Código de Barras"
@@ -129,7 +130,7 @@ function Form() {
                     />
                   </Grid>
                   <Grid item xs={12} className={classes.field}>
-                    <FormikField
+                    <Field
                       component={TextField}
                       type="text"
                       label="Descrição"
@@ -144,7 +145,7 @@ function Form() {
                   <Grid item xs={12} className={classes.field}>
                     <FormControlLabel
                       control={
-                        <FormikField
+                        <Field
                           component={Switch}
                           name="active"
                           type="checkbox"
@@ -174,11 +175,11 @@ function Form() {
                     </Button>
                   </Grid>
                 </Grid>
-              </FormikForm>
+              </Form>
             </Formik>
           </TabPanel>
           <TabPanel value="2" className={classes.tabs}>
-            <Prices />
+            <ProductsPrices />
           </TabPanel>
         </TabContext>
       </Loader>
@@ -191,4 +192,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default ProductForm;
