@@ -36,6 +36,7 @@ class ProductPriceController {
       ],
       include,
     });
+
     return res.json(prices);
   }
 

@@ -11,6 +11,7 @@ class ProductController {
     }
 
     const products = await Product.findAll({ attributes, order: ['name'] });
+
     return res.json(products);
   }
 

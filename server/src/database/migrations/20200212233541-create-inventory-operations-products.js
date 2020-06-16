@@ -1,11 +1,16 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('products_prices', {
+    return queryInterface.createTable('inventory_operations_products', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+      },
+      inventory_operation_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: 'inventory_operations', key: 'id' },
       },
       product_id: {
         type: Sequelize.INTEGER,
@@ -17,19 +22,7 @@ module.exports = {
         allowNull: false,
         references: { model: 'sizes', key: 'id' },
       },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      starting_date: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-      expiration_date: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-      price: {
+      quantity: {
         type: Sequelize.DECIMAL(15, 2),
         allowNull: false,
       },
@@ -45,6 +38,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('products_prices');
+    return queryInterface.dropTable('inventory_operations_products');
   },
 };
