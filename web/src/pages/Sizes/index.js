@@ -9,7 +9,7 @@ import history from '~/services/history';
 
 import { showSnackbar } from '~/store/modules/ui/actions';
 
-function Packages() {
+function Sizes() {
   const dispatch = useDispatch();
 
   const [data, setData] = useState([]);
@@ -18,7 +18,7 @@ function Packages() {
   useEffect(() => {
     (async function loadData() {
       try {
-        const response = await api.get('packages');
+        const response = await api.get('sizes');
         setData(response.data);
       } catch (err) {
         dispatch(showSnackbar('error', 'Não foi possível carregar os dados.'));
@@ -29,7 +29,7 @@ function Packages() {
 
   return (
     <MaterialTable
-      title="Embalagens"
+      title="Tamanhos"
       columns={[
         { title: 'Descrição', field: 'description' },
         {
@@ -47,16 +47,16 @@ function Packages() {
           icon: 'add',
           tooltip: 'Adicionar',
           isFreeAction: true,
-          onClick: (_event) => history.push('/packages/new'),
+          onClick: (_event) => history.push('/sizes/new'),
         },
         {
           icon: 'edit',
           tooltip: 'Editar',
-          onClick: (_event, rowData) => history.push(`/packages/${rowData.id}`),
+          onClick: (_event, rowData) => history.push(`/sizes/${rowData.id}`),
         },
       ]}
     />
   );
 }
 
-export default Packages;
+export default Sizes;

@@ -72,9 +72,9 @@ function AppMenu() {
                 button
                 className={classes.nested}
                 component={Link}
-                to="/packages"
+                to="/sizes"
               >
-                <ListItemText primary="Embalagens" />
+                <ListItemText primary="Tamanhos" />
               </ListItem>
               <ListItem
                 button

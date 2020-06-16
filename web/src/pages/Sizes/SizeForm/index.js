@@ -22,7 +22,7 @@ import history from '~/services/history';
 import { showSnackbar } from '~/store/modules/ui/actions';
 import style from './styles';
 
-function PackageForm() {
+function SizeForm() {
   const classes = style();
 
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ function PackageForm() {
 
   const loadValues = useCallback(async () => {
     if (id) {
-      const res = await api.get(`packages/${id}`);
+      const res = await api.get(`sizes/${id}`);
       if (res.data) {
         const { description, active } = res.data;
         setInitialValues({ description, active });
@@ -54,13 +54,13 @@ function PackageForm() {
     try {
       setIsSubmitting(true);
       if (id) {
-        await api.put(`packages/${id}`, values);
+        await api.put(`sizes/${id}`, values);
       } else {
-        await api.post('/packages', values);
+        await api.post('/sizes', values);
       }
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));
-      history.push('/packages');
+      history.push('/sizes');
     } catch (err) {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível salvar.'));
@@ -78,7 +78,7 @@ function PackageForm() {
         >
           <Form>
             <Typography variant="h6" className={classes.title}>
-              {id ? 'Editar Embalagem' : 'Nova Embalagem'}
+              {id ? 'Editar Tamanho' : 'Novo Tamanho'}
             </Typography>
             <Grid container spacing={1} className={classes.container}>
               <Grid item xs={12} className={classes.field}>
@@ -115,7 +115,7 @@ function PackageForm() {
                   variant="outlined"
                   color="primary"
                   component={Link}
-                  to="/packages"
+                  to="/sizes"
                 >
                   Voltar
                 </Button>
@@ -133,4 +133,4 @@ function PackageForm() {
   );
 }
 
-export default PackageForm;
+export default SizeForm;

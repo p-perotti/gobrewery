@@ -10,8 +10,8 @@ import Profile from '~/pages/Profile';
 import Users from '~/pages/Users';
 import UserForm from '~/pages/Users/UserForm';
 
-import Packages from '~/pages/Packages';
-import PackageForm from '~/pages/Packages/PackageForm';
+import Sizes from '~/pages/Sizes';
+import SizeForm from '~/pages/Sizes/SizeForm';
 
 import Products from '~/pages/Products';
 import ProductForm from '~/pages/Products/ProductForm';
@@ -32,9 +32,9 @@ export default function Routes() {
       <Route path="/users/new" exact component={UserForm} isPrivate />
       <Route path="/users/:id" exact component={UserForm} isPrivate />
 
-      <Route path="/packages" exact component={Packages} isPrivate />
-      <Route path="/packages/new" exact component={PackageForm} isPrivate />
-      <Route path="/packages/:id" exact component={PackageForm} isPrivate />
+      <Route path="/sizes" exact component={Sizes} isPrivate />
+      <Route path="/sizes/new" exact component={SizeForm} isPrivate />
+      <Route path="/sizes/:id" exact component={SizeForm} isPrivate />
 
       <Route path="/products" exact component={Products} isPrivate />
       <Route path="/products/new" exact component={ProductForm} isPrivate />
