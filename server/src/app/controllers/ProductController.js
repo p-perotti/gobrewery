@@ -10,7 +10,10 @@ class ProductController {
       return res.json(product);
     }
 
-    const products = await Product.findAll({ attributes, order: ['name'] });
+    const products = await Product.findAll({
+      attributes,
+      order: ['active', 'name'],
+    });
 
     return res.json(products);
   }

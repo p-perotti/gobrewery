@@ -10,7 +10,7 @@ class UserController {
       return res.json(user);
     }
 
-    const users = await User.findAll({ attributes, order: ['name'] });
+    const users = await User.findAll({ attributes, order: ['active', 'name'] });
     return res.json(users);
   }
 

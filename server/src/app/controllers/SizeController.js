@@ -12,10 +12,16 @@ class SizeController {
       return res.json(productSize);
     }
 
+    const { active } = req.query;
+
+    const where = active ? { active } : {};
+
     const sizes = await Size.findAll({
       attributes,
-      order: ['description'],
+      where,
+      order: ['active', 'description'],
     });
+
     return res.json(sizes);
   }
 
