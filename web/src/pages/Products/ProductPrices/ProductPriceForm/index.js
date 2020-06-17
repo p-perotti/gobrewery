@@ -5,6 +5,9 @@ import {
   Paper,
   Typography,
   Grid,
+  FormControl,
+  InputLabel,
+  MenuItem,
   InputAdornment,
   Button,
   Backdrop,
@@ -12,7 +15,7 @@ import {
   TextField as TextFieldMUI,
 } from '@material-ui/core';
 import { Formik, Field, Form } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { TextField, Select } from 'formik-material-ui';
 import { DateTimePicker } from 'formik-material-ui-pickers';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { parseISO, setSeconds, setMilliseconds } from 'date-fns';
@@ -21,7 +24,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 import * as Yup from 'yup';
 
 import Loader from '~/components/Loader';
-import CurrencyFormat from '~/components/CurrencyFormat';
+import DecimalFormat from '~/components/DecimalFormat';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -41,6 +44,8 @@ function ProductPriceForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [sizes, setSizes] = useState([]);
+
   const [initialValues, setInitialValues] = useState({
     starting_date: new Date(),
     expiration_date: new Date(),
@@ -49,11 +54,19 @@ function ProductPriceForm() {
   });
 
   const loadValues = useCallback(async () => {
+    const resSizes = await api.get('sizes', { query: { active: true } });
+
+    if (resSizes.data) {
+      setSizes(resSizes.data);
+    }
+
     if (id) {
       const res = await api.get(`products/${productId}/prices/${id}`);
+
       if (res.data) {
         const {
           product,
+          size,
           starting_date,
           expiration_date,
           price,
@@ -61,6 +74,7 @@ function ProductPriceForm() {
         } = res.data;
         setProductName(product.name);
         setInitialValues({
+          size: size.id,
           starting_date: parseISO(starting_date),
           expiration_date: parseISO(expiration_date),
           price,
@@ -69,6 +83,7 @@ function ProductPriceForm() {
       }
     } else {
       const res = await api.get(`products/${productId}`);
+
       if (res.data) {
         setProductName(res.data.name);
       }
@@ -96,6 +111,7 @@ function ProductPriceForm() {
 
       if (id) {
         await api.put(`products/${productId}/prices/${id}`, {
+          size_id: values.size,
           starting_date,
           expiration_date,
           price: values.price,
@@ -103,6 +119,7 @@ function ProductPriceForm() {
         });
       } else {
         await api.post(`products/${productId}/prices`, {
+          size_id: values.size,
           starting_date,
           expiration_date,
           price: values.price,
@@ -133,7 +150,7 @@ function ProductPriceForm() {
           <Form>
             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
               <Grid container spacing={1} className={classes.container}>
-                <Grid item xs={6} className={classes.field}>
+                <Grid item xs={12} className={classes.field}>
                   <TextFieldMUI
                     label="Produto"
                     value={productName}
@@ -142,6 +159,24 @@ function ProductPriceForm() {
                     fullWidth
                     disabled
                   />
+                </Grid>
+                <Grid item xs={6} className={classes.field}>
+                  <FormControl variant="outlined" size="small" fullWidth>
+                    <InputLabel htmlFor="size-select">Tamanho</InputLabel>
+                    <Field
+                      component={Select}
+                      label="Tamanho"
+                      name="size"
+                      inputProps={{
+                        id: 'size-select',
+                      }}
+                      disabled={sizes.length === 0}
+                    >
+                      {sizes.map((size) => (
+                        <MenuItem value={size.id}>{size.description}</MenuItem>
+                      ))}
+                    </Field>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={2} className={classes.field}>
                   <Field
@@ -177,7 +212,7 @@ function ProductPriceForm() {
                     size="small"
                     fullWidth
                     InputProps={{
-                      inputComponent: CurrencyFormat,
+                      inputComponent: DecimalFormat,
                       startAdornment: (
                         <InputAdornment position="start">R$</InputAdornment>
                       ),

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 
-function CurrencyFormat(props) {
+function DecimalFormat(props) {
   const { inputRef, onChange, ...other } = props;
 
   return (
@@ -26,10 +26,10 @@ function CurrencyFormat(props) {
   );
 }
 
-CurrencyFormat.propTypes = {
+DecimalFormat.propTypes = {
   inputRef: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
-export default CurrencyFormat;
+export default DecimalFormat;

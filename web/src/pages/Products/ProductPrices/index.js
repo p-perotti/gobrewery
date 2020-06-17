@@ -51,6 +51,7 @@ function ProductPrices() {
       <MaterialTable
         title=""
         columns={[
+          { title: 'Tamanho', field: 'size.description' },
           { title: 'Descrição', field: 'description' },
           { title: 'Início', field: 'startingDateFormatted' },
           { title: 'Expiração', field: 'expirationDateFormatted' },
@@ -61,7 +62,7 @@ function ProductPrices() {
         options={{ ...options, maxBodyHeight: 'calc(100vh - 325px)' }}
         actions={[
           {
-            icon: 'add',
+            icon: 'add_circle',
             tooltip: 'Adicionar',
             isFreeAction: true,
             onClick: (_event) => history.push(`/products/${id}/prices/new`),

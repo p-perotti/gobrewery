@@ -56,9 +56,9 @@ function Loader({ loadFunction, children }) {
   );
 }
 
-export default Loader;
-
 Loader.propTypes = {
   loadFunction: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
 };
+
+export default Loader;

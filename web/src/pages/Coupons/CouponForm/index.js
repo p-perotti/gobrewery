@@ -23,7 +23,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 import * as Yup from 'yup';
 
 import Loader from '~/components/Loader';
-import CurrencyFormat from '~/components/CurrencyFormat';
+import DecimalFormat from '~/components/DecimalFormat';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -75,9 +75,15 @@ function CouponForm() {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Obrigatório.'),
+    type: Yup.string(),
     value: Yup.number()
       .required('Obrigatório.')
-      .moreThan(0, 'Valor deve ser maior que 0.'),
+      .moreThan(0, 'Valor deve ser maior que 0.')
+      .when('type', (type, field) =>
+        type === 'P'
+          ? field.lessThan(100, 'Percentual deve ser menor que 100.')
+          : field
+      ),
   });
 
   const handleSubmit = async (values) => {
@@ -175,13 +181,13 @@ function CouponForm() {
                   </Grid>
                   <Grid item xs={3} className={classes.field}>
                     <FormControl variant="outlined" size="small" fullWidth>
-                      <InputLabel htmlFor="type-simple">Tipo</InputLabel>
+                      <InputLabel htmlFor="type-select">Tipo</InputLabel>
                       <Field
                         component={Select}
                         label="Tipo"
                         name="type"
                         inputProps={{
-                          id: 'type-simple',
+                          id: 'type-select',
                         }}
                       >
                         <MenuItem value="P">Percentual</MenuItem>
@@ -190,46 +196,24 @@ function CouponForm() {
                     </FormControl>
                   </Grid>
                   <Grid item xs={3} className={classes.field}>
-                    {values.type === 'P' && (
-                      <Field
-                        component={TextField}
-                        type="number"
-                        label="Valor"
-                        name="value"
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                        inputProps={{
-                          step: 1,
-                          min: 1,
-                          max: 100,
-                          type: 'number',
-                        }}
-                        // eslint-disable-next-line react/jsx-no-duplicate-props
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">%</InputAdornment>
-                          ),
-                        }}
-                      />
-                    )}
-                    {values.type === 'V' && (
-                      <Field
-                        component={TextField}
-                        type="text"
-                        label="Valor"
-                        name="value"
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                        InputProps={{
-                          inputComponent: CurrencyFormat,
-                          startAdornment: (
-                            <InputAdornment position="start">R$</InputAdornment>
-                          ),
-                        }}
-                      />
-                    )}
+                    <Field
+                      component={TextField}
+                      type="text"
+                      label="Valor"
+                      name="value"
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                      InputProps={{
+                        inputComponent: DecimalFormat,
+                        startAdornment: values.type === 'V' && (
+                          <InputAdornment position="start">R$</InputAdornment>
+                        ),
+                        endAdornment: values.type === 'P' && (
+                          <InputAdornment position="end">%</InputAdornment>
+                        ),
+                      }}
+                    />
                   </Grid>
                   <Grid item xs={12} className={classes.field}>
                     <Field

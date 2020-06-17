@@ -44,7 +44,7 @@ function Sizes() {
       options={options}
       actions={[
         {
-          icon: 'add',
+          icon: 'add_circle',
           tooltip: 'Adicionar',
           isFreeAction: true,
           onClick: (_event) => history.push('/sizes/new'),

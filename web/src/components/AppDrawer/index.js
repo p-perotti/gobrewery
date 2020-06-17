@@ -108,7 +108,12 @@ function AppMenu() {
           </ListItem>
           <Collapse in={maintenanceOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
+              <ListItem
+                button
+                className={classes.nested}
+                component={Link}
+                to="/inventory-operations"
+              >
                 <ListItemText primary="Estoque" />
               </ListItem>
             </List>

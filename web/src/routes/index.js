@@ -20,6 +20,9 @@ import ProductPricesForm from '~/pages/Products/ProductPrices/ProductPriceForm';
 import Coupons from '~/pages/Coupons';
 import CouponForm from '~/pages/Coupons/CouponForm';
 
+import InventoryOperations from '~/pages/InventoryOperations';
+import InventoryOperationForm from '~/pages/InventoryOperations/InventoryOperationForm';
+
 export default function Routes() {
   return (
     <Switch>
@@ -55,6 +58,19 @@ export default function Routes() {
       <Route path="/coupons" exact component={Coupons} isPrivate />
       <Route path="/coupons/new" exact component={CouponForm} isPrivate />
       <Route path="/coupons/:id" exact component={CouponForm} isPrivate />
+
+      <Route
+        path="/inventory-operations"
+        exact
+        component={InventoryOperations}
+        isPrivate
+      />
+      <Route
+        path="/inventory-operation/new"
+        exact
+        component={InventoryOperationForm}
+        isPrivate
+      />
     </Switch>
   );
 }

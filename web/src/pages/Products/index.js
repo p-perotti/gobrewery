@@ -32,7 +32,6 @@ function Products() {
       title="Produtos"
       columns={[
         { title: 'Nome', field: 'name' },
-        { title: 'Descrição', field: 'description' },
         {
           title: 'Ativo',
           field: 'active',
@@ -45,7 +44,7 @@ function Products() {
       options={options}
       actions={[
         {
-          icon: 'add',
+          icon: 'add_circle',
           tooltip: 'Adicionar',
           isFreeAction: true,
           onClick: (_event) => history.push('/products/new'),
