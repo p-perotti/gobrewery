@@ -23,6 +23,10 @@ class ProductPrice extends Model {
       foreignKey: 'product_id',
       as: 'product',
     });
+    this.belongsTo(models.Size, {
+      foreignKey: 'size_id',
+      as: 'size',
+    });
   }
 }
 

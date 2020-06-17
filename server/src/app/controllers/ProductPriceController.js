@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import { parseISO, isBefore, isAfter } from 'date-fns';
 import Product from '../models/Product';
+import Size from '../models/Size';
 import ProductPrice from '../models/ProductPrice';
 
 class ProductPriceController {
@@ -13,11 +14,18 @@ class ProductPriceController {
       'price',
     ];
 
-    const include = {
-      model: Product,
-      as: 'product',
-      attributes: ['id', 'name'],
-    };
+    const include = [
+      {
+        model: Product,
+        as: 'product',
+        attributes: ['id', 'name'],
+      },
+      {
+        model: Size,
+        as: 'size',
+        attributes: ['id', 'description'],
+      },
+    ];
 
     if (req.params.id) {
       const prices = await ProductPrice.findByPk(req.params.id, {
