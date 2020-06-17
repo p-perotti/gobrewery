@@ -41,7 +41,10 @@ class CouponController {
         .oneOf(['P', 'V']),
       value: Yup.number()
         .required()
-        .moreThan(0),
+        .moreThan(0)
+        .when('type', (type, field) =>
+          type === 'P' ? field.lessThan(100) : field
+        ),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -110,7 +113,10 @@ class CouponController {
         .oneOf(['P', 'V']),
       value: Yup.number()
         .required()
-        .moreThan(0),
+        .moreThan(0)
+        .when('type', (type, field) =>
+          type === 'P' ? field.lessThan(100) : field
+        ),
     });
 
     if (!(await schema.isValid(req.body))) {

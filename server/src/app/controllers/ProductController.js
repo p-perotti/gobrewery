@@ -3,16 +3,27 @@ import Product from '../models/Product';
 
 class ProductController {
   async index(req, res) {
-    const attributes = ['id', 'name', 'barcode', 'description', 'active'];
-
     if (req.params.id) {
-      const product = await Product.findByPk(req.params.id, { attributes });
+      const product = await Product.findByPk(req.params.id, {
+        attributes: ['id', 'name', 'barcode', 'description', 'active'],
+      });
       return res.json(product);
     }
 
+    const { active } = req.query;
+
+    const where = active ? { active } : {};
+
+    const attributes = active
+      ? ['id', 'name']
+      : ['id', 'name', 'barcode', 'description', 'active'];
+
+    const order = active ? ['name'] : [['active', 'DESC'], 'name'];
+
     const products = await Product.findAll({
       attributes,
-      order: ['active', 'name'],
+      where,
+      order,
     });
 
     return res.json(products);

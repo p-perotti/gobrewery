@@ -3,11 +3,9 @@ import Size from '../models/Size';
 
 class SizeController {
   async index(req, res) {
-    const attributes = ['id', 'description', 'active'];
-
     if (req.params.id) {
       const productSize = await Size.findByPk(req.params.id, {
-        attributes,
+        attributes: ['active', 'description'],
       });
       return res.json(productSize);
     }
@@ -16,10 +14,18 @@ class SizeController {
 
     const where = active ? { active } : {};
 
+    const attributes = active
+      ? ['id', 'description']
+      : ['id', 'description', 'active'];
+
+    const order = active
+      ? ['description']
+      : [['active', 'DESC'], 'description'];
+
     const sizes = await Size.findAll({
       attributes,
       where,
-      order: ['active', 'description'],
+      order,
     });
 
     return res.json(sizes);
