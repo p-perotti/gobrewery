@@ -2,10 +2,11 @@ import { Router } from 'express';
 import authMiddleware from './app/middlewares/auth';
 import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
-import PackageController from './app/controllers/PackageController';
+import SizeController from './app/controllers/SizeController';
 import ProductController from './app/controllers/ProductController';
 import ProductPriceController from './app/controllers/ProductPriceController';
 import CouponController from './app/controllers/CouponController';
+import InventoryOperationController from './app/controllers/InventoryOperationController';
 
 const routes = Router();
 
@@ -17,10 +18,10 @@ routes.get('/users/:id', UserController.index);
 routes.post('/users', UserController.store);
 routes.put('/users/:id', UserController.update);
 
-routes.get('/packages', PackageController.index);
-routes.get('/packages/:id', PackageController.index);
-routes.post('/packages', PackageController.store);
-routes.put('/packages/:id', PackageController.update);
+routes.get('/sizes', SizeController.index);
+routes.get('/sizes/:id', SizeController.index);
+routes.post('/sizes', SizeController.store);
+routes.put('/sizes/:id', SizeController.update);
 
 routes.get('/products', ProductController.index);
 routes.get('/products/:id', ProductController.index);
@@ -36,5 +37,10 @@ routes.get('/coupons', CouponController.index);
 routes.get('/coupons/:id', CouponController.index);
 routes.post('/coupons', CouponController.store);
 routes.put('/coupons/:id', CouponController.update);
+
+routes.get('/inventory-operations', InventoryOperationController.index);
+routes.get('/inventory-operations/:id', InventoryOperationController.index);
+routes.post('/inventory-operations/', InventoryOperationController.store);
+routes.delete('/inventory-operations/:id', InventoryOperationController.delete);
 
 export default routes;

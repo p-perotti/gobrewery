@@ -7,6 +7,7 @@ class InventoryOperation extends Model {
         type: Sequelize.CHAR(1),
         date: Sequelize.DATE,
         canceled: Sequelize.BOOLEAN,
+        canceled_at: Sequelize.BOOLEAN,
       },
       { sequelize }
     );
@@ -18,6 +19,10 @@ class InventoryOperation extends Model {
     this.belongsTo(models.User, {
       foreignKey: 'user_id',
       as: 'user',
+    });
+    this.belongsTo(models.User, {
+      foreignKey: 'cancelation_user_id',
+      as: 'cancelation_user',
     });
   }
 }
