@@ -7,7 +7,11 @@ import ProductPrice from '../app/models/ProductPrice';
 import Coupon from '../app/models/Coupon';
 import InventoryOperation from '../app/models/InventoryOperation';
 import InventoryOperationProduct from '../app/models/InventoryOperationProduct';
-import ProductInventoryQuantity from '../app/models/ProductInventoryQuantity';
+import ProductInventoryAmount from '../app/models/ProductInventoryAmount';
+import PaymentMethod from '../app/models/PaymentMethod';
+import Customer from '../app/models/Customer';
+import Sale from '../app/models/Sale';
+import SaleProduct from '../app/models/SaleProduct';
 
 import databaseConfig from '../config/database';
 
@@ -19,7 +23,11 @@ const models = [
   Coupon,
   InventoryOperation,
   InventoryOperationProduct,
-  ProductInventoryQuantity,
+  ProductInventoryAmount,
+  PaymentMethod,
+  Customer,
+  Sale,
+  SaleProduct,
 ];
 
 class Database {

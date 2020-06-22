@@ -1,18 +1,15 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('sizes', {
+    return queryInterface.createTable('payment_methods', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      description: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false,
-      },
-      capacity: {
-        type: Sequelize.INTEGER,
       },
       active: {
         type: Sequelize.BOOLEAN,
@@ -30,6 +27,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('sizes');
+    return queryInterface.dropTable('payment_methods');
   },
 };

@@ -7,6 +7,9 @@ import ProductController from './app/controllers/ProductController';
 import ProductPriceController from './app/controllers/ProductPriceController';
 import CouponController from './app/controllers/CouponController';
 import InventoryOperationController from './app/controllers/InventoryOperationController';
+import InventoryOperationsTodaysTotalController from './app/controllers/InventoryOperationsTodaysTotalController';
+import SalesTodaysTotalController from './app/controllers/SalesTodaysTotalController';
+import SalesLastDaysTotalsController from './app/controllers/SalesLastDaysTotalsController';
 
 const routes = Router();
 
@@ -42,5 +45,14 @@ routes.get('/inventory-operations', InventoryOperationController.index);
 routes.get('/inventory-operations/:id', InventoryOperationController.index);
 routes.post('/inventory-operations/', InventoryOperationController.store);
 routes.delete('/inventory-operations/:id', InventoryOperationController.delete);
+
+routes.get(
+  '/inventory-operations-todays-total',
+  InventoryOperationsTodaysTotalController.index
+);
+
+routes.get('/sales-todays-total', SalesTodaysTotalController.index);
+
+routes.get('/sales-last-days-totals', SalesLastDaysTotalsController.index);
 
 export default routes;

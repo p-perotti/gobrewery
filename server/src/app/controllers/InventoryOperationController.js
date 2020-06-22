@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import InventoryOperation from '../models/InventoryOperation';
 import InventoryOperationProduct from '../models/InventoryOperationProduct';
-import ProductInventoryQuantity from '../models/ProductInventoryQuantity';
+import ProductInventoryAmount from '../models/ProductInventoryAmount';
 import User from '../models/User';
 
 import Database from '../../database';
@@ -55,7 +55,7 @@ class InventoryOperationController {
           Yup.object().shape({
             product_id: Yup.number().required(),
             size_id: Yup.number(),
-            quantity: Yup.number()
+            amount: Yup.number()
               .required()
               .moreThan(0),
           })
@@ -91,51 +91,47 @@ class InventoryOperationController {
         { transaction }
       );
 
-      const updateProductInventoryQuantity = async (
+      const updateProductInventoryAmount = async (
         product_id,
         size_id,
-        quantity
+        amount
       ) => {
         const fields = [
           'product_id',
           'size_id',
-          'quantity',
+          'amount',
           'created_at',
           'updated_at',
         ];
 
-        const productInventoryQuantity = await ProductInventoryQuantity.findOne(
-          {
-            where: { product_id, size_id },
-            attributes: ['product_id', 'size_id', 'quantity'],
-          }
-        );
+        const productInventoryAmount = await ProductInventoryAmount.findOne({
+          where: { product_id, size_id },
+          attributes: ['product_id', 'size_id', 'amount'],
+        });
 
-        if (productInventoryQuantity) {
-          let newQuantity;
+        if (productInventoryAmount) {
+          let newAmount;
 
           if (type === 'E') {
-            newQuantity =
-              Number(productInventoryQuantity.quantity) + Number(quantity);
+            newAmount = Number(productInventoryAmount.amount) + Number(amount);
           } else if (type === 'S') {
-            newQuantity =
-              Number(productInventoryQuantity.quantity) - Number(quantity);
+            newAmount = Number(productInventoryAmount.amount) - Number(amount);
           }
 
-          await ProductInventoryQuantity.update(
+          await ProductInventoryAmount.update(
             {
               product_id,
               size_id,
-              quantity: newQuantity,
+              amount: newAmount,
             },
             { fields, where: { product_id, size_id }, transaction }
           );
         } else {
-          await ProductInventoryQuantity.create(
+          await ProductInventoryAmount.create(
             {
               product_id,
               size_id,
-              quantity,
+              amount,
             },
             {
               fields,
@@ -147,18 +143,14 @@ class InventoryOperationController {
 
       const inventory_operation_products = await Promise.all(
         resProduct.map(async p => {
-          await updateProductInventoryQuantity(
-            p.product_id,
-            p.size_id,
-            p.quantity
-          );
+          await updateProductInventoryAmount(p.product_id, p.size_id, p.amount);
 
           return {
             id: p.id,
             inventory_operation_id: p.inventory_operation_id,
             product_id: p.product_id,
             size_id: p.size_id,
-            quantity: p.quantity,
+            amount: p.amount,
           };
         })
       );
@@ -214,46 +206,42 @@ class InventoryOperationController {
       const inventoryOperationsProducts = await InventoryOperationProduct.findAll(
         {
           where: { inventory_operation_id: id },
-          attributes: ['product_id', 'size_id', 'quantity'],
+          attributes: ['product_id', 'size_id', 'amount'],
           transaction,
         }
       );
 
-      const updateProductInventoryQuantity = async (
+      const updateProductInventoryAmount = async (
         product_id,
         size_id,
-        quantity
+        amount
       ) => {
         const fields = [
           'product_id',
           'size_id',
-          'quantity',
+          'amount',
           'created_at',
           'updated_at',
         ];
 
-        const productInventoryQuantity = await ProductInventoryQuantity.findOne(
-          {
-            where: { product_id, size_id },
-            attributes: ['product_id', 'size_id', 'quantity'],
-          }
-        );
+        const productInventoryAmount = await ProductInventoryAmount.findOne({
+          where: { product_id, size_id },
+          attributes: ['product_id', 'size_id', 'amount'],
+        });
 
-        let newQuantity;
+        let newAmount;
 
         if (type === 'S') {
-          newQuantity =
-            Number(productInventoryQuantity.quantity) + Number(quantity);
+          newAmount = Number(productInventoryAmount.amount) + Number(amount);
         } else if (type === 'E') {
-          newQuantity =
-            Number(productInventoryQuantity.quantity) - Number(quantity);
+          newAmount = Number(productInventoryAmount.amount) - Number(amount);
         }
 
-        await ProductInventoryQuantity.update(
+        await ProductInventoryAmount.update(
           {
             product_id,
             size_id,
-            quantity: newQuantity,
+            amount: newAmount,
           },
           { fields, where: { product_id, size_id }, transaction }
         );
@@ -261,18 +249,14 @@ class InventoryOperationController {
 
       const inventory_operation_products = await Promise.all(
         inventoryOperationsProducts.map(async p => {
-          await updateProductInventoryQuantity(
-            p.product_id,
-            p.size_id,
-            p.quantity
-          );
+          await updateProductInventoryAmount(p.product_id, p.size_id, p.amount);
 
           return {
             id: p.id,
             inventory_operation_id: p.inventory_operation_id,
             product_id: p.product_id,
             size_id: p.size_id,
-            quantity: p.quantity,
+            amount: p.amount,
           };
         })
       );

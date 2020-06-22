@@ -6,6 +6,7 @@ class InventoryOperation extends Model {
       {
         type: Sequelize.CHAR(1),
         date: Sequelize.DATE,
+        total_amount: Sequelize.INTEGER,
         canceled: Sequelize.BOOLEAN,
         canceled_at: Sequelize.BOOLEAN,
       },
@@ -23,6 +24,10 @@ class InventoryOperation extends Model {
     this.belongsTo(models.User, {
       foreignKey: 'cancelation_user_id',
       as: 'cancelation_user',
+    });
+    this.belongsTo(models.Sale, {
+      foreignKey: 'sale_id',
+      as: 'sale',
     });
   }
 }

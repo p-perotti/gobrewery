@@ -7,7 +7,7 @@ module.exports = {
       [
         {
           email: 'admin@gobrewery.com',
-          password_hash: bcrypt.hashSync('admin', 8),
+          password_hash: bcrypt.hashSync('gobrewery', 8),
           name: 'Administrator',
           administrator: true,
           active: true,

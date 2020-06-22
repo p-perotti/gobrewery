@@ -17,16 +17,16 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: { model: 'users', key: 'id' },
+      },
+      total_amount: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       canceled: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false,
-      },
-      canceled_at: {
-        type: Sequelize.DATE,
       },
       cancelation_user_id: {
         type: Sequelize.INTEGER,

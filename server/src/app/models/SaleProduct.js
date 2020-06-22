@@ -1,13 +1,15 @@
 import Sequelize, { Model } from 'sequelize';
 
-class ProductInventoryQuantity extends Model {
+class SaleProduct extends Model {
   static init(sequelize) {
     super.init(
       {
-        quantity: Sequelize.DECIMAL(15, 2),
+        amount: Sequelize.INTEGER,
+        unit_price: Sequelize.DECIMAL(15, 2),
+        price: Sequelize.DECIMAL(15, 2),
       },
       {
-        tableName: 'product_inventory_quantity',
+        tableName: 'sales_products',
         sequelize,
       }
     );
@@ -16,6 +18,10 @@ class ProductInventoryQuantity extends Model {
   }
 
   static associate(models) {
+    this.belongsTo(models.Sale, {
+      foreignKey: 'sale_id',
+      as: 'sale',
+    });
     this.belongsTo(models.Product, {
       foreignKey: 'product_id',
       as: 'product',
@@ -27,4 +33,4 @@ class ProductInventoryQuantity extends Model {
   }
 }
 
-export default ProductInventoryQuantity;
+export default SaleProduct;

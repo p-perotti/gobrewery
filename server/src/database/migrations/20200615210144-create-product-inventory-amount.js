@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('product_inventory_quantity', {
+    return queryInterface.createTable('product_inventory_amount', {
       product_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -13,7 +13,7 @@ module.exports = {
         primaryKey: true,
         references: { model: 'sizes', key: 'id' },
       },
-      quantity: {
+      amount: {
         type: Sequelize.DECIMAL(15, 2),
         allowNull: false,
       },
@@ -29,6 +29,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('product_inventory_quantity');
+    return queryInterface.dropTable('product_inventory_amount');
   },
 };
