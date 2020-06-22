@@ -188,6 +188,7 @@ function ProductPriceForm() {
                     fullWidth
                     ampm={false}
                     format="dd/MM/yyyy HH:mm"
+                    cancelLabel="Cancelar"
                   />
                 </Grid>
                 <Grid item xs={2} className={classes.field}>
@@ -200,6 +201,7 @@ function ProductPriceForm() {
                     fullWidth
                     ampm={false}
                     format="dd/MM/yyyy HH:mm"
+                    cancelLabel="Cancelar"
                   />
                 </Grid>
                 <Grid item xs={2} className={classes.field}>

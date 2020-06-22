@@ -73,12 +73,12 @@ function UserForm() {
         },
         {
           title: 'Quantidade',
-          field: 'quantity',
+          field: 'amount',
           // eslint-disable-next-line react/prop-types
           editComponent: ({ value, onChange }) => (
             <TextField
               type="text"
-              name="quantity"
+              name="amount"
               size="small"
               value={value}
               onChange={(e) => onChange(e.target.value)}
@@ -101,8 +101,8 @@ function UserForm() {
       setIsSubmitting(true);
 
       const inventory_operation_products = state.data.map((data) => {
-        const { product_id, size_id, quantity } = data;
-        return { product_id, size_id, quantity };
+        const { product_id, size_id, amount } = data;
+        return { product_id, size_id, amount };
       });
 
       const data = { ...values, inventory_operation_products };
@@ -126,7 +126,7 @@ function UserForm() {
       dispatch(showSnackbar('warning', 'Tamanho deve ser selecionado.'));
       return false;
     }
-    if (values.quantity <= 0) {
+    if (values.amount <= 0) {
       dispatch(
         showSnackbar('warning', 'Quantidade deve ser maior que zero (0).')
       );
@@ -139,7 +139,6 @@ function UserForm() {
     <Paper>
       <Loader loadFunction={loadValues}>
         <Formik
-          enableReinitialize
           initialValues={{
             type: 'E',
             date: new Date(),
@@ -162,6 +161,7 @@ function UserForm() {
                     fullWidth
                     ampm={false}
                     format="dd/MM/yyyy HH:mm"
+                    cancelLabel="Cancelar"
                   />
                 </Grid>
                 <Grid item xs={2} className={classes.table}>

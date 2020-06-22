@@ -7,7 +7,7 @@ import { utcToZonedTime } from 'date-fns-tz';
 
 import Loader from '~/components/Loader';
 
-import { formatPrice } from '~/util/format';
+import { formatCurrency } from '~/util/format';
 
 import { options, localization } from '~/config/MaterialTableConfig';
 
@@ -40,7 +40,7 @@ function ProductPrices() {
           locale: ptBR,
         }
       ),
-      priceFormatted: formatPrice(prices.price),
+      priceFormatted: formatCurrency(prices.price),
     }));
 
     setData(dataFormatted);

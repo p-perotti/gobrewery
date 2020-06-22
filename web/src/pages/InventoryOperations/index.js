@@ -51,19 +51,6 @@ function InventoryOperations() {
             locale: ptBR,
           }
         ),
-        cancelationDateFormatted:
-          inventoryOperation.canceled_at === null
-            ? ''
-            : format(
-                utcToZonedTime(
-                  parseISO(inventoryOperation.canceled_at),
-                  timezone
-                ),
-                'dd/MM/yyyy HH:mm',
-                {
-                  locale: ptBR,
-                }
-              ),
       }));
 
       setData(dataFormatted);
@@ -72,7 +59,6 @@ function InventoryOperations() {
       setIsLoading(false);
       dispatch(showSnackbar('error', 'Não foi possível carregar os dados.'));
     }
-    setIsLoading(false);
   }, [dispatch]);
 
   function handleRefresh() {
@@ -113,6 +99,7 @@ function InventoryOperations() {
       <MaterialTable
         title="Movimentações de Estoque"
         columns={[
+          { title: 'Data de Movimentação', field: 'dateFormatted' },
           {
             title: 'Tipo de Movimentação',
             field: 'type',
@@ -127,14 +114,12 @@ function InventoryOperations() {
               }
             },
           },
-          { title: 'Data de Movimentação', field: 'dateFormatted' },
           { title: 'Usuário', field: 'user.name' },
           {
             title: 'Cancelada',
             field: 'canceled',
             render: (rowData) => (rowData.canceled ? 'Sim' : 'Não'),
           },
-          { title: 'Data de Cancelamento', field: 'cancelationDateFormatted' },
           { title: 'Usuário de Cancelamento', field: 'cancelation_user.name' },
         ]}
         data={data}

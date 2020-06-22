@@ -165,6 +165,7 @@ function CouponForm() {
                       fullWidth
                       ampm={false}
                       format="dd/MM/yyyy HH:mm"
+                      cancelLabel="Cancelar"
                     />
                   </Grid>
                   <Grid item xs={3} className={classes.field}>
@@ -177,6 +178,7 @@ function CouponForm() {
                       fullWidth
                       ampm={false}
                       format="dd/MM/yyyy HH:mm"
+                      cancelLabel="Cancelar"
                     />
                   </Grid>
                   <Grid item xs={3} className={classes.field}>

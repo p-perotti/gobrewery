@@ -5,7 +5,7 @@ import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { formatPrice, formatPercentage } from '~/util/format';
+import { formatCurrency, formatPercentage } from '~/util/format';
 
 import { options, localization } from '~/config/MaterialTableConfig';
 
@@ -43,7 +43,7 @@ function Coupons() {
               locale: ptBR,
             }
           ),
-          valueFormatted: formatPrice(coupons.value),
+          valueFormatted: formatCurrency(coupons.value),
         }));
 
         setData(dataFormatted);
@@ -83,7 +83,7 @@ function Coupons() {
               case 'P':
                 return formatPercentage(rowData.value);
               case 'V':
-                return formatPrice(rowData.value);
+                return formatCurrency(rowData.value);
               default:
                 return '';
             }

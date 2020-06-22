@@ -9,7 +9,7 @@ const style = makeStyles((theme) => ({
     padding: theme.spacing(1, 2),
   },
   tabs: {
-    padding: 'unset',
+    padding: 0,
   },
   buttons: {
     display: 'flex',
