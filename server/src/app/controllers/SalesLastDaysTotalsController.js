@@ -32,6 +32,16 @@ class SalesLastDaysTotalsController {
           'date',
         ],
       ],
+      order: [
+        [
+          [
+            Database.connection.fn(
+              'date',
+              Database.connection.col('created_at')
+            ),
+          ],
+        ],
+      ],
     });
 
     return res.json(totals);

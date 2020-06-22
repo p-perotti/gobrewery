@@ -21,7 +21,7 @@ class InventoryOperationsTodaysTotalController {
         .json({ error: 'Type of inventory operation must be one of (E, S).' });
     }
 
-    const total = await InventoryOperation.findAll({
+    const total = await InventoryOperation.findOne({
       attributes: [
         [
           Database.connection.fn(

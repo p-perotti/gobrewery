@@ -7,7 +7,7 @@ import Database from '../../database';
 
 class SalesTodaysTotalController {
   async index(req, res) {
-    const total = await Sale.findAll({
+    const total = await Sale.findOne({
       attributes: [
         [
           Database.connection.fn('sum', Database.connection.col('net_total')),

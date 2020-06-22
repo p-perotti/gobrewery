@@ -99,7 +99,7 @@ module.exports = {
           type: 'S',
           date: datefns.subDays(new Date(), 2),
           sale_id: 11,
-          total_amount: 3,
+          total_amount: 10,
           canceled: false,
           created_at: datefns.subDays(new Date(), 2),
           updated_at: datefns.subDays(new Date(), 2),

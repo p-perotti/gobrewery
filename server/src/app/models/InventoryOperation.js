@@ -8,7 +8,6 @@ class InventoryOperation extends Model {
         date: Sequelize.DATE,
         total_amount: Sequelize.INTEGER,
         canceled: Sequelize.BOOLEAN,
-        canceled_at: Sequelize.BOOLEAN,
       },
       { sequelize }
     );

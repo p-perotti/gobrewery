@@ -108,9 +108,9 @@ module.exports = {
         {
           customer_id: 2,
           status: 'F',
-          total_amount: 3,
-          gross_total: 9.57,
-          net_total: 9.57,
+          total_amount: 10,
+          gross_total: 99.0,
+          net_total: 99.0,
           payment_method_id: 2,
           created_at: datefns.subDays(new Date(), 2),
           updated_at: datefns.subDays(new Date(), 2),

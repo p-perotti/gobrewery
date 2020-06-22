@@ -10,6 +10,8 @@ import InventoryOperationController from './app/controllers/InventoryOperationCo
 import InventoryOperationsTodaysTotalController from './app/controllers/InventoryOperationsTodaysTotalController';
 import SalesTodaysTotalController from './app/controllers/SalesTodaysTotalController';
 import SalesLastDaysTotalsController from './app/controllers/SalesLastDaysTotalsController';
+import SalesLatestController from './app/controllers/SalesLatestController';
+import ProductsBestSellersController from './app/controllers/ProductsBestSellersController';
 
 const routes = Router();
 
@@ -54,5 +56,9 @@ routes.get(
 routes.get('/sales-todays-total', SalesTodaysTotalController.index);
 
 routes.get('/sales-last-days-totals', SalesLastDaysTotalsController.index);
+
+routes.get('/sales-latest', SalesLatestController.index);
+
+routes.get('/products-best-sellers', ProductsBestSellersController.index);
 
 export default routes;

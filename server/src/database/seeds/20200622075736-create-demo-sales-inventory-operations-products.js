@@ -127,9 +127,9 @@ module.exports = {
         },
         {
           inventory_operation_id: 15,
-          product_id: 5,
+          product_id: 6,
           size_id: 7,
-          amount: 3,
+          amount: 10,
           created_at: datefns.subDays(new Date(), 2),
           updated_at: datefns.subDays(new Date(), 2),
         },
