@@ -12,7 +12,7 @@ module.exports = {
         allowNull: false,
       },
       capacity: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.NUMERIC(7, 3),
       },
       active: {
         type: Sequelize.BOOLEAN,

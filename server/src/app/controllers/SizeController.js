@@ -16,7 +16,7 @@ class SizeController {
 
     const attributes = active
       ? ['id', 'description']
-      : ['id', 'description', 'active'];
+      : ['id', 'description', 'capacity', 'active'];
 
     const order = active
       ? ['description']
@@ -34,6 +34,7 @@ class SizeController {
   async store(req, res) {
     const schema = Yup.object().shape({
       description: Yup.string().required(),
+      capacity: Yup.number().moreThan(0),
       active: Yup.boolean().required(),
     });
 
@@ -41,11 +42,12 @@ class SizeController {
       return res.status(400).json({ error: 'Validation fails.' });
     }
 
-    const { id, description, active } = await Size.create(req.body);
+    const { id, description, capacity, active } = await Size.create(req.body);
 
     return res.json({
       id,
       description,
+      capacity,
       active,
     });
   }
@@ -60,7 +62,8 @@ class SizeController {
     }
 
     const schema = Yup.object().shape({
-      description: Yup.string(),
+      description: Yup.string().required(),
+      capacity: Yup.number().moreThan(0),
       active: Yup.boolean(),
     });
 
@@ -68,11 +71,14 @@ class SizeController {
       return res.status(400).json({ error: 'Validation fails.' });
     }
 
-    const { id, description, active } = await productSize.update(req.body);
+    const { id, description, capacity, active } = await productSize.update(
+      req.body
+    );
 
     return res.json({
       id,
       description,
+      capacity,
       active,
     });
   }

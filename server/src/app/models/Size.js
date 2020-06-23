@@ -5,6 +5,7 @@ class Size extends Model {
     super.init(
       {
         description: Sequelize.STRING,
+        capacity: Sequelize.NUMERIC(7, 3),
         active: Sequelize.BOOLEAN,
       },
       { sequelize }
