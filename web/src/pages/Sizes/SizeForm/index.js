@@ -9,12 +9,14 @@ import {
   Button,
   Backdrop,
   CircularProgress,
+  InputAdornment,
 } from '@material-ui/core';
 import { Formik, Field, Form } from 'formik';
 import { TextField, Switch } from 'formik-material-ui';
 import * as Yup from 'yup';
 
 import Loader from '~/components/Loader';
+import NumberFormatInput from '~/components/NumberFormatInput';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -33,6 +35,7 @@ function SizeForm() {
 
   const [initialValues, setInitialValues] = useState({
     description: '',
+    capacity: '',
     active: true,
   });
 
@@ -40,8 +43,8 @@ function SizeForm() {
     if (id) {
       const res = await api.get(`sizes/${id}`);
       if (res.data) {
-        const { description, active } = res.data;
-        setInitialValues({ description, active });
+        const { description, capacity, active } = res.data;
+        setInitialValues({ description, capacity, active });
       }
     }
   }, [id]);
@@ -81,7 +84,7 @@ function SizeForm() {
               {id ? 'Editar Tamanho' : 'Novo Tamanho'}
             </Typography>
             <Grid container spacing={1} className={classes.container}>
-              <Grid item xs={12} className={classes.field}>
+              <Grid item xs={10} className={classes.field}>
                 <Field
                   component={TextField}
                   type="text"
@@ -90,6 +93,24 @@ function SizeForm() {
                   variant="outlined"
                   size="small"
                   fullWidth
+                />
+              </Grid>
+              <Grid item xs={2} className={classes.field}>
+                <Field
+                  component={TextField}
+                  type="text"
+                  label="Capacidade"
+                  name="capacity"
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  InputProps={{
+                    inputComponent: NumberFormatInput,
+                    inputProps: { decimalScale: 3 },
+                    endAdornment: (
+                      <InputAdornment position="end">L</InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
               <Grid item xs={12} className={classes.field}>

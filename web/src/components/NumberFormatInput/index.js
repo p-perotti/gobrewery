@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 
-function DecimalFormat(props) {
-  const { inputRef, onChange, ...other } = props;
+function NumberFormatInput(props) {
+  const { inputRef, decimalScale, onChange, ...other } = props;
 
   return (
     <NumberFormat
@@ -17,7 +17,7 @@ function DecimalFormat(props) {
           },
         });
       }}
-      decimalScale={2}
+      decimalScale={decimalScale}
       decimalSeparator=","
       fixedDecimalScale
       thousandSeparator="."
@@ -26,10 +26,15 @@ function DecimalFormat(props) {
   );
 }
 
-DecimalFormat.propTypes = {
+NumberFormatInput.propTypes = {
   inputRef: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
+  decimalScale: PropTypes.number,
   onChange: PropTypes.func.isRequired,
 };
 
-export default DecimalFormat;
+NumberFormatInput.defaultProps = {
+  decimalScale: 2,
+};
+
+export default NumberFormatInput;

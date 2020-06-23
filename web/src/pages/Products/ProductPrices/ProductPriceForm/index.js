@@ -24,7 +24,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 import * as Yup from 'yup';
 
 import Loader from '~/components/Loader';
-import DecimalFormat from '~/components/DecimalFormat';
+import NumberFormatInput from '~/components/NumberFormatInput';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -214,7 +214,7 @@ function ProductPriceForm() {
                     size="small"
                     fullWidth
                     InputProps={{
-                      inputComponent: DecimalFormat,
+                      inputComponent: NumberFormatInput,
                       startAdornment: (
                         <InputAdornment position="start">R$</InputAdornment>
                       ),

@@ -25,7 +25,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 import { localization } from '~/config/MaterialTableConfig';
 
 import Loader from '~/components/Loader';
-import DecimalFormat from '~/components/DecimalFormat';
+import NumberFormatInput from '~/components/NumberFormatInput';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -83,10 +83,11 @@ function UserForm() {
               value={value}
               onChange={(e) => onChange(e.target.value)}
               InputProps={{
+                inputComponent: NumberFormatInput,
+                inputProps: { decimalScale: 0 },
                 style: {
                   fontSize: 13,
                 },
-                inputComponent: DecimalFormat,
               }}
             />
           ),
