@@ -78,6 +78,21 @@ function SalesByPeriod() {
       if (response.data) {
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+        const formatStatus = (status) => {
+          switch (status) {
+            case 'P':
+              return 'Processamento';
+            case 'E':
+              return 'Enviado';
+            case 'F':
+              return 'Finalizado';
+            case 'C':
+              return 'Cancelado';
+            default:
+              return '';
+          }
+        };
+
         const data = response.data.map((r) => ({
           date: format(
             utcToZonedTime(parseISO(r.date), timezone),
@@ -86,20 +101,7 @@ function SalesByPeriod() {
               locale: ptBR,
             }
           ),
-          status: () => {
-            switch (r.status) {
-              case 'P':
-                return 'Processamento';
-              case 'E':
-                return 'Enviado';
-              case 'F':
-                return 'Finalizado';
-              case 'C':
-                return 'Cancelado';
-              default:
-                return '';
-            }
-          },
+          status: formatStatus(r.status),
           customer: r.customer.name,
           total_amount: r.total_amount,
           gross_total: formatCurrency(r.gross_total),
