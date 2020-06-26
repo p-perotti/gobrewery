@@ -8,7 +8,7 @@ import Size from '../models/Size';
 
 import Database from '../../database';
 
-class ProductsBestSellersController {
+class BestSellersByAmountController {
   async index(req, res) {
     const products = await SaleProduct.findAll({
       include: [
@@ -56,4 +56,4 @@ class ProductsBestSellersController {
   }
 }
 
-export default new ProductsBestSellersController();
+export default new BestSellersByAmountController();

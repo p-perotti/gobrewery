@@ -10,7 +10,7 @@ class SalesLastDaysTotalsController {
     const totals = await Sale.findAll({
       attributes: [
         [
-          Database.connection.fn('date', Database.connection.col('created_at')),
+          Database.connection.fn('date', Database.connection.col('date')),
           'date',
         ],
         [
@@ -19,7 +19,7 @@ class SalesLastDaysTotalsController {
         ],
       ],
       where: {
-        created_at: {
+        date: {
           [Op.gte]: startOfDay(subDays(new Date(), 7)),
         },
         status: {
@@ -28,19 +28,12 @@ class SalesLastDaysTotalsController {
       },
       group: [
         [
-          Database.connection.fn('date', Database.connection.col('created_at')),
+          Database.connection.fn('date', Database.connection.col('date')),
           'date',
         ],
       ],
       order: [
-        [
-          [
-            Database.connection.fn(
-              'date',
-              Database.connection.col('created_at')
-            ),
-          ],
-        ],
+        [[Database.connection.fn('date', Database.connection.col('date'))]],
       ],
     });
 

@@ -78,7 +78,7 @@ class ProductPriceController {
     ) {
       return res
         .status(400)
-        .json({ error: `Starting date must be before expiration date.` });
+        .json({ error: 'Starting date must be before expiration date.' });
     }
 
     if (
@@ -89,7 +89,7 @@ class ProductPriceController {
     ) {
       return res
         .status(400)
-        .json({ error: `Expiration date must be after starting date.` });
+        .json({ error: 'Expiration date must be after starting date.' });
     }
 
     const {
@@ -139,7 +139,7 @@ class ProductPriceController {
     ) {
       return res
         .status(400)
-        .json({ error: `Starting date must be before expiration date.` });
+        .json({ error: 'Starting date must be before expiration date.' });
     }
 
     if (
@@ -150,7 +150,7 @@ class ProductPriceController {
     ) {
       return res
         .status(400)
-        .json({ error: `Expiration date must be after starting date.` });
+        .json({ error: 'Expiration date must be after starting date.' });
     }
 
     const {

@@ -19,13 +19,13 @@ class SalesLatestController {
           attributes: ['id', 'name'],
         },
       ],
-      attributes: ['created_at', 'status', 'total_amount', 'net_total'],
+      attributes: ['date', 'status', 'total_amount', 'net_total'],
       where: {
         status: {
           [Op.not]: 'C',
         },
       },
-      order: [['created_at', 'DESC']],
+      order: [['date', 'DESC']],
       limit: 5,
     });
 

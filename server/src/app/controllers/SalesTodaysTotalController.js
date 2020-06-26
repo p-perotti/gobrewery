@@ -15,7 +15,7 @@ class SalesTodaysTotalController {
         ],
       ],
       where: {
-        created_at: {
+        date: {
           [Op.gte]: startOfDay(new Date()),
         },
         status: {
