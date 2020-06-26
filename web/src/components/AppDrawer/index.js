@@ -160,7 +160,7 @@ function AppMenu() {
                 button
                 className={classes.nested}
                 component={Link}
-                to="/reports/sales"
+                to="/reports/sales-by-period"
               >
                 <ListItemText primary="Vendas" />
               </ListItem>
