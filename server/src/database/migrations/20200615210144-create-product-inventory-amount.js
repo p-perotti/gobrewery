@@ -14,7 +14,7 @@ module.exports = {
         references: { model: 'sizes', key: 'id' },
       },
       amount: {
-        type: Sequelize.DECIMAL(15, 2),
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       created_at: {

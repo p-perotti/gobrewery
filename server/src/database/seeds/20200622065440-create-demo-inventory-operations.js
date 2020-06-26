@@ -9,7 +9,7 @@ module.exports = {
           type: 'E',
           date: datefns.subDays(new Date(), 6),
           user_id: 1,
-          total_amount: 180,
+          total_amount: 370,
           created_at: datefns.subDays(new Date(), 6),
           updated_at: datefns.subDays(new Date(), 6),
         },
