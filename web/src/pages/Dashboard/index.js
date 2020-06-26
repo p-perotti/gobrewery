@@ -95,7 +95,7 @@ function Dashboard() {
     })();
 
     (async () => {
-      const response = await api.get('products-best-sellers');
+      const response = await api.get('best-sellers-by-amount');
 
       if (response.data) {
         setBestSellers(response.data);

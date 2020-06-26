@@ -28,7 +28,7 @@ function BestSellersByLiter() {
   const generateChart = useCallback(
     async (startingDate, endingDate) => {
       try {
-        const res = await api.get('products-best-sellers-by-liter', {
+        const res = await api.get('best-sellers-by-liter', {
           params: { startingDate, endingDate },
         });
 
