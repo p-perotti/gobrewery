@@ -144,7 +144,7 @@ function CouponForm() {
                   {id ? 'Editar Cupom' : 'Novo Cupom'}
                 </Typography>
                 <Grid container spacing={1} className={classes.container}>
-                  <Grid item xs={12} className={classes.field}>
+                  <Grid item xs={12}>
                     <Field
                       component={TextField}
                       type="text"
@@ -155,7 +155,7 @@ function CouponForm() {
                       fullWidth
                     />
                   </Grid>
-                  <Grid item xs={3} className={classes.field}>
+                  <Grid item xs={3}>
                     <Field
                       component={DateTimePicker}
                       label="Início"
@@ -168,7 +168,7 @@ function CouponForm() {
                       cancelLabel="Cancelar"
                     />
                   </Grid>
-                  <Grid item xs={3} className={classes.field}>
+                  <Grid item xs={3}>
                     <Field
                       component={DateTimePicker}
                       label="Expiração"
@@ -181,7 +181,7 @@ function CouponForm() {
                       cancelLabel="Cancelar"
                     />
                   </Grid>
-                  <Grid item xs={3} className={classes.field}>
+                  <Grid item xs={3}>
                     <FormControl variant="outlined" size="small" fullWidth>
                       <InputLabel htmlFor="type-select">Tipo</InputLabel>
                       <Field
@@ -197,7 +197,7 @@ function CouponForm() {
                       </Field>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={3} className={classes.field}>
+                  <Grid item xs={3}>
                     <Field
                       component={TextField}
                       type="text"
@@ -217,7 +217,7 @@ function CouponForm() {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12} className={classes.field}>
+                  <Grid item xs={12}>
                     <Field
                       component={TextField}
                       type="text"

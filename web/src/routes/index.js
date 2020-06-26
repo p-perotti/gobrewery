@@ -23,6 +23,10 @@ import CouponForm from '~/pages/Coupons/CouponForm';
 import InventoryOperations from '~/pages/InventoryOperations';
 import InventoryOperationForm from '~/pages/InventoryOperations/InventoryOperationForm';
 
+import BestSellersByLiter from '~/pages/Charts/BestSellersByLiter';
+
+import SalesByPeriod from '~/pages/Reports/SalesByPeriod';
+
 export default function Routes() {
   return (
     <Switch>
@@ -69,6 +73,20 @@ export default function Routes() {
         path="/inventory-operation/new"
         exact
         component={InventoryOperationForm}
+        isPrivate
+      />
+
+      <Route
+        path="/charts/best-sellers-by-liter"
+        exact
+        component={BestSellersByLiter}
+        isPrivate
+      />
+
+      <Route
+        path="/reports/sales-by-period"
+        exact
+        component={SalesByPeriod}
         isPrivate
       />
     </Switch>

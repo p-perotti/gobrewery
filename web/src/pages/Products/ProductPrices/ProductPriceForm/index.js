@@ -150,7 +150,7 @@ function ProductPriceForm() {
           <Form>
             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
               <Grid container spacing={1} className={classes.container}>
-                <Grid item xs={12} className={classes.field}>
+                <Grid item xs={12}>
                   <TextFieldMUI
                     label="Produto"
                     value={productName}
@@ -160,7 +160,7 @@ function ProductPriceForm() {
                     disabled
                   />
                 </Grid>
-                <Grid item xs={6} className={classes.field}>
+                <Grid item xs={6}>
                   <FormControl variant="outlined" size="small" fullWidth>
                     <InputLabel htmlFor="size-select">Tamanho</InputLabel>
                     <Field
@@ -178,7 +178,7 @@ function ProductPriceForm() {
                     </Field>
                   </FormControl>
                 </Grid>
-                <Grid item xs={2} className={classes.field}>
+                <Grid item xs={2}>
                   <Field
                     component={DateTimePicker}
                     label="Início"
@@ -191,7 +191,7 @@ function ProductPriceForm() {
                     cancelLabel="Cancelar"
                   />
                 </Grid>
-                <Grid item xs={2} className={classes.field}>
+                <Grid item xs={2}>
                   <Field
                     component={DateTimePicker}
                     label="Expiração"
@@ -204,7 +204,7 @@ function ProductPriceForm() {
                     cancelLabel="Cancelar"
                   />
                 </Grid>
-                <Grid item xs={2} className={classes.field}>
+                <Grid item xs={2}>
                   <Field
                     component={TextField}
                     type="text"
@@ -221,7 +221,7 @@ function ProductPriceForm() {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} className={classes.field}>
+                <Grid item xs={12}>
                   <Field
                     component={TextField}
                     type="text"

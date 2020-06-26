@@ -152,7 +152,7 @@ function UserForm() {
                 Movimentação de Estoque
               </Typography>
               <Grid container spacing={1} className={classes.container}>
-                <Grid item xs={2} className={classes.field}>
+                <Grid item xs={2}>
                   <Field
                     component={DateTimePicker}
                     label="Data"

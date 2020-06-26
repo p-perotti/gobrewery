@@ -111,7 +111,7 @@ function Dashboard() {
         const dataFormatted = response.data.map((product) => ({
           ...product,
           formattedDate: format(
-            utcToZonedTime(parseISO(product.created_at), timezone),
+            utcToZonedTime(parseISO(product.date), timezone),
             'dd/MM/yyyy HH:mm',
             {
               locale: ptBR,
@@ -208,6 +208,7 @@ function Dashboard() {
           localization={localization.ptBR}
           options={{
             search: false,
+            draggable: false,
             filtering: false,
             sorting: false,
             grouping: false,
@@ -235,6 +236,7 @@ function Dashboard() {
           localization={localization.ptBR}
           options={{
             search: false,
+            draggable: false,
             filtering: false,
             sorting: false,
             grouping: false,

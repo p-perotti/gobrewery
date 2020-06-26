@@ -107,7 +107,7 @@ function ProductForm() {
             >
               <Form>
                 <Grid container spacing={1} className={classes.container}>
-                  <Grid item xs={9} className={classes.field}>
+                  <Grid item xs={9}>
                     <Field
                       component={TextField}
                       type="text"
@@ -118,7 +118,7 @@ function ProductForm() {
                       fullWidth
                     />
                   </Grid>
-                  <Grid item xs={3} className={classes.field}>
+                  <Grid item xs={3}>
                     <Field
                       component={TextField}
                       type="text"
@@ -129,7 +129,7 @@ function ProductForm() {
                       fullWidth
                     />
                   </Grid>
-                  <Grid item xs={12} className={classes.field}>
+                  <Grid item xs={12}>
                     <Field
                       component={TextField}
                       type="text"
@@ -142,7 +142,7 @@ function ProductForm() {
                       fullWidth
                     />
                   </Grid>
-                  <Grid item xs={12} className={classes.field}>
+                  <Grid item xs={12}>
                     <FormControlLabel
                       control={
                         <Field

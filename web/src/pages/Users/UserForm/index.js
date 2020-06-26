@@ -86,7 +86,7 @@ function UserForm() {
               {id ? 'Editar Usuário' : 'Novo Usuário'}
             </Typography>
             <Grid container spacing={1} className={classes.container}>
-              <Grid item xs={6} className={classes.field}>
+              <Grid item xs={6}>
                 <Field
                   component={TextField}
                   type="text"
@@ -97,7 +97,7 @@ function UserForm() {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={6} className={classes.field}>
+              <Grid item xs={6}>
                 <Field
                   component={TextField}
                   type="text"
@@ -108,7 +108,7 @@ function UserForm() {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} className={classes.field}>
+              <Grid item xs={12}>
                 <FormControlLabel
                   control={
                     <Field component={Switch} name="active" type="checkbox" />

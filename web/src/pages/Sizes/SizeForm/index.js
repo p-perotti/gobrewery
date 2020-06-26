@@ -84,7 +84,7 @@ function SizeForm() {
               {id ? 'Editar Tamanho' : 'Novo Tamanho'}
             </Typography>
             <Grid container spacing={1} className={classes.container}>
-              <Grid item xs={10} className={classes.field}>
+              <Grid item xs={10}>
                 <Field
                   component={TextField}
                   type="text"
@@ -95,7 +95,7 @@ function SizeForm() {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={2} className={classes.field}>
+              <Grid item xs={2}>
                 <Field
                   component={TextField}
                   type="text"
@@ -113,7 +113,7 @@ function SizeForm() {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} className={classes.field}>
+              <Grid item xs={12}>
                 <FormControlLabel
                   control={
                     <Field component={Switch} name="active" type="checkbox" />

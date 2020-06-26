@@ -132,11 +132,13 @@ function AppMenu() {
           </ListItem>
           <Collapse in={graphsOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <InsertChart />
-                </ListItemIcon>
-                <ListItemText primary="Gráfico Teste" />
+              <ListItem
+                button
+                className={classes.nested}
+                component={Link}
+                to="/charts/best-sellers-by-liter"
+              >
+                <ListItemText primary="Mais Vendidos (por L)" />
               </ListItem>
             </List>
           </Collapse>
@@ -154,11 +156,13 @@ function AppMenu() {
           </ListItem>
           <Collapse in={reportsOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <TableChart />
-                </ListItemIcon>
-                <ListItemText primary="Relatório Teste" />
+              <ListItem
+                button
+                className={classes.nested}
+                component={Link}
+                to="/reports/sales"
+              >
+                <ListItemText primary="Vendas" />
               </ListItem>
             </List>
           </Collapse>
