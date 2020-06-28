@@ -83,8 +83,8 @@ function ProductForm() {
 
   return (
     <Paper>
-      <Typography variant="h6" className={classes.title}>
-        {id ? 'Editar Produto' : 'Novo Produto'}
+      <Typography variant="h6" color="primary" className={classes.title}>
+        Produto {!id && '(Novo)'}
       </Typography>
       <Loader loadFunction={loadValues}>
         <TabContext value={selectedTab}>

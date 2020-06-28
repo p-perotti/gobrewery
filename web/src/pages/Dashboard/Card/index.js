@@ -15,14 +15,16 @@ function Card({ title, value, currency, positive, link }) {
 
   return (
     <>
-      <Typography variant="h6" color="primary" gutterBottom>
+      <Typography variant="h6" color="primary">
         {title}
       </Typography>
       <Typography
         variant="h4"
-        className={value > 0 && positive ? classes.positive : classes.negative}
+        className={
+          '' && value > 0 && (positive ? classes.positive : classes.negative)
+        }
       >
-        {value > 0 && positive ? <ArrowDropUp /> : <ArrowDropDown />}
+        {value > 0 && (positive ? <ArrowDropUp /> : <ArrowDropDown />)}
         {currency ? formatCurrency(value) : value}
       </Typography>
       <Typography color="textSecondary" className={classes.date}>

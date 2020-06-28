@@ -49,7 +49,6 @@ function ProductPrices() {
   return (
     <Loader loadFunction={loadValues}>
       <MaterialTable
-        title=""
         columns={[
           { title: 'Tamanho', field: 'size.description' },
           { title: 'Descrição', field: 'description' },
@@ -59,7 +58,11 @@ function ProductPrices() {
         ]}
         data={data}
         localization={localization.ptBR}
-        options={{ ...options, maxBodyHeight: 'calc(100vh - 325px)' }}
+        options={{
+          ...options,
+          showTitle: false,
+          maxBodyHeight: 'calc(100vh - 325px)',
+        }}
         actions={[
           {
             icon: 'add_circle',

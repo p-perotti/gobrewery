@@ -120,7 +120,7 @@ function SalesByPeriod() {
   return (
     <Paper>
       <Typography variant="h6" color="primary" className={classes.title}>
-        Relatório de Vendas
+        Vendas por período
       </Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
         <Grid container spacing={1} className={classes.container}>

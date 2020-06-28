@@ -137,8 +137,8 @@ function ProductPriceForm() {
 
   return (
     <Paper>
-      <Typography variant="h6" className={classes.title}>
-        {id ? 'Editar Preço' : 'Novo Preço'}
+      <Typography variant="h6" color="primary" className={classes.title}>
+        Preço {!id && '(Novo)'}
       </Typography>
       <Loader loadFunction={loadValues}>
         <Formik

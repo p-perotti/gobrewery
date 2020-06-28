@@ -139,10 +139,14 @@ function CouponForm() {
         >
           {({ values }) => (
             <Form>
+              <Typography
+                variant="h6"
+                color="primary"
+                className={classes.title}
+              >
+                Cupom {!id && '(Novo)'}
+              </Typography>
               <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
-                <Typography variant="h6" className={classes.title}>
-                  {id ? 'Editar Cupom' : 'Novo Cupom'}
-                </Typography>
                 <Grid container spacing={1} className={classes.container}>
                   <Grid item xs={12}>
                     <Field

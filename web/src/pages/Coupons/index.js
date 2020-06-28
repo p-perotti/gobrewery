@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import Typography from '@material-ui/core/Typography';
 import MaterialTable from 'material-table';
 import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -56,7 +57,11 @@ function Coupons() {
 
   return (
     <MaterialTable
-      title="Cupons de Desconto"
+      title={
+        <Typography variant="h6" color="primary">
+          Cupons de desconto
+        </Typography>
+      }
       columns={[
         { title: 'Nome', field: 'name' },
         { title: 'Início', field: 'startingDateFormatted' },

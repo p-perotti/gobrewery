@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import Typography from '@material-ui/core/Typography';
 import MaterialTable from 'material-table';
 import { options, localization } from '~/config/MaterialTableConfig';
 
@@ -28,7 +29,11 @@ function Users() {
 
   return (
     <MaterialTable
-      title="Usuários"
+      title={
+        <Typography variant="h6" color="primary">
+          Usuários
+        </Typography>
+      }
       columns={[
         { title: 'Nome', field: 'name' },
         { title: 'E-mail', field: 'email' },

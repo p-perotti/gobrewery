@@ -80,8 +80,8 @@ function SizeForm() {
           onSubmit={handleSubmit}
         >
           <Form>
-            <Typography variant="h6" className={classes.title}>
-              {id ? 'Editar Tamanho' : 'Novo Tamanho'}
+            <Typography variant="h6" color="primary" className={classes.title}>
+              Tamanho {!id && '(Novo)'}
             </Typography>
             <Grid container spacing={1} className={classes.container}>
               <Grid item xs={10}>

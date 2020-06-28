@@ -147,10 +147,10 @@ function UserForm() {
           onSubmit={handleSubmit}
         >
           <Form>
+            <Typography variant="h6" color="primary" className={classes.title}>
+              Movimentação de estoque
+            </Typography>
             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
-              <Typography variant="h6" className={classes.title}>
-                Movimentação de Estoque
-              </Typography>
               <Grid container spacing={1} className={classes.container}>
                 <Grid item xs={2}>
                   <Field
@@ -183,7 +183,12 @@ function UserForm() {
                 </Grid>
                 <Grid item xs={12}>
                   <MaterialTable
-                    title="Produtos"
+                    title={
+                      <Typography variant="h6" color="primary">
+                        Produtos
+                      </Typography>
+                    }
+                    column
                     columns={state.columns}
                     data={state.data}
                     localization={localization.ptBR}
@@ -214,7 +219,7 @@ function UserForm() {
                             } else {
                               reject();
                             }
-                          }, 500);
+                          }, 1);
                         }),
                       onRowUpdate: (newData, oldData) =>
                         new Promise((resolve, reject) => {
@@ -231,7 +236,7 @@ function UserForm() {
                             } else {
                               reject();
                             }
-                          }, 500);
+                          }, 1);
                         }),
                       onRowDelete: (oldData) =>
                         new Promise((resolve) => {
@@ -242,7 +247,7 @@ function UserForm() {
                               return { ...prevState, data };
                             });
                             resolve();
-                          }, 500);
+                          }, 1);
                         }),
                     }}
                   />

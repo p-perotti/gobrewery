@@ -84,7 +84,7 @@ function BestSellersByLiter() {
   return (
     <Paper className={classes.paper}>
       <Typography variant="h6" color="primary" className={classes.title}>
-        Mais Vendidos (por L)
+        Mais vendidos (por L)
       </Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
         <Grid container spacing={1} className={classes.container}>

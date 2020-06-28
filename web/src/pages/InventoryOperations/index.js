@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import MaterialTable from 'material-table';
 import {
+  Typography,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -97,11 +98,16 @@ function InventoryOperations() {
   return (
     <>
       <MaterialTable
-        title="Movimentações de Estoque"
+        title={
+          <Typography variant="h6" color="primary">
+            Estoque (Movimentações)
+          </Typography>
+        }
+        column
         columns={[
-          { title: 'Data de Movimentação', field: 'dateFormatted' },
+          { title: 'Data/Hora', field: 'dateFormatted' },
           {
-            title: 'Tipo de Movimentação',
+            title: 'Tipo',
             field: 'type',
             render: (rowData) => {
               switch (rowData.type) {
@@ -114,13 +120,11 @@ function InventoryOperations() {
               }
             },
           },
-          { title: 'Usuário', field: 'user.name' },
           {
             title: 'Cancelada',
             field: 'canceled',
             render: (rowData) => (rowData.canceled ? 'Sim' : 'Não'),
           },
-          { title: 'Usuário de Cancelamento', field: 'cancelation_user.name' },
         ]}
         data={data}
         isLoading={isLoading}
@@ -144,7 +148,9 @@ function InventoryOperations() {
       />
       <Dialog open={open} onClose={handleCloseCancelDialog}>
         <DialogTitle>
-          Confirma o cancelamento da movimentação de estoque?
+          <Typography component="span" variant="h6" color="primary">
+            Confirma o cancelamento da movimentação de estoque?
+          </Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>

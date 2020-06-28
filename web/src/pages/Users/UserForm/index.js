@@ -82,8 +82,8 @@ function UserForm() {
           onSubmit={handleSubmit}
         >
           <Form>
-            <Typography variant="h6" className={classes.title}>
-              {id ? 'Editar Usuário' : 'Novo Usuário'}
+            <Typography variant="h6" color="primary" className={classes.title}>
+              Usuário {!id && '(Novo)'}
             </Typography>
             <Grid container spacing={1} className={classes.container}>
               <Grid item xs={6}>

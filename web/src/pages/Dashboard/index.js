@@ -141,7 +141,7 @@ function Dashboard() {
       <Grid item xs={4}>
         <Paper className={classes.card}>
           <Card
-            title="Entradas de Estoque"
+            title="Estoque (Entradas)"
             value={inventoryInputs}
             link="/inventory-operations"
             positive
@@ -151,7 +151,7 @@ function Dashboard() {
       <Grid item xs={4}>
         <Paper className={classes.card}>
           <Card
-            title="Saídas de Estoque"
+            title="Estoque (Saídas)"
             value={inventoryOutputs}
             link="/inventory-operations"
           />
@@ -159,8 +159,8 @@ function Dashboard() {
       </Grid>
       <Grid item xs={12}>
         <Paper className={classes.report}>
-          <Typography variant="h6" color="primary" gutterBottom>
-            Vendas (em 7 Dias)
+          <Typography variant="h6" color="primary">
+            Vendas
           </Typography>
           <ResponsiveContainer>
             <LineChart
@@ -195,8 +195,8 @@ function Dashboard() {
       <Grid item xs={5}>
         <MaterialTable
           title={
-            <Typography variant="h6" color="primary" gutterBottom>
-              Mais Vendidos (em 7 dias)
+            <Typography variant="h6" color="primary">
+              Mais vendidos (últimos 7 dias)
             </Typography>
           }
           columns={[
@@ -219,8 +219,8 @@ function Dashboard() {
       <Grid item xs={7}>
         <MaterialTable
           title={
-            <Typography variant="h6" color="primary" gutterBottom>
-              Vendas Recentes
+            <Typography variant="h6" color="primary">
+              Vendas recentes
             </Typography>
           }
           columns={[

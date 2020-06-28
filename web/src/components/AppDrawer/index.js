@@ -138,7 +138,7 @@ function AppMenu() {
                 component={Link}
                 to="/charts/best-sellers-by-liter"
               >
-                <ListItemText primary="Mais Vendidos (por L)" />
+                <ListItemText primary="Mais vendidos (por L)" />
               </ListItem>
             </List>
           </Collapse>
@@ -162,7 +162,7 @@ function AppMenu() {
                 component={Link}
                 to="/reports/sales-by-period"
               >
-                <ListItemText primary="Vendas" />
+                <ListItemText primary="Vendas por período" />
               </ListItem>
             </List>
           </Collapse>
