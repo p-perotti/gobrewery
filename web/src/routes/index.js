@@ -27,6 +27,8 @@ import BestSellersByLiter from '~/pages/Charts/BestSellersByLiter';
 
 import SalesByPeriod from '~/pages/Reports/SalesByPeriod';
 
+import NotFound from '~/pages/NotFound';
+
 export default function Routes() {
   return (
     <Switch>
@@ -89,6 +91,8 @@ export default function Routes() {
         component={SalesByPeriod}
         isPrivate
       />
+
+      <Route component={NotFound} isPrivate />
     </Switch>
   );
 }
