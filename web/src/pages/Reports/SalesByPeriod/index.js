@@ -32,13 +32,18 @@ function SalesByPeriod() {
           th('Data'),
           th('Status'),
           th('Cliente'),
+          th('F. de Pgto.'),
           th('Qtd. Total'),
           th('Total Bruto'),
           th('Total Líquido'),
           th('Desc. Total'),
-          th('F. de Pgto.'),
         ],
       ];
+
+      let totalAmount = 0;
+      let grossTotal = 0;
+      let netTotal = 0;
+      let totalDiscount = 0;
 
       rows.forEach((row, index) => {
         const tableRow = [];
@@ -46,14 +51,47 @@ function SalesByPeriod() {
           td(row.date, index),
           td(row.status, index),
           td(row.customer, index),
+          td(row.payment_method, index),
           td(row.total_amount, index),
-          td(row.gross_total, index),
-          td(row.net_total, index),
-          td(row.total_discount, index),
-          td(row.payment_method, index)
+          td(formatCurrency(row.gross_total), index),
+          td(formatCurrency(row.net_total), index),
+          td(formatCurrency(row.total_discount), index)
         );
         body.push(tableRow);
+
+        totalAmount += Number(row.total_amount);
+        grossTotal += Number(row.gross_total);
+        netTotal += Number(row.net_total);
+        totalDiscount += Number(row.total_discount);
       });
+
+      body[rows.length + 1] = [
+        td('Total', -1, {
+          colSpan: 4,
+          fillColor: 'black',
+          color: 'white',
+          alignment: 'right',
+        }),
+        td(''),
+        td(''),
+        td(''),
+        td(totalAmount, -1, {
+          fillColor: 'black',
+          color: 'white',
+        }),
+        td(formatCurrency(grossTotal), -1, {
+          fillColor: 'black',
+          color: 'white',
+        }),
+        td(formatCurrency(netTotal), -1, {
+          fillColor: 'black',
+          color: 'white',
+        }),
+        td(formatCurrency(totalDiscount), -1, {
+          fillColor: 'black',
+          color: 'white',
+        }),
+      ];
 
       return body;
     };
@@ -62,7 +100,7 @@ function SalesByPeriod() {
     const periodEnd = format(endingDate, 'dd/MM/yy', { locale: ptBR });
 
     generateReport(
-      `Vendas por Período (${periodStart} à ${periodEnd})`,
+      `Vendas por período (${periodStart} à ${periodEnd})`,
       'landscape',
       ['auto', 'auto', '*', 'auto', 'auto', 'auto', 'auto', 'auto'],
       generateReportBody(data)
@@ -104,9 +142,9 @@ function SalesByPeriod() {
           status: formatStatus(r.status),
           customer: r.customer.name,
           total_amount: r.total_amount,
-          gross_total: formatCurrency(r.gross_total),
-          net_total: formatCurrency(r.net_total),
-          total_discount: formatCurrency(r.total_discount),
+          gross_total: r.gross_total,
+          net_total: r.net_total,
+          total_discount: r.total_discount,
           payment_method: r.payment_method.name,
         }));
 
