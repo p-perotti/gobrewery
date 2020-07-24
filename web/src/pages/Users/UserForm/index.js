@@ -10,6 +10,7 @@ import {
   Backdrop,
   CircularProgress,
 } from '@material-ui/core';
+import Save from '@material-ui/icons/Save';
 import { Formik, Field, Form } from 'formik';
 import { TextField, Switch } from 'formik-material-ui';
 import * as Yup from 'yup';
@@ -133,6 +134,7 @@ function UserForm() {
                   color="primary"
                   disabled={isSubmitting}
                   className={classes.button}
+                  startIcon={<Save />}
                 >
                   Salvar
                 </Button>

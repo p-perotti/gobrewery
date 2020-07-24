@@ -19,10 +19,6 @@ const style = makeStyles((theme) => ({
     fontWeight: 'bold',
     color: theme.palette.primary.main,
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
   form: {
     width: '100%',
     marginTop: theme.spacing(1),

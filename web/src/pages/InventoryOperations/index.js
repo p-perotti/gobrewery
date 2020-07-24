@@ -33,6 +33,7 @@ function InventoryOperations() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [cancelationId, setCancelationId] = useState();
+  const [dialogOpen, setDialogOpen] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLoad = useCallback(async () => {
@@ -62,26 +63,20 @@ function InventoryOperations() {
     }
   }, [dispatch]);
 
-  function handleRefresh() {
-    handleLoad();
-  }
-
   useEffect(() => {
     handleLoad();
   }, [handleLoad]);
 
-  const [open, setOpen] = React.useState(false);
-
   const handleCancelRequest = (id) => {
     setCancelationId(id);
-    setOpen(true);
+    setDialogOpen(true);
   };
 
-  const handleCloseCancelDialog = () => setOpen(false);
+  const handleCloseCancelDialog = () => setDialogOpen(false);
 
   const cancelInventoryOperation = async () => {
+    handleCloseCancelDialog();
     try {
-      handleCloseCancelDialog();
       setIsSubmitting(true);
       await api.delete(`/inventory-operations/${cancelationId}`);
       setCancelationId();
@@ -92,7 +87,7 @@ function InventoryOperations() {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível cancelar.'));
     }
-    handleRefresh();
+    handleLoad();
   };
 
   return (
@@ -120,6 +115,7 @@ function InventoryOperations() {
               }
             },
           },
+          { title: 'Qtd. Total', field: 'total_amount' },
           {
             title: 'Cancelada',
             field: 'canceled',
@@ -146,7 +142,7 @@ function InventoryOperations() {
           }),
         ]}
       />
-      <Dialog open={open} onClose={handleCloseCancelDialog}>
+      <Dialog open={dialogOpen} onClose={handleCloseCancelDialog}>
         <DialogTitle>
           <Typography component="span" variant="h6" color="primary">
             Confirma o cancelamento da movimentação de estoque?
@@ -167,11 +163,9 @@ function InventoryOperations() {
           </Button>
         </DialogActions>
       </Dialog>
-      {isSubmitting && (
-        <Backdrop open className={classes.backdrop}>
-          <CircularProgress color="primary" />
-        </Backdrop>
-      )}
+      <Backdrop open={isSubmitting} className={classes.backdrop}>
+        <CircularProgress color="primary" />
+      </Backdrop>
     </>
   );
 }

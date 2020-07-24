@@ -24,10 +24,6 @@ function Loader({ loadFunction, children }) {
     handleLoad();
   }, [handleLoad]);
 
-  function handleRefresh() {
-    handleLoad();
-  }
-
   return (
     <>
       {state.isLoading && (
@@ -45,7 +41,7 @@ function Loader({ loadFunction, children }) {
             variant="outlined"
             color="primary"
             className={classes.item}
-            onClick={handleRefresh}
+            onClick={handleLoad}
           >
             <Refresh /> Tentar novamente
           </Button>

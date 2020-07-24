@@ -13,7 +13,7 @@ import {
   Backdrop,
   CircularProgress,
 } from '@material-ui/core';
-import AddCircle from '@material-ui/icons/AddCircle';
+import { AddCircle, Save } from '@material-ui/icons';
 import MaterialTable from 'material-table';
 import { Formik, Field, Form } from 'formik';
 import { Select } from 'formik-material-ui';
@@ -101,12 +101,19 @@ function UserForm() {
     try {
       setIsSubmitting(true);
 
+      let totalAmount = 0;
+
       const inventory_operation_products = state.data.map((data) => {
         const { product_id, size_id, amount } = data;
+        totalAmount += amount;
         return { product_id, size_id, amount };
       });
 
-      const data = { ...values, inventory_operation_products };
+      const data = {
+        ...values,
+        total_amount: totalAmount,
+        inventory_operation_products,
+      };
 
       await api.post('/inventory-operations', data);
       setIsSubmitting(false);
@@ -259,6 +266,7 @@ function UserForm() {
                     color="primary"
                     disabled={isSubmitting}
                     className={classes.button}
+                    startIcon={<Save />}
                   >
                     Salvar
                   </Button>

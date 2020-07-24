@@ -14,11 +14,12 @@ import {
   CircularProgress,
   TextField as TextFieldMUI,
 } from '@material-ui/core';
+import Save from '@material-ui/icons/Save';
 import { Formik, Field, Form } from 'formik';
 import { TextField, Select } from 'formik-material-ui';
 import { DateTimePicker } from 'formik-material-ui-pickers';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { parseISO, setSeconds, setMilliseconds } from 'date-fns';
+import { parseISO, startOfDay, endOfDay } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import * as Yup from 'yup';
@@ -99,15 +100,9 @@ function ProductPriceForm() {
     try {
       setIsSubmitting(true);
 
-      const starting_date = setSeconds(
-        setMilliseconds(values.starting_date, 0),
-        0
-      );
+      const starting_date = startOfDay(values.starting_date);
 
-      const expiration_date = setSeconds(
-        setMilliseconds(values.expiration_date, 999),
-        59
-      );
+      const expiration_date = endOfDay(values.expiration_date);
 
       if (id) {
         await api.put(`products/${productId}/prices/${id}`, {
@@ -239,6 +234,7 @@ function ProductPriceForm() {
                     color="primary"
                     disabled={isSubmitting}
                     className={classes.button}
+                    startIcon={<Save />}
                   >
                     Salvar
                   </Button>
