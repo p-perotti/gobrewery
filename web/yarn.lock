@@ -7512,6 +7512,13 @@ material-table@^1.57.2:
     react-beautiful-dnd "11.0.3"
     react-double-scrollbar "0.0.15"
 
+material-ui-image@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/material-ui-image/-/material-ui-image-3.2.3.tgz#34b24149a94e1f090c47e210fa8a6a2c815bcb3b"
+  integrity sha512-dXU9Hj7l0OvmG5s39gwmBuZdYvf5kn17tMMPYg5Hpu4vgnSdfoGkE8kt5J449BWmZZaLMTf5pExcz80Du9dwog==
+  dependencies:
+    prop-types "^15.5.8"
+
 math-expression-evaluator@^1.2.14:
   version "1.2.22"
   resolved "https://registry.yarnpkg.com/math-expression-evaluator/-/math-expression-evaluator-1.2.22.tgz#c14dcb3d8b4d150e5dcea9c68c8dad80309b0d5e"
@@ -9401,7 +9408,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==

@@ -21,6 +21,7 @@
     "history": "^4.10.1",
     "immer": "^6.0.5",
     "material-table": "^1.57.2",
+    "material-ui-image": "^3.2.3",
     "pdfmake": "^0.1.65",
     "prop-types": "^15.7.2",
     "random-material-color": "^1.0.5",
