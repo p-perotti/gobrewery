@@ -12,6 +12,7 @@ import {
   Backdrop,
   CircularProgress,
 } from '@material-ui/core';
+import Save from '@material-ui/icons/Save';
 import { TabContext, TabPanel } from '@material-ui/lab';
 import { Formik, Field, Form } from 'formik';
 import { TextField, Switch } from 'formik-material-ui';
@@ -24,7 +25,8 @@ import history from '~/services/history';
 
 import { showSnackbar } from '~/store/modules/ui/actions';
 
-import ProductsPrices from '../ProductPrices';
+import ProductPrices from '../ProductPrices';
+import ProductImages from '../ProductImages';
 
 import style from './styles';
 
@@ -97,6 +99,7 @@ function ProductForm() {
           >
             <Tab label="Dados" value="1" />
             <Tab label="Preços" value="2" disabled={!id} />
+            <Tab label="Imagens" value="3" disabled={!id} />
           </Tabs>
           <TabPanel value="1" className={classes.tabs}>
             <Formik
@@ -161,6 +164,7 @@ function ProductForm() {
                       color="primary"
                       disabled={isSubmitting}
                       className={classes.button}
+                      startIcon={<Save />}
                     >
                       Salvar
                     </Button>
@@ -179,7 +183,10 @@ function ProductForm() {
             </Formik>
           </TabPanel>
           <TabPanel value="2" className={classes.tabs}>
-            <ProductsPrices />
+            <ProductPrices />
+          </TabPanel>
+          <TabPanel value="3" className={classes.tabs}>
+            <ProductImages />
           </TabPanel>
         </TabContext>
       </Loader>
