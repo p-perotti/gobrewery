@@ -253,11 +253,9 @@ function ProductPriceForm() {
           </Form>
         </Formik>
       </Loader>
-      {isSubmitting && (
-        <Backdrop open className={classes.backdrop}>
-          <CircularProgress color="primary" />
-        </Backdrop>
-      )}
+      <Backdrop open={isSubmitting} className={classes.backdrop}>
+        <CircularProgress color="primary" />
+      </Backdrop>
     </Paper>
   );
 }
