@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
@@ -19,7 +19,8 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import { Delete, Add } from '@material-ui/icons';
-import Image from 'material-ui-image';
+
+import Loader from '~/components/Loader';
 
 import api from '~/services/api';
 
@@ -35,25 +36,14 @@ function ProductImages() {
   const { id } = useParams();
 
   const [images, setImages] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [imageToDeleteId, setImageToDeleteId] = useState();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleLoad = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const response = await api.get(`products/${id}/images`);
-      setImages(response.data);
-    } catch (err) {
-      dispatch(showSnackbar('error', 'Não foi possível carregar os dados.'));
-    }
-    setIsLoading(false);
-  }, [id, dispatch]);
-
-  useEffect(() => {
-    handleLoad();
-  }, [handleLoad]);
+  const loadImages = useCallback(async () => {
+    const response = await api.get(`products/${id}/images`);
+    setImages(response.data);
+  }, [id]);
 
   async function handleUploadImage(e) {
     try {
@@ -67,7 +57,7 @@ function ProductImages() {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível salvar a imagem.'));
     }
-    handleLoad();
+    loadImages();
   }
 
   const handleCloseCancelDialog = () => setDialogOpen(false);
@@ -92,47 +82,35 @@ function ProductImages() {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível excluir a imagem.'));
     }
-    handleLoad();
+    loadImages();
   }
 
   return (
     <>
-      <Paper className={classes.root}>
-        {!isLoading && (
-          <GridList cols={3} cellHeight={300} className={classes.grid}>
-            {images.map((image) => (
-              <GridListTile key={image.id}>
-                <Image
-                  src={image.url}
-                  alt={image.id}
-                  imageStyle={{
-                    height: 'auto',
-                    position: 'relative',
-                  }}
-                  style={{
-                    paddingTop: 'offset',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                  }}
-                />
-                <GridListTileBar
-                  classes={{
-                    root: classes.title,
-                    title: classes.white,
-                  }}
-                  actionIcon={
-                    <IconButton
-                      className={classes.iconButton}
-                      onClick={() => handleDeleteRequest(image.id)}
-                    >
-                      <Delete className={classes.white} />
-                    </IconButton>
-                  }
-                />
-              </GridListTile>
-            ))}
-          </GridList>
-        )}
+      <Paper>
+        <Loader loadFunction={loadImages}>
+          <div className={classes.root}>
+            <GridList cols={3} cellHeight={300} className={classes.grid}>
+              {images.map((image) => (
+                <GridListTile key={image.id}>
+                  <img src={image.url} alt={image.id} />
+                  <GridListTileBar
+                    classes={{
+                      root: classes.title,
+                      title: classes.white,
+                    }}
+                    titlePosition="top"
+                    actionIcon={
+                      <IconButton onClick={() => handleDeleteRequest(image.id)}>
+                        <Delete className={classes.white} />
+                      </IconButton>
+                    }
+                  />
+                </GridListTile>
+              ))}
+            </GridList>
+          </div>
+        </Loader>
         <label htmlFor="product-image-file">
           <input
             accept="image/*"
