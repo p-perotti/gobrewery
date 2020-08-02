@@ -65,7 +65,7 @@ function SizeForm() {
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));
       history.push('/sizes');
-    } catch (err) {
+    } catch (error) {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível salvar.'));
     }

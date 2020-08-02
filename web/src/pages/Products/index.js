@@ -21,7 +21,7 @@ function Products() {
       try {
         const response = await api.get('products');
         setData(response.data);
-      } catch (err) {
+      } catch (error) {
         dispatch(showSnackbar('error', 'Não foi possível carregar os dados.'));
       }
       setIsLoading(false);

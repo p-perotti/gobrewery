@@ -150,7 +150,7 @@ function SalesByPeriod() {
 
         report(data);
       }
-    } catch (err) {
+    } catch (error) {
       dispatch(showSnackbar('error', 'Não foi possível gerar relatório.'));
     }
   };

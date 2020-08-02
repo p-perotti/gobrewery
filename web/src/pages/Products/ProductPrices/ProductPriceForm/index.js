@@ -124,7 +124,7 @@ function ProductPriceForm() {
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));
       history.push(`/products/${productId}`);
-    } catch (err) {
+    } catch (error) {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível salvar.'));
     }

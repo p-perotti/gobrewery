@@ -33,7 +33,7 @@ function InventoryOperations() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [cancelationId, setCancelationId] = useState();
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLoad = useCallback(async () => {
@@ -57,7 +57,7 @@ function InventoryOperations() {
 
       setData(dataFormatted);
       setIsLoading(false);
-    } catch (err) {
+    } catch (error) {
       setIsLoading(false);
       dispatch(showSnackbar('error', 'Não foi possível carregar os dados.'));
     }
@@ -82,7 +82,7 @@ function InventoryOperations() {
       setCancelationId();
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Cancelada com sucesso.'));
-    } catch (err) {
+    } catch (error) {
       setCancelationId();
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível cancelar.'));

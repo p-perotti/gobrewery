@@ -41,7 +41,7 @@ function UserForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     columns: [],
     data: [],
   });
@@ -119,7 +119,7 @@ function UserForm() {
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));
       history.push('/inventory-operations');
-    } catch (err) {
+    } catch (error) {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível salvar.'));
     }

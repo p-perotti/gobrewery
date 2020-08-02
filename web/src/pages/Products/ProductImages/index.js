@@ -37,7 +37,7 @@ function ProductImages() {
 
   const [images, setImages] = useState([]);
   const [imageToDeleteId, setImageToDeleteId] = useState();
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const loadImages = useCallback(async () => {
@@ -53,7 +53,7 @@ function ProductImages() {
       await api.post(`/products/${id}/images`, data);
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Imagem salva com sucesso.'));
-    } catch (err) {
+    } catch (error) {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível salvar a imagem.'));
     }
@@ -77,7 +77,7 @@ function ProductImages() {
       }
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Imagem excluída com sucesso.'));
-    } catch (err) {
+    } catch (error) {
       setImageToDeleteId();
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível excluir a imagem.'));

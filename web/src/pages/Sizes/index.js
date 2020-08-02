@@ -21,7 +21,7 @@ function Sizes() {
       try {
         const response = await api.get('sizes');
         setData(response.data);
-      } catch (err) {
+      } catch (error) {
         dispatch(showSnackbar('error', 'Não foi possível carregar os dados.'));
       }
       setIsLoading(false);

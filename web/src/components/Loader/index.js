@@ -15,7 +15,7 @@ function Loader({ loadFunction, children }) {
       setState({ isLoading: true, loadError: false });
       await loadFunction();
       setState({ isLoading: false, loadError: false });
-    } catch (err) {
+    } catch (error) {
       setState({ isLoading: false, loadError: true });
     }
   }, [loadFunction]);

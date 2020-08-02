@@ -67,7 +67,7 @@ function UserForm() {
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));
       history.push('/users');
-    } catch (err) {
+    } catch (error) {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível salvar.'));
     }

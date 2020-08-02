@@ -46,7 +46,7 @@ function BestSellersByLiter() {
 
           setChartData(formattedData);
         }
-      } catch (err) {
+      } catch (error) {
         dispatch(showSnackbar('error', 'Não foi possível gerar gráfico.'));
       }
     },
