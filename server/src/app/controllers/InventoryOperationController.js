@@ -50,6 +50,9 @@ class InventoryOperationController {
         .required()
         .oneOf(['E', 'S']),
       date: Yup.date().required(),
+      total_amount: Yup.number()
+        .required()
+        .moreThan(0),
       inventory_operation_products: Yup.array()
         .of(
           Yup.object().shape({
@@ -70,16 +73,27 @@ class InventoryOperationController {
     const transaction = await Database.connection.transaction();
 
     try {
-      const { id, user_id, type, date } = await InventoryOperation.create(
+      const {
+        id,
+        user_id,
+        type,
+        date,
+        total_amount,
+      } = await InventoryOperation.create(
         {
           user_id: req.userId,
           type: req.body.type,
           date: req.body.date,
+          total_amount: req.body.total_amount,
         },
         { transaction }
       );
 
+      let totalAmount = 0;
+
       const reqProduct = req.body.inventory_operation_products.map(p => {
+        totalAmount += Number(p.amount);
+
         return {
           inventory_operation_id: id,
           ...p,
@@ -90,6 +104,12 @@ class InventoryOperationController {
         reqProduct,
         { transaction }
       );
+
+      if (totalAmount !== total_amount) {
+        return res.status(404).json({
+          error: 'Total amount different from the sum of the product amounts.',
+        });
+      }
 
       const updateProductInventoryAmount = async (
         product_id,
@@ -162,6 +182,7 @@ class InventoryOperationController {
         user_id,
         type,
         date,
+        total_amount,
         inventory_operation_products,
       });
     } catch (error) {

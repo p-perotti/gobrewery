@@ -58,6 +58,7 @@ class ProductPriceController {
     }
 
     const schema = Yup.object().shape({
+      size_id: Yup.number().required(),
       description: Yup.string().required(),
       starting_date: Yup.date().required(),
       expiration_date: Yup.date().required(),
@@ -95,6 +96,7 @@ class ProductPriceController {
     const {
       id,
       product_id,
+      size_id,
       description,
       starting_date,
       expiration_date,
@@ -104,6 +106,7 @@ class ProductPriceController {
     return res.json({
       id,
       product_id,
+      size_id,
       description,
       starting_date,
       expiration_date,
@@ -119,6 +122,7 @@ class ProductPriceController {
     }
 
     const schema = Yup.object().shape({
+      size_id: Yup.number().required(),
       description: Yup.string().required(),
       starting_date: Yup.date().required(),
       expiration_date: Yup.date().required(),
@@ -156,6 +160,7 @@ class ProductPriceController {
     const {
       id,
       product_id,
+      size_id,
       description,
       starting_date,
       expiration_date,
@@ -165,6 +170,7 @@ class ProductPriceController {
     return res.json({
       id,
       product_id,
+      size_id,
       description,
       starting_date,
       expiration_date,
