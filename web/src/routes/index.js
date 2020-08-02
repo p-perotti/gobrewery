@@ -5,7 +5,9 @@ import Route from './Route';
 import SignIn from '~/pages/SignIn';
 
 import Dashboard from '~/pages/Dashboard';
+
 import Profile from '~/pages/Profile';
+import ProfileForm from '~/pages/Profile/ProfileForm';
 
 import Users from '~/pages/Users';
 import UserForm from '~/pages/Users/UserForm';
@@ -34,7 +36,9 @@ export default function Routes() {
     <Switch>
       <Route path="/" exact component={SignIn} />
 
-      <Route path="/profile" component={Profile} isPrivate />
+      <Route path="/profile" exact component={Profile} isPrivate />
+      <Route path="/profile/edit" exact component={ProfileForm} isPrivate />
+
       <Route path="/dashboard" component={Dashboard} isPrivate />
 
       <Route path="/users" exact component={Users} isPrivate />

@@ -22,7 +22,7 @@ export function* signIn({ payload }) {
     yield put(signInSuccess(token, user));
 
     history.push('/dashboard');
-  } catch (err) {
+  } catch (error) {
     yield put(showSnackbar('warning', 'Verifique os dados e tente novamente.'));
     yield put(signFailure());
   }
