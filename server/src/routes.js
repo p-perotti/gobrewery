@@ -1,10 +1,18 @@
 import { Router } from 'express';
+import multer from 'multer';
+
+import multerConfig from './config/multer';
+
 import authMiddleware from './app/middlewares/auth';
+
 import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
+import ProfileController from './app/controllers/ProfileController';
+import ProfileAvatarController from './app/controllers/ProfileAvatarController';
 import SizeController from './app/controllers/SizeController';
 import ProductController from './app/controllers/ProductController';
 import ProductPriceController from './app/controllers/ProductPriceController';
+import ProductImageController from './app/controllers/ProductImageController';
 import CouponController from './app/controllers/CouponController';
 import InventoryOperationController from './app/controllers/InventoryOperationController';
 import InventoryOperationsTodaysTotalController from './app/controllers/InventoryOperationsTodaysTotalController';
@@ -16,9 +24,20 @@ import BestSellersByLiterController from './app/controllers/BestSellersByLiterCo
 import SalesByPeriodController from './app/controllers/SalesByPeriodController';
 
 const routes = Router();
+const upload = multer(multerConfig);
 
 routes.post('/sessions', SessionController.store);
 routes.use(authMiddleware);
+
+routes.get('/profile', ProfileController.index);
+routes.put('/profile', ProfileController.update);
+
+routes.post(
+  '/profile/avatar',
+  upload.single('file'),
+  ProfileAvatarController.store
+);
+routes.delete('/profile/avatar', ProfileAvatarController.delete);
 
 routes.get('/users', UserController.index);
 routes.get('/users/:id', UserController.index);
@@ -39,6 +58,14 @@ routes.get('/products/:productId/prices', ProductPriceController.index);
 routes.get('/products/:productId/prices/:id', ProductPriceController.index);
 routes.post('/products/:productId/prices', ProductPriceController.store);
 routes.put('/products/:productId/prices/:id', ProductPriceController.update);
+
+routes.get('/products/:productId/images', ProductImageController.index);
+routes.post(
+  '/products/:productId/images',
+  upload.single('file'),
+  ProductImageController.store
+);
+routes.delete('/products/:productId/images/:id', ProductImageController.delete);
 
 routes.get('/coupons', CouponController.index);
 routes.get('/coupons/:id', CouponController.index);

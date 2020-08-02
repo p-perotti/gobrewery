@@ -1,9 +1,11 @@
 import Sequelize from 'sequelize';
 
 import User from '../app/models/User';
+import UserAvatar from '../app/models/UserAvatar';
 import Size from '../app/models/Size';
 import Product from '../app/models/Product';
 import ProductPrice from '../app/models/ProductPrice';
+import ProductImage from '../app/models/ProductImage';
 import Coupon from '../app/models/Coupon';
 import InventoryOperation from '../app/models/InventoryOperation';
 import InventoryOperationProduct from '../app/models/InventoryOperationProduct';
@@ -17,9 +19,11 @@ import databaseConfig from '../config/database';
 
 const models = [
   User,
+  UserAvatar,
   Size,
   Product,
   ProductPrice,
+  ProductImage,
   Coupon,
   InventoryOperation,
   InventoryOperationProduct,

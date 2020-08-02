@@ -27,6 +27,13 @@ class User extends Model {
   checkPassword(password) {
     return bcrypt.compare(password, this.password_hash);
   }
+
+  static associate(models) {
+    this.hasOne(models.UserAvatar, {
+      foreignKey: 'user_id',
+      as: 'avatar',
+    });
+  }
 }
 
 export default User;

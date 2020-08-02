@@ -70,7 +70,7 @@ class UserController {
       password: Yup.string()
         .min(8)
         .when('oldPassword', (oldPassword, field) =>
-          oldPassword ? field.required : field
+          oldPassword ? field.required() : field
         ),
       passwordConfirmation: Yup.string().when('password', (password, field) =>
         password ? field.required().oneOf([Yup.ref('password')]) : field
