@@ -48,6 +48,7 @@ function CouponForm() {
     expiration_date: new Date(),
     type: 'P',
     value: '',
+    limit: '',
   });
 
   const loadValues = useCallback(async () => {
@@ -61,6 +62,7 @@ function CouponForm() {
           expiration_date,
           type,
           value,
+          limit,
         } = res.data;
         setInitialValues({
           name,
@@ -69,6 +71,7 @@ function CouponForm() {
           expiration_date: parseISO(expiration_date),
           type,
           value,
+          limit,
         });
       }
     }
@@ -85,6 +88,7 @@ function CouponForm() {
           ? field.lessThan(100, 'Percentual deve ser menor que 100.')
           : field
       ),
+    limit: Yup.number().moreThan(0),
   });
 
   const handleSubmit = async (values) => {
@@ -103,6 +107,7 @@ function CouponForm() {
           type: values.type,
           value: values.value,
           description: values.description,
+          limit: values.limit,
         });
       } else {
         await api.post('/coupons', {
@@ -112,6 +117,7 @@ function CouponForm() {
           type: values.type,
           value: values.value,
           description: values.description,
+          limit: values.limit,
         });
       }
       setIsSubmitting(false);

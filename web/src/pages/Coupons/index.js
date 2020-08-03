@@ -64,7 +64,6 @@ function Coupons() {
       }
       columns={[
         { title: 'Nome', field: 'name' },
-        { title: 'Limite', field: 'limit' },
         { title: 'Início', field: 'startingDateFormatted' },
         { title: 'Expiração', field: 'expirationDateFormatted' },
         {
@@ -95,6 +94,7 @@ function Coupons() {
             }
           },
         },
+        { title: 'Limite', field: 'limit' },
       ]}
       data={data}
       isLoading={isLoading}
