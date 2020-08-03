@@ -30,6 +30,9 @@ module.exports = {
         type: Sequelize.DECIMAL(15, 2),
         allowNull: false,
       },
+      limit: {
+        type: Sequelize.INTEGER,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,

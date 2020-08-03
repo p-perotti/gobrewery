@@ -10,6 +10,7 @@ class Coupon extends Model {
         expiration_date: Sequelize.DATE,
         type: Sequelize.CHAR(1),
         value: Sequelize.DECIMAL(15, 2),
+        limit: Sequelize.INTEGER,
       },
       { sequelize }
     );
