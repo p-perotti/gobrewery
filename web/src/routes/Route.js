@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 
@@ -9,19 +9,28 @@ import { store } from '~/store';
 export default function RouteWrapper({
   component: Component,
   isPrivate,
+  isAdminRestricted,
   ...rest
 }) {
   const { signed } = store.getState().auth;
+  const { administrator } = store.getState().user;
 
   if (!signed && isPrivate) {
     return <Redirect to="/" />;
   }
 
   if (signed && !isPrivate) {
-    return <Redirect to="/dashboard" />;
+    if (administrator) {
+      return <Redirect to="/dashboard" />;
+    }
+    return <Redirect to="/home" />;
   }
 
-  const AppLayout = signed ? AppContainer : React.Fragment;
+  if (!administrator && isAdminRestricted) {
+    return <Redirect to="/restricted" />;
+  }
+
+  const AppLayout = signed ? AppContainer : Fragment;
 
   return (
     <Route
@@ -37,10 +46,12 @@ export default function RouteWrapper({
 
 RouteWrapper.propTypes = {
   isPrivate: PropTypes.bool,
+  isAdminRestricted: PropTypes.bool,
   component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
     .isRequired,
 };
 
 RouteWrapper.defaultProps = {
   isPrivate: false,
+  isAdminRestricted: false,
 };

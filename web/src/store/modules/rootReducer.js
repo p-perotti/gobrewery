@@ -2,6 +2,6 @@ import { combineReducers } from 'redux';
 
 import ui from './ui/reducers';
 import auth from './auth/reducers';
-import avatar from './avatar/reducers';
+import user from './user/reducers';
 
-export default combineReducers({ ui, auth, avatar });
+export default combineReducers({ ui, auth, user });

@@ -21,7 +21,7 @@ export function* signIn({ payload }) {
 
     yield put(signInSuccess(token, user));
 
-    history.push('/dashboard');
+    history.push('/');
   } catch (error) {
     yield put(showSnackbar('warning', 'Verifique os dados e tente novamente.'));
     yield put(signFailure());

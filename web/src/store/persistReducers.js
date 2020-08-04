@@ -6,7 +6,7 @@ export default (reducers) => {
     {
       key: 'gobrewery',
       storage,
-      whitelist: ['auth', 'avatar'],
+      whitelist: ['auth', 'user'],
     },
     reducers
   );

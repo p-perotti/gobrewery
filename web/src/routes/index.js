@@ -4,6 +4,8 @@ import Route from './Route';
 
 import SignIn from '~/pages/SignIn';
 
+import Home from '~/pages/Home';
+
 import Dashboard from '~/pages/Dashboard';
 
 import Profile from '~/pages/Profile';
@@ -29,6 +31,8 @@ import BestSellersByLiter from '~/pages/Charts/BestSellersByLiter';
 
 import SalesByPeriod from '~/pages/Reports/SalesByPeriod';
 
+import Restricted from '~/pages/Restricted';
+
 import NotFound from '~/pages/NotFound';
 
 export default function Routes() {
@@ -36,14 +40,39 @@ export default function Routes() {
     <Switch>
       <Route path="/" exact component={SignIn} />
 
+      <Route path="/home" component={Home} isPrivate />
+
       <Route path="/profile" exact component={Profile} isPrivate />
       <Route path="/profile/edit" exact component={ProfileForm} isPrivate />
 
-      <Route path="/dashboard" component={Dashboard} isPrivate />
+      <Route
+        path="/dashboard"
+        component={Dashboard}
+        isPrivate
+        isAdminRestricted
+      />
 
-      <Route path="/users" exact component={Users} isPrivate />
-      <Route path="/users/new" exact component={UserForm} isPrivate />
-      <Route path="/users/:id" exact component={UserForm} isPrivate />
+      <Route
+        path="/users"
+        exact
+        component={Users}
+        isPrivate
+        isAdminRestricted
+      />
+      <Route
+        path="/users/new"
+        exact
+        component={UserForm}
+        isPrivate
+        isAdminRestricted
+      />
+      <Route
+        path="/users/:id"
+        exact
+        component={UserForm}
+        isPrivate
+        isAdminRestricted
+      />
 
       <Route path="/sizes" exact component={Sizes} isPrivate />
       <Route path="/sizes/new" exact component={SizeForm} isPrivate />
@@ -87,6 +116,7 @@ export default function Routes() {
         exact
         component={BestSellersByLiter}
         isPrivate
+        isAdminRestricted
       />
 
       <Route
@@ -94,7 +124,10 @@ export default function Routes() {
         exact
         component={SalesByPeriod}
         isPrivate
+        isAdminRestricted
       />
+
+      <Route path="/restricted" component={Restricted} isPrivate />
 
       <Route component={NotFound} isPrivate />
     </Switch>

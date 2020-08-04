@@ -31,7 +31,12 @@ export default function SignIn() {
   return (
     <Container component="main" maxWidth="sm" className={classes.root}>
       <Paper className={classes.paper}>
-        <Typography component="h1" variant="h3" className={classes.title}>
+        <Typography
+          component="h1"
+          variant="h3"
+          color="primary"
+          className={classes.title}
+        >
           GoBrewery
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>

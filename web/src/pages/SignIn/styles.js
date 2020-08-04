@@ -17,7 +17,6 @@ const style = makeStyles((theme) => ({
   },
   title: {
     fontWeight: 'bold',
-    color: theme.palette.primary.main,
   },
   form: {
     width: '100%',

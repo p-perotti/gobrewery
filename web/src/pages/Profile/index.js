@@ -28,7 +28,7 @@ import api from '~/services/api';
 import {
   updateAvatarRequest,
   deleteAvatarRequest,
-} from '~/store/modules/avatar/actions';
+} from '~/store/modules/user/actions';
 import { showSnackbar } from '~/store/modules/ui/actions';
 
 import style from './styles';
@@ -38,10 +38,8 @@ function Profile() {
 
   const dispatch = useDispatch();
 
-  const avatar = useSelector((state) =>
-    state.avatar.url ? state.avatar.url : ''
-  );
-  const isSubmitting = useSelector((state) => state.avatar.submitting);
+  const avatar = useSelector((state) => state.user.avatar);
+  const isSubmitting = useSelector((state) => state.user.submitting);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [profile, setProfile] = useState({});

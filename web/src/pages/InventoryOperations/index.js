@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MaterialTable from 'material-table';
 import {
   Typography,
@@ -29,6 +29,8 @@ function InventoryOperations() {
   const classes = style();
 
   const dispatch = useDispatch();
+
+  const administrator = useSelector((state) => state.user.administrator);
 
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -138,7 +140,7 @@ function InventoryOperations() {
             tooltip: 'Cancelar',
             onClick: (_event) =>
               !rowData.canceled && handleCancelRequest(rowData.id),
-            hidden: rowData.canceled,
+            hidden: !administrator || rowData.canceled,
           }),
         ]}
       />

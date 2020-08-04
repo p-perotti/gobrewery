@@ -50,6 +50,6 @@ export function* deleteAvatar() {
 }
 
 export default all([
-  takeLatest('@avatar/UPDATE_REQUEST', updateAvatar),
-  takeLatest('@avatar/DELETE_REQUEST', deleteAvatar),
+  takeLatest('@user/UPDATE_AVATAR_REQUEST', updateAvatar),
+  takeLatest('@user/DELETE_AVATAR_REQUEST', deleteAvatar),
 ]);

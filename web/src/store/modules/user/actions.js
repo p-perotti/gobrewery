@@ -1,37 +1,37 @@
 export function updateAvatarRequest(data) {
   return {
-    type: '@avatar/UPDATE_REQUEST',
+    type: '@user/UPDATE_AVATAR_REQUEST',
     payload: { data },
   };
 }
 
 export function updateAvatarSuccess(avatar) {
   return {
-    type: '@avatar/UPDATE_SUCCESS',
+    type: '@user/UPDATE_AVATAR_SUCCESS',
     payload: { avatar },
   };
 }
 
 export function updateAvatarFailure() {
   return {
-    type: '@avatar/UPDATE_FAILURE',
+    type: '@user/UPDATE_AVATAR_FAILURE',
   };
 }
 
 export function deleteAvatarRequest() {
   return {
-    type: '@avatar/DELETE_REQUEST',
+    type: '@user/DELETE_AVATAR_REQUEST',
   };
 }
 
 export function deleteAvatarSuccess() {
   return {
-    type: '@avatar/DELETE_SUCCESS',
+    type: '@user/DELETE_AVATAR_SUCCESS',
   };
 }
 
 export function deleteAvatarFailure() {
   return {
-    type: '@avatar/DELETE_FAILURE',
+    type: '@user/DELETE_AVATAR_FAILURE',
   };
 }

@@ -19,7 +19,7 @@ function AppBar() {
   const classes = style();
   const dispatch = useDispatch();
 
-  const avatar = useSelector((state) => state.avatar.url);
+  const avatar = useSelector((state) => state.user.avatar);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -43,7 +43,7 @@ function AppBar() {
           GoBrewery
         </Typography>
         <IconButton onClick={handleMenu} color="inherit">
-          <Avatar src={avatar} />
+          <Avatar src={avatar} className={classes.avatar} />
         </IconButton>
         <Menu
           id="menu-appbar"

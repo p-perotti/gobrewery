@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   Drawer,
@@ -24,6 +25,8 @@ import style from './styles';
 function AppMenu() {
   const classes = style();
 
+  const administrator = useSelector((state) => state.user.administrator);
+
   const [registerOpen, setRegisterOpen] = useState(false);
   const [maintenanceOpen, setMaintenanceOpen] = useState(false);
   const [graphsOpen, setGraphsOpen] = useState(false);
@@ -40,12 +43,14 @@ function AppMenu() {
       <Toolbar />
       <div className={classes.drawerContainer}>
         <List>
-          <ListItem button component={Link} to="/dashboard">
-            <ListItemIcon>
-              <Dashboard />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
+          {administrator && (
+            <ListItem button component={Link} to="/dashboard">
+              <ListItemIcon>
+                <Dashboard />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+          )}
           <ListItem
             button
             onClick={() => {
@@ -60,14 +65,16 @@ function AppMenu() {
           </ListItem>
           <Collapse in={registerOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem
-                button
-                className={classes.nested}
-                component={Link}
-                to="/users"
-              >
-                <ListItemText primary="Usuários" />
-              </ListItem>
+              {administrator && (
+                <ListItem
+                  button
+                  className={classes.nested}
+                  component={Link}
+                  to="/users"
+                >
+                  <ListItemText primary="Usuários" />
+                </ListItem>
+              )}
               <ListItem
                 button
                 className={classes.nested}
@@ -118,54 +125,58 @@ function AppMenu() {
               </ListItem>
             </List>
           </Collapse>
-          <ListItem
-            button
-            onClick={() => {
-              setGraphsOpen(!graphsOpen);
-            }}
-          >
-            <ListItemIcon>
-              <InsertChart />
-            </ListItemIcon>
-            <ListItemText primary="Gráficos" />
-            {graphsOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={graphsOpen} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
+          {administrator && (
+            <>
               <ListItem
                 button
-                className={classes.nested}
-                component={Link}
-                to="/charts/best-sellers-by-liter"
+                onClick={() => {
+                  setGraphsOpen(!graphsOpen);
+                }}
               >
-                <ListItemText primary="Mais vendidos (por L)" />
+                <ListItemIcon>
+                  <InsertChart />
+                </ListItemIcon>
+                <ListItemText primary="Gráficos" />
+                {graphsOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
-            </List>
-          </Collapse>
-          <ListItem
-            button
-            onClick={() => {
-              setReportsOpen(!reportsOpen);
-            }}
-          >
-            <ListItemIcon>
-              <TableChart />
-            </ListItemIcon>
-            <ListItemText primary="Relatórios" />
-            {reportsOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={reportsOpen} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
+              <Collapse in={graphsOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItem
+                    button
+                    className={classes.nested}
+                    component={Link}
+                    to="/charts/best-sellers-by-liter"
+                  >
+                    <ListItemText primary="Mais vendidos (por L)" />
+                  </ListItem>
+                </List>
+              </Collapse>
               <ListItem
                 button
-                className={classes.nested}
-                component={Link}
-                to="/reports/sales-by-period"
+                onClick={() => {
+                  setReportsOpen(!reportsOpen);
+                }}
               >
-                <ListItemText primary="Vendas por período" />
+                <ListItemIcon>
+                  <TableChart />
+                </ListItemIcon>
+                <ListItemText primary="Relatórios" />
+                {reportsOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
-            </List>
-          </Collapse>
+              <Collapse in={reportsOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItem
+                    button
+                    className={classes.nested}
+                    component={Link}
+                    to="/reports/sales-by-period"
+                  >
+                    <ListItemText primary="Vendas por período" />
+                  </ListItem>
+                </List>
+              </Collapse>
+            </>
+          )}
         </List>
       </div>
     </Drawer>
