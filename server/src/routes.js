@@ -4,6 +4,7 @@ import multer from 'multer';
 import multerConfig from './config/multer';
 
 import authMiddleware from './app/middlewares/auth';
+import administratorMiddleware from './app/middlewares/administrator';
 
 import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
@@ -39,10 +40,10 @@ routes.post(
 );
 routes.delete('/profile/avatar', ProfileAvatarController.delete);
 
-routes.get('/users', UserController.index);
-routes.get('/users/:id', UserController.index);
-routes.post('/users', UserController.store);
-routes.put('/users/:id', UserController.update);
+routes.get('/users', administratorMiddleware, UserController.index);
+routes.get('/users/:id', administratorMiddleware, UserController.index);
+routes.post('/users', administratorMiddleware, UserController.store);
+routes.put('/users/:id', administratorMiddleware, UserController.update);
 
 routes.get('/sizes', SizeController.index);
 routes.get('/sizes/:id', SizeController.index);
@@ -75,23 +76,52 @@ routes.put('/coupons/:id', CouponController.update);
 routes.get('/inventory-operations', InventoryOperationController.index);
 routes.get('/inventory-operations/:id', InventoryOperationController.index);
 routes.post('/inventory-operations/', InventoryOperationController.store);
-routes.delete('/inventory-operations/:id', InventoryOperationController.delete);
+routes.delete(
+  '/inventory-operations/:id',
+  administratorMiddleware,
+  InventoryOperationController.delete
+);
 
 routes.get(
   '/inventory-operations-todays-total',
+  administratorMiddleware,
   InventoryOperationsTodaysTotalController.index
 );
 
-routes.get('/sales-todays-total', SalesTodaysTotalController.index);
+routes.get(
+  '/sales-todays-total',
+  administratorMiddleware,
+  SalesTodaysTotalController.index
+);
 
-routes.get('/sales-last-days-totals', SalesLastDaysTotalsController.index);
+routes.get(
+  '/sales-last-days-totals',
+  administratorMiddleware,
+  SalesLastDaysTotalsController.index
+);
 
-routes.get('/sales-latest', SalesLatestController.index);
+routes.get(
+  '/sales-latest',
+  administratorMiddleware,
+  SalesLatestController.index
+);
 
-routes.get('/best-sellers-by-amount', BestSellersByAmountController.index);
+routes.get(
+  '/best-sellers-by-amount',
+  administratorMiddleware,
+  BestSellersByAmountController.index
+);
 
-routes.get('/best-sellers-by-liter', BestSellersByLiterController.index);
+routes.get(
+  '/best-sellers-by-liter',
+  administratorMiddleware,
+  BestSellersByLiterController.index
+);
 
-routes.get('/sales-by-period', SalesByPeriodController.index);
+routes.get(
+  '/sales-by-period',
+  administratorMiddleware,
+  SalesByPeriodController.index
+);
 
 export default routes;
