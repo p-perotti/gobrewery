@@ -8,7 +8,7 @@ import Database from '../../database';
 
 class InventoryOperationController {
   async index(req, res) {
-    const attributes = ['id', 'type', 'date', 'canceled'];
+    const attributes = ['id', 'type', 'total_amount', 'date', 'canceled'];
 
     const include = [
       {
