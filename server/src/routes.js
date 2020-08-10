@@ -22,7 +22,7 @@ import SalesLastDaysTotalsController from './app/controllers/SalesLastDaysTotals
 import SalesLatestController from './app/controllers/SalesLatestController';
 import BestSellersByAmountController from './app/controllers/BestSellersByAmountController';
 import BestSellersByLiterController from './app/controllers/BestSellersByLiterController';
-import SalesByPeriodController from './app/controllers/SalesByPeriodController';
+import SalesReportController from './app/controllers/Reports/SalesController';
 
 const routes = Router();
 const upload = multer(multerConfig);
@@ -119,9 +119,9 @@ routes.get(
 );
 
 routes.get(
-  '/sales-by-period',
+  '/reports/sales',
   administratorMiddleware,
-  SalesByPeriodController.index
+  SalesReportController.index
 );
 
 export default routes;
