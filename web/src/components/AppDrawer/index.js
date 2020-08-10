@@ -169,9 +169,25 @@ function AppMenu() {
                     button
                     className={classes.nested}
                     component={Link}
-                    to="/reports/sales-by-period"
+                    to="/reports/sales"
                   >
-                    <ListItemText primary="Vendas por período" />
+                    <ListItemText primary="Vendas" />
+                  </ListItem>
+                  <ListItem
+                    button
+                    className={classes.nested}
+                    component={Link}
+                    to="/reports/inventory-operations"
+                  >
+                    <ListItemText primary="Estoque (Movimentações)" />
+                  </ListItem>
+                  <ListItem
+                    button
+                    className={classes.nested}
+                    component={Link}
+                    to="/reports/discount-by-coupon"
+                  >
+                    <ListItemText primary="Desconto por cupom" />
                   </ListItem>
                 </List>
               </Collapse>

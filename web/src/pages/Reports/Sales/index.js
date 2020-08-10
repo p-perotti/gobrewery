@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Paper, Typography, Grid, Button } from '@material-ui/core';
+import {
+  Paper,
+  Typography,
+  Grid,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@material-ui/core';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import { subMonths, format, parseISO } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -17,15 +26,16 @@ import { th, td, generateReport } from '~/util/report';
 
 import style from './styles';
 
-function SalesByPeriod() {
+function Sales() {
   const classes = style();
 
   const dispatch = useDispatch();
 
   const [startingDate, setStartingDate] = useState(subMonths(new Date(), 1));
   const [endingDate, setEndingDate] = useState(new Date());
+  const [groupBy, setGroupBy] = useState('sale');
 
-  function report(data) {
+  function reportBySale(data) {
     const generateReportBody = (rows) => {
       const body = [
         [
@@ -100,65 +110,141 @@ function SalesByPeriod() {
     const periodEnd = format(endingDate, 'dd/MM/yy', { locale: ptBR });
 
     generateReport(
-      `Vendas por período (${periodStart} à ${periodEnd})`,
+      `Vendas (${periodStart} à ${periodEnd})`,
       'landscape',
       ['auto', 'auto', '*', 'auto', 'auto', 'auto', 'auto', 'auto'],
       generateReportBody(data)
     );
   }
 
+  function reportByProduct(data) {
+    const generateReportBody = (rows) => {
+      const body = [
+        [
+          th('Produto'),
+          th('Tamanho'),
+          th('Preço'),
+          th('Quantidade'),
+          th('Total'),
+        ],
+      ];
+
+      let totalAmount = 0;
+      let grossTotal = 0;
+
+      rows.forEach((row, index) => {
+        const tableRow = [];
+        tableRow.push(
+          td(row.product.name, index),
+          td(row.size.description, index),
+          td(formatCurrency(row.unit_price), index),
+          td(row.amount, index),
+          td(formatCurrency(row.total), index)
+        );
+        body.push(tableRow);
+
+        totalAmount += Number(row.amount);
+        grossTotal += Number(row.total);
+      });
+
+      body[rows.length + 1] = [
+        td('Total', -1, {
+          colSpan: 3,
+          fillColor: 'black',
+          color: 'white',
+          alignment: 'right',
+        }),
+        td(''),
+        td(''),
+        td(totalAmount, -1, {
+          fillColor: 'black',
+          color: 'white',
+        }),
+        td(formatCurrency(grossTotal), -1, {
+          fillColor: 'black',
+          color: 'white',
+        }),
+      ];
+
+      return body;
+    };
+
+    const periodStart = format(startingDate, 'dd/MM/yy', { locale: ptBR });
+    const periodEnd = format(endingDate, 'dd/MM/yy', { locale: ptBR });
+
+    generateReport(
+      `Vendas por Produto (${periodStart} à ${periodEnd})`,
+      'portrait',
+      ['*', '*', 'auto', 'auto', 'auto'],
+      generateReportBody(data)
+    );
+  }
   const handleGenerate = async () => {
     try {
-      const response = await api.get('/sales-by-period', {
-        params: { startingDate, endingDate },
+      const response = await api.get('/reports/sales', {
+        params: { startingDate, endingDate, groupBy },
       });
 
       if (response.data) {
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        switch (groupBy) {
+          case 'sale': {
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-        const formatStatus = (status) => {
-          switch (status) {
-            case 'P':
-              return 'Processamento';
-            case 'E':
-              return 'Enviado';
-            case 'F':
-              return 'Finalizado';
-            case 'C':
-              return 'Cancelado';
-            default:
-              return '';
+            const formatStatus = (status) => {
+              switch (status) {
+                case 'P':
+                  return 'Processamento';
+                case 'E':
+                  return 'Enviado';
+                case 'F':
+                  return 'Finalizado';
+                case 'C':
+                  return 'Cancelado';
+                default:
+                  return '';
+              }
+            };
+
+            const data = response.data.map((r) => ({
+              date: format(
+                utcToZonedTime(parseISO(r.date), timezone),
+                'dd/MM/yyyy HH:mm',
+                {
+                  locale: ptBR,
+                }
+              ),
+              status: formatStatus(r.status),
+              customer: r.customer.name,
+              total_amount: r.total_amount,
+              gross_total: r.gross_total,
+              net_total: r.net_total,
+              total_discount: r.total_discount,
+              payment_method: r.payment_method.name,
+            }));
+
+            reportBySale(data);
+            break;
           }
-        };
-
-        const data = response.data.map((r) => ({
-          date: format(
-            utcToZonedTime(parseISO(r.date), timezone),
-            'dd/MM/yyyy HH:mm',
-            {
-              locale: ptBR,
-            }
-          ),
-          status: formatStatus(r.status),
-          customer: r.customer.name,
-          total_amount: r.total_amount,
-          gross_total: r.gross_total,
-          net_total: r.net_total,
-          total_discount: r.total_discount,
-          payment_method: r.payment_method.name,
-        }));
-
-        report(data);
+          case 'product': {
+            reportByProduct(response.data);
+            break;
+          }
+          default:
+        }
       }
     } catch (error) {
       dispatch(showSnackbar('error', 'Não foi possível gerar relatório.'));
     }
   };
 
+  const handleChangeGroupBy = (event) => {
+    setGroupBy(event.target.value);
+  };
+
   return (
     <Paper>
       <Typography variant="h6" color="primary" className={classes.title}>
-        Vendas por período
+        Relatório de Vendas
       </Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
         <Grid container spacing={1} className={classes.container}>
@@ -188,7 +274,26 @@ function SalesByPeriod() {
               onChange={setEndingDate}
             />
           </Grid>
-          <Grid item xs={8} className={classes.buttons}>
+          <Grid item xs={2}>
+            <FormControl
+              variant="outlined"
+              size="small"
+              fullWidth
+              className={classes.formControl}
+            >
+              <InputLabel htmlFor="group-by-select">Agrupamento</InputLabel>
+              <Select
+                id="group-by-select"
+                value={groupBy}
+                onChange={handleChangeGroupBy}
+                label="Agrupamento"
+              >
+                <MenuItem value="sale">Venda</MenuItem>
+                <MenuItem value="product">Produto</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6} className={classes.buttons}>
             <Button
               type="button"
               variant="contained"
@@ -205,4 +310,4 @@ function SalesByPeriod() {
   );
 }
 
-export default SalesByPeriod;
+export default Sales;

@@ -29,7 +29,7 @@ import InventoryOperationForm from '~/pages/InventoryOperations/InventoryOperati
 
 import BestSellersByLiter from '~/pages/Charts/BestSellersByLiter';
 
-import SalesByPeriod from '~/pages/Reports/SalesByPeriod';
+import Sales from '~/pages/Reports/Sales';
 
 import Restricted from '~/pages/Restricted';
 
@@ -120,9 +120,9 @@ export default function Routes() {
       />
 
       <Route
-        path="/reports/sales-by-period"
+        path="/reports/sales"
         exact
-        component={SalesByPeriod}
+        component={Sales}
         isPrivate
         isAdminRestricted
       />
