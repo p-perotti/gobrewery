@@ -95,19 +95,13 @@ class SalesController {
               Database.connection.fn('sum', Database.connection.col('amount')),
               'amount',
             ],
-            [
-              Database.connection.fn(
-                'sum',
-                Database.connection.col('unit_price')
-              ),
-              'unit_price',
-            ],
+            'unit_price',
             [
               Database.connection.fn('sum', Database.connection.col('price')),
               'total',
             ],
           ],
-          group: ['product.id', 'size.id'],
+          group: ['product.id', 'size.id', 'unit_price'],
           order: [
             ['product', 'name'],
             ['size', 'description'],
