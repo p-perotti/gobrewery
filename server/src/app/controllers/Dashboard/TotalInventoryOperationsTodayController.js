@@ -1,9 +1,9 @@
 import { Op } from 'sequelize';
 import { startOfDay } from 'date-fns';
 
-import InventoryOperation from '../models/InventoryOperation';
+import InventoryOperation from '../../models/InventoryOperation';
 
-import Database from '../../database';
+import Database from '../../../database';
 
 class InventoryOperationsTodaysTotalController {
   async index(req, res) {

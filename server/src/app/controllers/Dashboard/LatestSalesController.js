@@ -1,8 +1,8 @@
 import { Op } from 'sequelize';
 
-import Sale from '../models/Sale';
-import Customer from '../models/Customer';
-import PaymentMethod from '../models/PaymentMethod';
+import Sale from '../../models/Sale';
+import Customer from '../../models/Customer';
+import PaymentMethod from '../../models/PaymentMethod';
 
 class SalesLatestController {
   async index(req, res) {

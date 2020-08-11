@@ -16,12 +16,15 @@ import ProductPriceController from './app/controllers/ProductPriceController';
 import ProductImageController from './app/controllers/ProductImageController';
 import CouponController from './app/controllers/CouponController';
 import InventoryOperationController from './app/controllers/InventoryOperationController';
-import InventoryOperationsTodaysTotalController from './app/controllers/InventoryOperationsTodaysTotalController';
-import SalesTodaysTotalController from './app/controllers/SalesTodaysTotalController';
-import SalesLastDaysTotalsController from './app/controllers/SalesLastDaysTotalsController';
-import SalesLatestController from './app/controllers/SalesLatestController';
-import BestSellersByAmountController from './app/controllers/BestSellersByAmountController';
-import BestSellersByLiterController from './app/controllers/BestSellersByLiterController';
+
+import DashboardTotalInventoryOperationsTodayController from './app/controllers/Dashboard/TotalInventoryOperationsTodayController';
+import DashboardTotalSalesTodayController from './app/controllers/Dashboard/TotalSalesTodayController';
+import DashboardLastDaysTotalSalesController from './app/controllers/Dashboard/LastDaysTotalSalesController';
+import DashboardLatestSalesController from './app/controllers/Dashboard/LatestSalesController';
+import DashboardBestSellersByAmountController from './app/controllers/Dashboard/BestSellersByAmountController';
+
+import BestSellersByLiterChartController from './app/controllers/Charts/BestSellersByLiterController';
+
 import SalesReportController from './app/controllers/Reports/SalesController';
 
 const routes = Router();
@@ -83,39 +86,39 @@ routes.delete(
 );
 
 routes.get(
-  '/inventory-operations-todays-total',
+  '/dashboard/total-inventory-operations-today',
   administratorMiddleware,
-  InventoryOperationsTodaysTotalController.index
+  DashboardTotalInventoryOperationsTodayController.index
 );
 
 routes.get(
-  '/sales-todays-total',
+  '/dashboard/total-sales-today',
   administratorMiddleware,
-  SalesTodaysTotalController.index
+  DashboardTotalSalesTodayController.index
 );
 
 routes.get(
-  '/sales-last-days-totals',
+  '/dashboard/last-days-total-sales',
   administratorMiddleware,
-  SalesLastDaysTotalsController.index
+  DashboardLastDaysTotalSalesController.index
 );
 
 routes.get(
-  '/sales-latest',
+  '/dashboard/latest-sales',
   administratorMiddleware,
-  SalesLatestController.index
+  DashboardLatestSalesController.index
 );
 
 routes.get(
-  '/best-sellers-by-amount',
+  '/dashboard/best-sellers-by-amount',
   administratorMiddleware,
-  BestSellersByAmountController.index
+  DashboardBestSellersByAmountController.index
 );
 
 routes.get(
-  '/best-sellers-by-liter',
+  '/charts/best-sellers-by-liter',
   administratorMiddleware,
-  BestSellersByLiterController.index
+  BestSellersByLiterChartController.index
 );
 
 routes.get(

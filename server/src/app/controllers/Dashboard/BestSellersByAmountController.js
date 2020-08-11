@@ -1,12 +1,12 @@
 import { Op } from 'sequelize';
 import { subDays, startOfDay } from 'date-fns';
 
-import Sale from '../models/Sale';
-import SaleProduct from '../models/SaleProduct';
-import Product from '../models/Product';
-import Size from '../models/Size';
+import Sale from '../../models/Sale';
+import SaleProduct from '../../models/SaleProduct';
+import Product from '../../models/Product';
+import Size from '../../models/Size';
 
-import Database from '../../database';
+import Database from '../../../database';
 
 class BestSellersByAmountController {
   async index(req, res) {

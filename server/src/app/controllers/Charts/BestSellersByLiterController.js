@@ -1,12 +1,12 @@
 import { Op, literal } from 'sequelize';
 import { parseISO, startOfDay, endOfDay, isBefore, isAfter } from 'date-fns';
 
-import Sale from '../models/Sale';
-import SaleProduct from '../models/SaleProduct';
-import Product from '../models/Product';
-import Size from '../models/Size';
+import Sale from '../../models/Sale';
+import SaleProduct from '../../models/SaleProduct';
+import Product from '../../models/Product';
+import Size from '../../models/Size';
 
-import Database from '../../database';
+import Database from '../../../database';
 
 class BestSellersByLiterController {
   async index(req, res) {
@@ -16,13 +16,13 @@ class BestSellersByLiterController {
     if (isAfter(startingDate, endingDate)) {
       return res
         .status(400)
-        .json({ error: `Starting date must be before ending date.` });
+        .json({ error: 'Starting date must be before ending date.' });
     }
 
     if (isBefore(endingDate, startingDate)) {
       return res
         .status(400)
-        .json({ error: `Ending date must be after starting date.` });
+        .json({ error: 'Ending date must be after starting date.' });
     }
 
     const products = await SaleProduct.findAll({
