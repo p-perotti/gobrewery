@@ -12,6 +12,12 @@ import Database from '../../../database';
 
 class SalesController {
   async index(req, res) {
+    if (!req.query.startingDate || !req.query.endingDate) {
+      return res.status(400).json({
+        error: 'Starting and ending date request params must have value.',
+      });
+    }
+
     const startingDate = startOfDay(parseISO(req.query.startingDate));
     const endingDate = endOfDay(parseISO(req.query.endingDate));
 
