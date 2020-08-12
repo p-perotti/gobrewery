@@ -26,6 +26,7 @@ import DashboardBestSellersByAmountController from './app/controllers/Dashboard/
 import BestSellersByLiterChartController from './app/controllers/Charts/BestSellersByLiterController';
 
 import SalesReportController from './app/controllers/Reports/SalesController';
+import TotalDiscountByCouponReportController from './app/controllers/Reports/TotalDiscountByCouponController';
 
 const routes = Router();
 const upload = multer(multerConfig);
@@ -125,6 +126,12 @@ routes.get(
   '/reports/sales',
   administratorMiddleware,
   SalesReportController.index
+);
+
+routes.get(
+  '/reports/total-discount-by-coupon',
+  administratorMiddleware,
+  TotalDiscountByCouponReportController.index
 );
 
 export default routes;
