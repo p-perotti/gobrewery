@@ -83,7 +83,7 @@ class InventoryOperationsController {
       data.map(async row => {
         const { product, size, inward, outward } = row.get();
 
-        const { previous } = await InventoryOperationProduct.findAll({
+        const balance = await InventoryOperationProduct.findOne({
           include: [
             {
               model: InventoryOperation,
@@ -112,26 +112,28 @@ class InventoryOperationsController {
             size_id: size.id,
           },
           group: ['product_id', 'size_id'],
+          raw: true,
         });
 
-        if (!previous) {
+        if (balance) {
           return {
             product,
             size,
-            previous: 0,
+            previous: Number(balance.previous),
             in: Number(inward),
             out: Number(outward),
-            current: Number(inward) - Number(outward),
+            current:
+              Number(balance.previous) + (Number(inward) - Number(outward)),
           };
         }
 
         return {
           product,
           size,
-          previous: Number(previous),
+          previous: 0,
           in: Number(inward),
           out: Number(outward),
-          current: Number(previous) + Number(inward) - Number(outward),
+          current: Number(inward) - Number(outward),
         };
       })
     );

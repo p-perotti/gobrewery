@@ -6,14 +6,14 @@ module.exports = {
         {
           product_id: 2,
           size_id: 2,
-          amount: 52,
+          amount: 100,
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
           product_id: 2,
           size_id: 3,
-          amount: 6,
+          amount: 30,
           created_at: new Date(),
           updated_at: new Date(),
         },
