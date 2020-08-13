@@ -29,7 +29,9 @@ import InventoryOperationForm from '~/pages/InventoryOperations/InventoryOperati
 
 import BestSellersByLiter from '~/pages/Charts/BestSellersByLiter';
 
-import Sales from '~/pages/Reports/Sales';
+import SalesReport from '~/pages/Reports/Sales';
+import InventoryOperationsReport from '~/pages/Reports/InventoryOperations';
+import TotalDiscountByCouponReport from '~/pages/Reports/TotalDiscountByCoupon';
 
 import Restricted from '~/pages/Restricted';
 
@@ -122,7 +124,23 @@ export default function Routes() {
       <Route
         path="/reports/sales"
         exact
-        component={Sales}
+        component={SalesReport}
+        isPrivate
+        isAdminRestricted
+      />
+
+      <Route
+        path="/reports/inventory-operations"
+        exact
+        component={InventoryOperationsReport}
+        isPrivate
+        isAdminRestricted
+      />
+
+      <Route
+        path="/reports/total-discount-by-coupon"
+        exact
+        component={TotalDiscountByCouponReport}
         isPrivate
         isAdminRestricted
       />

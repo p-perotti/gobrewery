@@ -36,7 +36,24 @@ function Sales() {
   const [groupBy, setGroupBy] = useState('sale');
 
   function reportBySale(data) {
+    const formatStatus = (status) => {
+      switch (status) {
+        case 'P':
+          return 'Processamento';
+        case 'E':
+          return 'Enviado';
+        case 'F':
+          return 'Finalizado';
+        case 'C':
+          return 'Cancelado';
+        default:
+          return '';
+      }
+    };
+
     const generateReportBody = (rows) => {
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
       const body = [
         [
           th('Data'),
@@ -58,10 +75,19 @@ function Sales() {
       rows.forEach((row, index) => {
         const tableRow = [];
         tableRow.push(
-          td(row.date, index),
-          td(row.status, index),
-          td(row.customer, index),
-          td(row.payment_method, index),
+          td(
+            format(
+              utcToZonedTime(parseISO(row.date), timezone),
+              'dd/MM/yyyy HH:mm',
+              {
+                locale: ptBR,
+              }
+            ),
+            index
+          ),
+          td(formatStatus(row.status), index),
+          td(row.customer.name, index),
+          td(row.payment_method.name, index),
           td(row.total_amount, index),
           td(formatCurrency(row.gross_total), index),
           td(formatCurrency(row.net_total), index),
@@ -110,7 +136,7 @@ function Sales() {
     const periodEnd = format(endingDate, 'dd/MM/yy', { locale: ptBR });
 
     generateReport(
-      `Vendas (${periodStart} à ${periodEnd})`,
+      `Relatório de vendas (${periodStart} à ${periodEnd})`,
       'landscape',
       ['auto', 'auto', '*', 'auto', 'auto', 'auto', 'auto', 'auto'],
       generateReportBody(data)
@@ -125,7 +151,7 @@ function Sales() {
           th('Tamanho'),
           th('Preço'),
           th('Quantidade'),
-          th('Total'),
+          th('Total Bruto'),
         ],
       ];
 
@@ -173,7 +199,7 @@ function Sales() {
     const periodEnd = format(endingDate, 'dd/MM/yy', { locale: ptBR });
 
     generateReport(
-      `Vendas por Produto (${periodStart} à ${periodEnd})`,
+      `Relatório de vendas por produto (${periodStart} à ${periodEnd})`,
       'portrait',
       ['*', '*', 'auto', 'auto', 'auto'],
       generateReportBody(data)
@@ -181,48 +207,14 @@ function Sales() {
   }
   const handleGenerate = async () => {
     try {
-      const response = await api.get('/reports/sales', {
+      const response = await api.get('reports/sales', {
         params: { startingDate, endingDate, groupBy },
       });
 
       if (response.data) {
         switch (groupBy) {
           case 'sale': {
-            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-            const formatStatus = (status) => {
-              switch (status) {
-                case 'P':
-                  return 'Processamento';
-                case 'E':
-                  return 'Enviado';
-                case 'F':
-                  return 'Finalizado';
-                case 'C':
-                  return 'Cancelado';
-                default:
-                  return '';
-              }
-            };
-
-            const data = response.data.map((r) => ({
-              date: format(
-                utcToZonedTime(parseISO(r.date), timezone),
-                'dd/MM/yyyy HH:mm',
-                {
-                  locale: ptBR,
-                }
-              ),
-              status: formatStatus(r.status),
-              customer: r.customer.name,
-              total_amount: r.total_amount,
-              gross_total: r.gross_total,
-              net_total: r.net_total,
-              total_discount: r.total_discount,
-              payment_method: r.payment_method.name,
-            }));
-
-            reportBySale(data);
+            reportBySale(response.data);
             break;
           }
           case 'product': {
@@ -244,7 +236,7 @@ function Sales() {
   return (
     <Paper>
       <Typography variant="h6" color="primary" className={classes.title}>
-        Relatório de Vendas
+        Relatório de vendas
       </Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
         <Grid container spacing={1} className={classes.container}>
