@@ -5,7 +5,7 @@ import Sale from '../../models/Sale';
 
 import Database from '../../../database';
 
-class SalesLastDaysTotalsController {
+class LastDaysTotalSalesController {
   async index(req, res) {
     const totals = await Sale.findAll({
       attributes: [
@@ -41,4 +41,4 @@ class SalesLastDaysTotalsController {
   }
 }
 
-export default new SalesLastDaysTotalsController();
+export default new LastDaysTotalSalesController();

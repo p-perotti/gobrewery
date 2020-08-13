@@ -4,7 +4,7 @@ import Sale from '../../models/Sale';
 import Customer from '../../models/Customer';
 import PaymentMethod from '../../models/PaymentMethod';
 
-class SalesLatestController {
+class LatestSalesController {
   async index(req, res) {
     const totals = await Sale.findAll({
       include: [
@@ -33,4 +33,4 @@ class SalesLatestController {
   }
 }
 
-export default new SalesLatestController();
+export default new LatestSalesController();

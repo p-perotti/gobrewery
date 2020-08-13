@@ -5,7 +5,7 @@ import InventoryOperation from '../../models/InventoryOperation';
 
 import Database from '../../../database';
 
-class InventoryOperationsTodaysTotalController {
+class TotalInventoryOperationsTodayController {
   async index(req, res) {
     const { type } = req.query;
 
@@ -44,4 +44,4 @@ class InventoryOperationsTodaysTotalController {
   }
 }
 
-export default new InventoryOperationsTodaysTotalController();
+export default new TotalInventoryOperationsTodayController();

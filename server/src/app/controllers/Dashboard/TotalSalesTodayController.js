@@ -5,7 +5,7 @@ import Sale from '../../models/Sale';
 
 import Database from '../../../database';
 
-class SalesTodaysTotalController {
+class TotalSalesTodayController {
   async index(req, res) {
     const total = await Sale.findOne({
       attributes: [
@@ -28,4 +28,4 @@ class SalesTodaysTotalController {
   }
 }
 
-export default new SalesTodaysTotalController();
+export default new TotalSalesTodayController();
