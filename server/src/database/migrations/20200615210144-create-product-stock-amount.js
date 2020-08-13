@@ -1,16 +1,20 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('product_stock_amount', {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       product_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true,
         references: { model: 'products', key: 'id' },
       },
       size_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true,
         references: { model: 'sizes', key: 'id' },
       },
       amount: {
