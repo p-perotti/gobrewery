@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Paper, Typography, Grid, Button } from '@material-ui/core';
+import {
+  Paper,
+  Typography,
+  Grid,
+  FormControlLabel,
+  Switch,
+  Button,
+} from '@material-ui/core';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
-import { subMonths, format } from 'date-fns';
+import { startOfMonth, format } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
@@ -19,8 +26,59 @@ function StockOperations() {
 
   const dispatch = useDispatch();
 
-  const [startingDate, setStartingDate] = useState(subMonths(new Date(), 1));
+  const [startingDate, setStartingDate] = useState(startOfMonth(new Date()));
   const [endingDate, setEndingDate] = useState(new Date());
+  const [synthetic, setSynthetic] = useState(true);
+
+  const handleChangeSynthetic = () => {
+    setSynthetic(!synthetic);
+  };
+
+  function syntheticReport(data) {
+    const generateReportBody = (rows) => {
+      const body = [[th('Produto'), th('Tamanho'), th('Saldo Atual')]];
+
+      let currentTotal = 0;
+
+      rows.forEach((row, index) => {
+        const tableRow = [];
+        tableRow.push(
+          td(row.product.name, index),
+          td(row.size.description, index),
+          td(row.current_balance, index)
+        );
+        body.push(tableRow);
+
+        currentTotal += Number(row.current_balance);
+      });
+
+      body[rows.length + 1] = [
+        td('Total', -1, {
+          colSpan: 2,
+          fillColor: 'black',
+          color: 'white',
+          alignment: 'right',
+        }),
+        td(''),
+        td(currentTotal, -1, {
+          fillColor: 'black',
+          color: 'white',
+        }),
+      ];
+
+      return body;
+    };
+
+    const periodStart = format(startingDate, 'dd/MM/yy', { locale: ptBR });
+    const periodEnd = format(endingDate, 'dd/MM/yy', { locale: ptBR });
+
+    generateReport(
+      `Relatório resumido de estoque (${periodStart} à ${periodEnd})`,
+      'portrait',
+      ['*', '*', 'auto'],
+      generateReportBody(data)
+    );
+  }
 
   function report(data) {
     const generateReportBody = (rows) => {
@@ -45,17 +103,17 @@ function StockOperations() {
         tableRow.push(
           td(row.product.name, index),
           td(row.size.description, index),
-          td(row.previous, index),
-          td(row.in, index),
-          td(row.out, index),
-          td(row.current, index)
+          td(row.previous_balance, index),
+          td(row.inward, index),
+          td(row.outward, index),
+          td(row.current_balance, index)
         );
         body.push(tableRow);
 
-        previousTotal += Number(row.previous);
-        totalInwards += Number(row.in);
-        totalOutwards += Number(row.out);
-        currentTotal += Number(row.current);
+        previousTotal += Number(row.previous_balance);
+        totalInwards += Number(row.inward);
+        totalOutwards += Number(row.outward);
+        currentTotal += Number(row.current_balance);
       });
 
       body[rows.length + 1] = [
@@ -101,11 +159,15 @@ function StockOperations() {
   const handleGenerate = async () => {
     try {
       const response = await api.get('reports/stock-operations', {
-        params: { startingDate, endingDate },
+        params: { startingDate, endingDate, synthetic },
       });
 
       if (response.data) {
-        report(response.data);
+        if (synthetic) {
+          syntheticReport(response.data);
+        } else {
+          report(response.data);
+        }
       }
     } catch (error) {
       dispatch(showSnackbar('error', 'Não foi possível gerar relatório.'));
@@ -128,6 +190,8 @@ function StockOperations() {
               ampm={false}
               format="dd/MM/yyyy"
               cancelLabel="Cancelar"
+              maxDate={endingDate}
+              maxDateMessage="Data inicial deve ser menor que a data final."
               value={startingDate}
               onChange={setStartingDate}
             />
@@ -141,11 +205,25 @@ function StockOperations() {
               ampm={false}
               format="dd/MM/yyyy"
               cancelLabel="Cancelar"
+              minDate={startingDate}
+              minDateMessage="Data final deve ser maior que a data inicial."
               value={endingDate}
               onChange={setEndingDate}
             />
           </Grid>
-          <Grid item xs={8} className={classes.buttons}>
+          <Grid item xs={2}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={synthetic}
+                  onChange={handleChangeSynthetic}
+                  name="synthetic"
+                />
+              }
+              label="Resumido"
+            />
+          </Grid>
+          <Grid item xs={6} className={classes.buttons}>
             <Button
               type="button"
               variant="contained"
