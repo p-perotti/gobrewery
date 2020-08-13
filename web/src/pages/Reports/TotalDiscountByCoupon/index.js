@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Paper, Typography, Grid, Button } from '@material-ui/core';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
-import { subMonths, format } from 'date-fns';
+import { startOfMonth, format } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
@@ -21,7 +21,7 @@ function TotalDiscountByCoupon() {
 
   const dispatch = useDispatch();
 
-  const [startingDate, setStartingDate] = useState(subMonths(new Date(), 1));
+  const [startingDate, setStartingDate] = useState(startOfMonth(new Date()));
   const [endingDate, setEndingDate] = useState(new Date());
 
   function report(data) {
@@ -147,6 +147,8 @@ function TotalDiscountByCoupon() {
               ampm={false}
               format="dd/MM/yyyy"
               cancelLabel="Cancelar"
+              maxDate={endingDate}
+              maxDateMessage="Data inicial deve ser menor que a data final."
               value={startingDate}
               onChange={setStartingDate}
             />
@@ -160,6 +162,8 @@ function TotalDiscountByCoupon() {
               ampm={false}
               format="dd/MM/yyyy"
               cancelLabel="Cancelar"
+              minDate={startingDate}
+              minDateMessage="Data final deve ser maior que a data inicial."
               value={endingDate}
               onChange={setEndingDate}
             />

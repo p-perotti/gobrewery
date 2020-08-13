@@ -4,7 +4,7 @@ import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { PieChart, Pie, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { getColor } from 'random-material-color';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
-import { subDays, isBefore, isAfter } from 'date-fns';
+import { startOfMonth } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
@@ -20,7 +20,7 @@ function BestSellersByLiter() {
   const dispatch = useDispatch();
 
   const [startingDateParam, setStartingDateParam] = useState(
-    subDays(new Date(), 6)
+    startOfMonth(new Date())
   );
   const [endingDateParam, setEndingDateParam] = useState(new Date());
   const [chartData, setChartData] = useState([{}]);
@@ -54,31 +54,11 @@ function BestSellersByLiter() {
   );
 
   useEffect(() => {
-    generateChart(subDays(new Date(), 6), new Date());
+    generateChart(startOfMonth(new Date()), new Date());
   }, [generateChart]);
 
-  function validateParams() {
-    if (isBefore(endingDateParam, startingDateParam)) {
-      dispatch(
-        showSnackbar('warning', 'Data final deve ser maior que a data inicial.')
-      );
-      return false;
-    }
-
-    if (isAfter(startingDateParam, endingDateParam)) {
-      dispatch(
-        showSnackbar('warning', 'Data inicial deve ser menor que a data final.')
-      );
-      return false;
-    }
-
-    return true;
-  }
-
   function handleGenerate() {
-    if (validateParams()) {
-      generateChart(startingDateParam, endingDateParam);
-    }
+    generateChart(startingDateParam, endingDateParam);
   }
 
   return (
@@ -97,6 +77,8 @@ function BestSellersByLiter() {
               ampm={false}
               format="dd/MM/yyyy"
               cancelLabel="Cancelar"
+              maxDate={endingDateParam}
+              maxDateMessage="Data inicial deve ser menor que a data final."
               value={startingDateParam}
               onChange={setStartingDateParam}
             />
@@ -110,6 +92,8 @@ function BestSellersByLiter() {
               ampm={false}
               format="dd/MM/yyyy"
               cancelLabel="Cancelar"
+              minDate={startingDateParam}
+              minDateMessage="Data final deve ser maior que a data inicial."
               value={endingDateParam}
               onChange={setEndingDateParam}
             />

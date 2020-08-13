@@ -11,7 +11,7 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
-import { subMonths, format, parseISO } from 'date-fns';
+import { startOfMonth, format, parseISO } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { utcToZonedTime } from 'date-fns-tz';
@@ -31,7 +31,7 @@ function Sales() {
 
   const dispatch = useDispatch();
 
-  const [startingDate, setStartingDate] = useState(subMonths(new Date(), 1));
+  const [startingDate, setStartingDate] = useState(startOfMonth(new Date()));
   const [endingDate, setEndingDate] = useState(new Date());
   const [groupBy, setGroupBy] = useState('sale');
 
@@ -249,6 +249,8 @@ function Sales() {
               ampm={false}
               format="dd/MM/yyyy"
               cancelLabel="Cancelar"
+              maxDate={endingDate}
+              maxDateMessage="Data inicial deve ser menor que a data final."
               value={startingDate}
               onChange={setStartingDate}
             />
@@ -262,6 +264,8 @@ function Sales() {
               ampm={false}
               format="dd/MM/yyyy"
               cancelLabel="Cancelar"
+              minDate={startingDate}
+              minDateMessage="Data final deve ser maior que a data inicial."
               value={endingDate}
               onChange={setEndingDate}
             />
