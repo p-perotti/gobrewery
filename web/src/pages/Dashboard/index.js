@@ -196,7 +196,7 @@ function Dashboard() {
         <MaterialTable
           title={
             <Typography variant="h6" color="primary">
-              Mais vendidos (últimos 7 dias)
+              Produtos mais vendidos (últimos 7 dias)
             </Typography>
           }
           columns={[

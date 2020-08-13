@@ -121,7 +121,7 @@ function AppMenu() {
                 component={Link}
                 to="/stock-operations"
               >
-                <ListItemText primary="Estoque" />
+                <ListItemText primary="Movimentações de estoque" />
               </ListItem>
             </List>
           </Collapse>
