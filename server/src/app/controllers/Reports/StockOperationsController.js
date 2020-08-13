@@ -1,6 +1,7 @@
 import { Op, literal } from 'sequelize';
 import { parseISO, startOfDay, endOfDay, isBefore, isAfter } from 'date-fns';
 
+import ProductStockAmount from '../../models/ProductStockAmount';
 import StockOperation from '../../models/StockOperation';
 import StockOperationProduct from '../../models/StockOperationProduct';
 import Product from '../../models/Product';
@@ -29,6 +30,30 @@ class StockOperationsController {
       return res
         .status(400)
         .json({ error: 'Ending date must be after starting date.' });
+    }
+
+    if (req.query.synthetic === true) {
+      const products = await ProductStockAmount.findAll({
+        include: [
+          {
+            model: Product,
+            as: 'product',
+            attributes: ['id', 'name'],
+          },
+          {
+            model: Size,
+            as: 'size',
+            attributes: ['id', 'description'],
+          },
+        ],
+        attributes: [['amount', 'current_balance']],
+        order: [
+          ['product', 'name'],
+          ['size', 'description'],
+        ],
+      });
+
+      return res.json(products);
     }
 
     const data = await StockOperationProduct.findAll({
@@ -119,10 +144,10 @@ class StockOperationsController {
           return {
             product,
             size,
-            previous: Number(balance.previous),
+            previous_balance: Number(balance.previous),
             in: Number(inward),
             out: Number(outward),
-            current:
+            current_balance:
               Number(balance.previous) + (Number(inward) - Number(outward)),
           };
         }
@@ -130,10 +155,10 @@ class StockOperationsController {
         return {
           product,
           size,
-          previous: 0,
-          in: Number(inward),
-          out: Number(outward),
-          current: Number(inward) - Number(outward),
+          previous_balance: 0,
+          inward: Number(inward),
+          outward: Number(outward),
+          current_balance: Number(inward) - Number(outward),
         };
       })
     );
