@@ -26,6 +26,7 @@ import DashboardBestSellersByAmountController from './app/controllers/Dashboard/
 import BestSellersByLiterChartController from './app/controllers/Charts/BestSellersByLiterController';
 
 import SalesReportController from './app/controllers/Reports/SalesController';
+import InventoryOperationsReportController from './app/controllers/Reports/InventoryOperationsController';
 import TotalDiscountByCouponReportController from './app/controllers/Reports/TotalDiscountByCouponController';
 
 const routes = Router();
@@ -126,6 +127,12 @@ routes.get(
   '/reports/sales',
   administratorMiddleware,
   SalesReportController.index
+);
+
+routes.get(
+  '/reports/inventory-operations',
+  administratorMiddleware,
+  InventoryOperationsReportController.index
 );
 
 routes.get(
