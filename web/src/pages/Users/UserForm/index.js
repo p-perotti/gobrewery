@@ -62,7 +62,7 @@ function UserForm() {
         await api.put(`users/${id}`, values);
       } else {
         const data = { ...values, password: 'gobrewery' };
-        await api.post('/users', data);
+        await api.post('users', data);
       }
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));

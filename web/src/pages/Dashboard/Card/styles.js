@@ -1,6 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const style = makeStyles((theme) => ({
+  title: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
   positive: {
     color: theme.palette.success.main,
   },

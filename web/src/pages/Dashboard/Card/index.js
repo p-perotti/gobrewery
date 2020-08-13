@@ -15,13 +15,18 @@ function Card({ title, value, currency, positive, link }) {
 
   return (
     <>
-      <Typography variant="h6" color="primary">
-        {title}
-      </Typography>
+      <div className={classes.title}>
+        <Typography variant="h6" color="primary">
+          {title}
+        </Typography>
+        <Button type="button" color="primary" component={Link} to={link}>
+          Ver mais
+        </Button>
+      </div>
       <Typography
         variant="h4"
         className={
-          '' && value > 0 && (positive ? classes.positive : classes.negative)
+          value > 0 && (positive ? classes.positive : classes.negative)
         }
       >
         {value > 0 && (positive ? <ArrowDropUp /> : <ArrowDropDown />)}
@@ -32,11 +37,6 @@ function Card({ title, value, currency, positive, link }) {
           locale: ptBR,
         })}
       </Typography>
-      <div>
-        <Button type="button" color="primary" component={Link} to={link}>
-          Ver mais
-        </Button>
-      </div>
     </>
   );
 }

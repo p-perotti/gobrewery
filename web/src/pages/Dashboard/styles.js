@@ -10,13 +10,15 @@ const style = makeStyles((theme) => ({
     padding: theme.spacing(2, 3),
     display: 'flex',
     flexDirection: 'column',
+  },
+  container: {
+    width: `calc(100% - ${theme.spacing(3)}px)`,
     height: 180,
   },
-  report: {
+  chart: {
     padding: theme.spacing(2, 3),
     display: 'flex',
     flexDirection: 'column',
-    height: 240,
   },
   wrapper: {
     display: 'flex',

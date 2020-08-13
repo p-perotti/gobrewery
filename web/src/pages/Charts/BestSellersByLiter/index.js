@@ -28,7 +28,7 @@ function BestSellersByLiter() {
   const generateChart = useCallback(
     async (startingDate, endingDate) => {
       try {
-        const res = await api.get('best-sellers-by-liter', {
+        const res = await api.get('charts/best-sellers-by-liter', {
           params: { startingDate, endingDate },
         });
 
@@ -84,7 +84,7 @@ function BestSellersByLiter() {
   return (
     <Paper className={classes.paper}>
       <Typography variant="h6" color="primary" className={classes.title}>
-        Mais vendidos (por L)
+        Produtos mais vendidos (por L)
       </Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
         <Grid container spacing={1} className={classes.container}>

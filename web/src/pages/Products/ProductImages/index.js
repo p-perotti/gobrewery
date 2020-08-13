@@ -72,7 +72,7 @@ function ProductImages() {
     try {
       setIsSubmitting(true);
       if (imageToDeleteId) {
-        await api.delete(`/products/${id}/images/${imageToDeleteId}`);
+        await api.delete(`products/${id}/images/${imageToDeleteId}`);
         setImageToDeleteId();
       }
       setIsSubmitting(false);

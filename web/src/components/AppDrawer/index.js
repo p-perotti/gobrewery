@@ -147,7 +147,7 @@ function AppMenu() {
                     component={Link}
                     to="/charts/best-sellers-by-liter"
                   >
-                    <ListItemText primary="Mais vendidos (por L)" />
+                    <ListItemText primary="Produtos mais vendidos (por L)" />
                   </ListItem>
                 </List>
               </Collapse>
@@ -179,15 +179,15 @@ function AppMenu() {
                     component={Link}
                     to="/reports/inventory-operations"
                   >
-                    <ListItemText primary="Estoque (Movimentações)" />
+                    <ListItemText primary="Estoque" />
                   </ListItem>
                   <ListItem
                     button
                     className={classes.nested}
                     component={Link}
-                    to="/reports/discount-by-coupon"
+                    to="/reports/total-discount-by-coupon"
                   >
-                    <ListItemText primary="Desconto por cupom" />
+                    <ListItemText primary="Desconto total por cupom" />
                   </ListItem>
                 </List>
               </Collapse>

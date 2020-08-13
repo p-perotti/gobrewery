@@ -60,7 +60,7 @@ function SizeForm() {
       if (id) {
         await api.put(`sizes/${id}`, values);
       } else {
-        await api.post('/sizes', values);
+        await api.post('sizes', values);
       }
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));

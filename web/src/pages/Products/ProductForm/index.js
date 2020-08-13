@@ -72,7 +72,7 @@ function ProductForm() {
       if (id) {
         await api.put(`products/${id}`, values);
       } else {
-        await api.post('/products', values);
+        await api.post('products', values);
       }
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));

@@ -46,7 +46,7 @@ function Profile() {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const loadProfile = useCallback(async () => {
-    const res = await api.get('/profile');
+    const res = await api.get('profile');
     if (res.data) {
       const { name, email, administrator } = res.data;
       setProfile({

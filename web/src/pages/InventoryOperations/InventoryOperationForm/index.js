@@ -115,7 +115,7 @@ function UserForm() {
         inventory_operation_products,
       };
 
-      await api.post('/inventory-operations', data);
+      await api.post('inventory-operations', data);
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));
       history.push('/inventory-operations');
@@ -195,7 +195,6 @@ function UserForm() {
                         Produtos
                       </Typography>
                     }
-                    column
                     columns={state.columns}
                     data={state.data}
                     localization={localization.ptBR}

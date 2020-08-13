@@ -38,7 +38,7 @@ function Dashboard() {
 
   useEffect(() => {
     (async () => {
-      const response = await api.get('sales-todays-total');
+      const response = await api.get('dashboard/total-sales-today');
 
       if (response.data) {
         setSales(Number(response.data.total));
@@ -46,9 +46,12 @@ function Dashboard() {
     })();
 
     (async () => {
-      const response = await api.get('inventory-operations-todays-total', {
-        params: { type: 'E' },
-      });
+      const response = await api.get(
+        'dashboard/total-inventory-operations-today',
+        {
+          params: { type: 'E' },
+        }
+      );
 
       if (response.data) {
         setInventoryInputs(Number(response.data.total));
@@ -56,9 +59,12 @@ function Dashboard() {
     })();
 
     (async () => {
-      const response = await api.get('inventory-operations-todays-total', {
-        params: { type: 'S' },
-      });
+      const response = await api.get(
+        'dashboard/total-inventory-operations-today',
+        {
+          params: { type: 'S' },
+        }
+      );
 
       if (response.data) {
         setInventoryOutputs(Number(response.data.total));
@@ -78,7 +84,7 @@ function Dashboard() {
         today,
       ];
 
-      const response = await api.get('sales-last-days-totals');
+      const response = await api.get('dashboard/last-days-total-sales');
 
       const data = lastDays.map((day) => {
         const result = response.data.find((d) =>
@@ -95,7 +101,7 @@ function Dashboard() {
     })();
 
     (async () => {
-      const response = await api.get('best-sellers-by-amount');
+      const response = await api.get('dashboard/best-sellers-by-amount');
 
       if (response.data) {
         setBestSellers(response.data);
@@ -103,7 +109,7 @@ function Dashboard() {
     })();
 
     (async () => {
-      const response = await api.get('sales-latest');
+      const response = await api.get('dashboard/latest-sales');
 
       if (response.data) {
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -132,7 +138,7 @@ function Dashboard() {
           <Card
             title="Vendas"
             value={sales}
-            link="/inventory-operations"
+            link="/reports/sales"
             currency
             positive
           />
@@ -143,7 +149,7 @@ function Dashboard() {
           <Card
             title="Estoque (Entradas)"
             value={inventoryInputs}
-            link="/inventory-operations"
+            link="/reports/inventory-operations"
             positive
           />
         </Paper>
@@ -153,43 +159,43 @@ function Dashboard() {
           <Card
             title="Estoque (Saídas)"
             value={inventoryOutputs}
-            link="/inventory-operations"
+            link="/reports/inventory-operations"
           />
         </Paper>
       </Grid>
       <Grid item xs={12}>
-        <Paper className={classes.report}>
+        <Paper className={classes.chart}>
           <Typography variant="h6" color="primary">
             Vendas
           </Typography>
-          <ResponsiveContainer>
-            <LineChart
-              data={lastDaysSales}
-              margin={{
-                top: theme.spacing(1),
-                right: theme.spacing(1),
-                bottom: 0,
-                left: theme.spacing(2),
-              }}
-            >
-              <XAxis dataKey="date" stroke={theme.palette.text.secondary} />
-              <YAxis stroke={theme.palette.text.secondary}>
-                <Label
-                  value="Vendas (R$)"
-                  angle={270}
-                  position="left"
-                  className={classes.label}
+          <div className={classes.container}>
+            <ResponsiveContainer>
+              <LineChart
+                data={lastDaysSales}
+                margin={{
+                  top: theme.spacing(2),
+                  left: theme.spacing(2),
+                }}
+              >
+                <XAxis dataKey="date" stroke={theme.palette.text.secondary} />
+                <YAxis stroke={theme.palette.text.secondary}>
+                  <Label
+                    value="Vendas (R$)"
+                    angle={270}
+                    position="left"
+                    className={classes.label}
+                  />
+                </YAxis>
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="total"
+                  stroke={theme.palette.primary.main}
+                  dot={false}
                 />
-              </YAxis>
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="total"
-                stroke={theme.palette.primary.main}
-                dot={false}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </Paper>
       </Grid>
       <Grid item xs={5}>

@@ -110,7 +110,7 @@ function CouponForm() {
           limit: values.limit,
         });
       } else {
-        await api.post('/coupons', {
+        await api.post('coupons', {
           name: values.name,
           starting_date,
           expiration_date,

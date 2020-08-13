@@ -80,7 +80,7 @@ function InventoryOperations() {
     handleCloseCancelDialog();
     try {
       setIsSubmitting(true);
-      await api.delete(`/inventory-operations/${cancelationId}`);
+      await api.delete(`inventory-operations/${cancelationId}`);
       setCancelationId();
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Cancelada com sucesso.'));
@@ -97,7 +97,7 @@ function InventoryOperations() {
       <MaterialTable
         title={
           <Typography variant="h6" color="primary">
-            Estoque (Movimentações)
+            Movimentações de estoque
           </Typography>
         }
         column

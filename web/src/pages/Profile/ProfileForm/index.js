@@ -40,7 +40,7 @@ function ProfileForm() {
   });
 
   const loadValues = useCallback(async () => {
-    const res = await api.get('/profile');
+    const res = await api.get('profile');
     if (res.data) {
       const { name, email } = res.data;
       setInitialValues({
