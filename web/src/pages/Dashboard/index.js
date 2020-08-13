@@ -30,8 +30,8 @@ function Dashboard() {
   const classes = styles();
 
   const [sales, setSales] = useState(0);
-  const [inventoryInputs, setInventoryInputs] = useState(0);
-  const [inventoryOutputs, setInventoryOutputs] = useState(0);
+  const [stockInputs, setStockInputs] = useState(0);
+  const [stockOutputs, setStockOutputs] = useState(0);
   const [lastDaysSales, setLastDaysSales] = useState([{}]);
   const [latestSales, setLatestSales] = useState([{}]);
   const [bestSellers, setBestSellers] = useState([{}]);
@@ -46,28 +46,22 @@ function Dashboard() {
     })();
 
     (async () => {
-      const response = await api.get(
-        'dashboard/total-inventory-operations-today',
-        {
-          params: { type: 'E' },
-        }
-      );
+      const response = await api.get('dashboard/total-stock-operations-today', {
+        params: { type: 'E' },
+      });
 
       if (response.data) {
-        setInventoryInputs(Number(response.data.total));
+        setStockInputs(Number(response.data.total));
       }
     })();
 
     (async () => {
-      const response = await api.get(
-        'dashboard/total-inventory-operations-today',
-        {
-          params: { type: 'S' },
-        }
-      );
+      const response = await api.get('dashboard/total-stock-operations-today', {
+        params: { type: 'S' },
+      });
 
       if (response.data) {
-        setInventoryOutputs(Number(response.data.total));
+        setStockOutputs(Number(response.data.total));
       }
     })();
 
@@ -129,7 +123,7 @@ function Dashboard() {
         setLatestSales(dataFormatted);
       }
     })();
-  }, [setInventoryInputs, setInventoryOutputs]);
+  }, [setStockInputs, setStockOutputs]);
 
   return (
     <Grid container spacing={3}>
@@ -148,8 +142,8 @@ function Dashboard() {
         <Paper className={classes.card}>
           <Card
             title="Estoque (Entradas)"
-            value={inventoryInputs}
-            link="/reports/inventory-operations"
+            value={stockInputs}
+            link="/reports/stock-operations"
             positive
           />
         </Paper>
@@ -158,8 +152,8 @@ function Dashboard() {
         <Paper className={classes.card}>
           <Card
             title="Estoque (Saídas)"
-            value={inventoryOutputs}
-            link="/reports/inventory-operations"
+            value={stockOutputs}
+            link="/reports/stock-operations"
           />
         </Paper>
       </Grid>

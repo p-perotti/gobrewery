@@ -34,7 +34,7 @@ import { showSnackbar } from '~/store/modules/ui/actions';
 
 import style from './styles';
 
-function UserForm() {
+function StockOperationForm() {
   const classes = style();
 
   const dispatch = useDispatch();
@@ -103,7 +103,7 @@ function UserForm() {
 
       let totalAmount = 0;
 
-      const inventory_operation_products = state.data.map((data) => {
+      const stock_operation_products = state.data.map((data) => {
         const { product_id, size_id, amount } = data;
         totalAmount += amount;
         return { product_id, size_id, amount };
@@ -112,13 +112,13 @@ function UserForm() {
       const data = {
         ...values,
         total_amount: totalAmount,
-        inventory_operation_products,
+        stock_operation_products,
       };
 
-      await api.post('inventory-operations', data);
+      await api.post('stock-operations', data);
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Salvo com sucesso.'));
-      history.push('/inventory-operations');
+      history.push('/stock-operations');
     } catch (error) {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível salvar.'));
@@ -274,7 +274,7 @@ function UserForm() {
                     variant="outlined"
                     color="primary"
                     component={Link}
-                    to="/inventory-operations"
+                    to="/stock-operations"
                   >
                     Voltar
                   </Button>
@@ -291,4 +291,4 @@ function UserForm() {
   );
 }
 
-export default UserForm;
+export default StockOperationForm;

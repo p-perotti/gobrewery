@@ -25,7 +25,7 @@ import { showSnackbar } from '~/store/modules/ui/actions';
 
 import style from './styles';
 
-function InventoryOperations() {
+function StockOperations() {
   const classes = style();
 
   const dispatch = useDispatch();
@@ -42,14 +42,14 @@ function InventoryOperations() {
     try {
       setIsLoading(true);
 
-      const response = await api.get('inventory-operations');
+      const response = await api.get('stock-operations');
 
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      const dataFormatted = response.data.map((inventoryOperation) => ({
-        ...inventoryOperation,
+      const dataFormatted = response.data.map((stockOperation) => ({
+        ...stockOperation,
         dateFormatted: format(
-          utcToZonedTime(parseISO(inventoryOperation.date), timezone),
+          utcToZonedTime(parseISO(stockOperation.date), timezone),
           'dd/MM/yyyy HH:mm',
           {
             locale: ptBR,
@@ -76,11 +76,11 @@ function InventoryOperations() {
 
   const handleCloseCancelDialog = () => setDialogOpen(false);
 
-  const cancelInventoryOperation = async () => {
+  const cancelStockOperation = async () => {
     handleCloseCancelDialog();
     try {
       setIsSubmitting(true);
-      await api.delete(`inventory-operations/${cancelationId}`);
+      await api.delete(`stock-operations/${cancelationId}`);
       setCancelationId();
       setIsSubmitting(false);
       dispatch(showSnackbar('success', 'Cancelada com sucesso.'));
@@ -133,7 +133,7 @@ function InventoryOperations() {
             icon: 'add_circle',
             tooltip: 'Adicionar',
             isFreeAction: true,
-            onClick: (_event) => history.push('/inventory-operation/new'),
+            onClick: (_event) => history.push('/stock-operation/new'),
           },
           (rowData) => ({
             icon: 'cancel',
@@ -160,7 +160,7 @@ function InventoryOperations() {
           <Button onClick={handleCloseCancelDialog} autoFocus>
             Voltar
           </Button>
-          <Button onClick={cancelInventoryOperation} color="primary">
+          <Button onClick={cancelStockOperation} color="primary">
             Confirmar
           </Button>
         </DialogActions>
@@ -172,4 +172,4 @@ function InventoryOperations() {
   );
 }
 
-export default InventoryOperations;
+export default StockOperations;

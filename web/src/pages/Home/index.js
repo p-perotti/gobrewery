@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 
 import styles from './styles';
 
-function NotFound() {
+function Home() {
   const classes = styles();
 
   return (
@@ -20,4 +20,4 @@ function NotFound() {
   );
 }
 
-export default NotFound;
+export default Home;

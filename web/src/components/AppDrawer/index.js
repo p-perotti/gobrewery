@@ -119,7 +119,7 @@ function AppMenu() {
                 button
                 className={classes.nested}
                 component={Link}
-                to="/inventory-operations"
+                to="/stock-operations"
               >
                 <ListItemText primary="Estoque" />
               </ListItem>
@@ -177,7 +177,7 @@ function AppMenu() {
                     button
                     className={classes.nested}
                     component={Link}
-                    to="/reports/inventory-operations"
+                    to="/reports/stock-operations"
                   >
                     <ListItemText primary="Estoque" />
                   </ListItem>

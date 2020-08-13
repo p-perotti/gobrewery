@@ -24,13 +24,13 @@ import ProductPricesForm from '~/pages/Products/ProductPrices/ProductPriceForm';
 import Coupons from '~/pages/Coupons';
 import CouponForm from '~/pages/Coupons/CouponForm';
 
-import InventoryOperations from '~/pages/InventoryOperations';
-import InventoryOperationForm from '~/pages/InventoryOperations/InventoryOperationForm';
+import StockOperations from '~/pages/StockOperations';
+import StockOperationForm from '~/pages/StockOperations/StockOperationForm';
 
 import BestSellersByLiter from '~/pages/Charts/BestSellersByLiter';
 
 import SalesReport from '~/pages/Reports/Sales';
-import InventoryOperationsReport from '~/pages/Reports/InventoryOperations';
+import StockOperationsReport from '~/pages/Reports/StockOperations';
 import TotalDiscountByCouponReport from '~/pages/Reports/TotalDiscountByCoupon';
 
 import Restricted from '~/pages/Restricted';
@@ -101,15 +101,15 @@ export default function Routes() {
       <Route path="/coupons/:id" exact component={CouponForm} isPrivate />
 
       <Route
-        path="/inventory-operations"
+        path="/stock-operations"
         exact
-        component={InventoryOperations}
+        component={StockOperations}
         isPrivate
       />
       <Route
-        path="/inventory-operation/new"
+        path="/stock-operation/new"
         exact
-        component={InventoryOperationForm}
+        component={StockOperationForm}
         isPrivate
       />
 
@@ -130,9 +130,9 @@ export default function Routes() {
       />
 
       <Route
-        path="/reports/inventory-operations"
+        path="/reports/stock-operations"
         exact
-        component={InventoryOperationsReport}
+        component={StockOperationsReport}
         isPrivate
         isAdminRestricted
       />

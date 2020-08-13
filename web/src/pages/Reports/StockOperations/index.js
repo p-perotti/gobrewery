@@ -14,7 +14,7 @@ import { th, td, generateReport } from '~/util/report';
 
 import style from './styles';
 
-function InventoryOperations() {
+function StockOperations() {
   const classes = style();
 
   const dispatch = useDispatch();
@@ -100,7 +100,7 @@ function InventoryOperations() {
 
   const handleGenerate = async () => {
     try {
-      const response = await api.get('reports/inventory-operations', {
+      const response = await api.get('reports/stock-operations', {
         params: { startingDate, endingDate },
       });
 
@@ -162,4 +162,4 @@ function InventoryOperations() {
   );
 }
 
-export default InventoryOperations;
+export default StockOperations;
