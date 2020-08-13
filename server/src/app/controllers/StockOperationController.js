@@ -1,12 +1,12 @@
 import * as Yup from 'yup';
-import InventoryOperation from '../models/InventoryOperation';
-import InventoryOperationProduct from '../models/InventoryOperationProduct';
-import ProductInventoryAmount from '../models/ProductInventoryAmount';
+import StockOperation from '../models/StockOperation';
+import StockOperationProduct from '../models/StockOperationProduct';
+import ProductStockAmount from '../models/ProductStockAmount';
 import User from '../models/User';
 
 import Database from '../../database';
 
-class InventoryOperationController {
+class StockOperationController {
   async index(req, res) {
     const attributes = ['id', 'type', 'total_amount', 'date', 'canceled'];
 
@@ -24,24 +24,21 @@ class InventoryOperationController {
     ];
 
     if (req.params.id) {
-      const inventoryOperation = await InventoryOperation.findByPk(
-        req.params.id,
-        {
-          attributes,
-          include,
-        }
-      );
+      const stockOperation = await StockOperation.findByPk(req.params.id, {
+        attributes,
+        include,
+      });
 
-      return res.json(inventoryOperation);
+      return res.json(stockOperation);
     }
 
-    const inventoryOperations = await InventoryOperation.findAll({
+    const stockOperations = await StockOperation.findAll({
       attributes,
       order: [['date', 'DESC']],
       include,
     });
 
-    return res.json(inventoryOperations);
+    return res.json(stockOperations);
   }
 
   async store(req, res) {
@@ -53,7 +50,7 @@ class InventoryOperationController {
       total_amount: Yup.number()
         .required()
         .moreThan(0),
-      inventory_operation_products: Yup.array()
+      stock_operation_products: Yup.array()
         .of(
           Yup.object().shape({
             product_id: Yup.number().required(),
@@ -79,7 +76,7 @@ class InventoryOperationController {
         type,
         date,
         total_amount,
-      } = await InventoryOperation.create(
+      } = await StockOperation.create(
         {
           user_id: req.userId,
           type: req.body.type,
@@ -91,16 +88,16 @@ class InventoryOperationController {
 
       let totalAmount = 0;
 
-      const reqProduct = req.body.inventory_operation_products.map(p => {
+      const reqProduct = req.body.stock_operation_products.map(p => {
         totalAmount += Number(p.amount);
 
         return {
-          inventory_operation_id: id,
+          stock_operation_id: id,
           ...p,
         };
       });
 
-      const resProduct = await InventoryOperationProduct.bulkCreate(
+      const resProduct = await StockOperationProduct.bulkCreate(
         reqProduct,
         { transaction }
       );
@@ -111,7 +108,7 @@ class InventoryOperationController {
         });
       }
 
-      const updateProductInventoryAmount = async (
+      const updateProductStockAmount = async (
         product_id,
         size_id,
         amount
@@ -124,21 +121,21 @@ class InventoryOperationController {
           'updated_at',
         ];
 
-        const productInventoryAmount = await ProductInventoryAmount.findOne({
+        const productStockAmount = await ProductStockAmount.findOne({
           where: { product_id, size_id },
           attributes: ['product_id', 'size_id', 'amount'],
         });
 
-        if (productInventoryAmount) {
+        if (productStockAmount) {
           let newAmount;
 
           if (type === 'E') {
-            newAmount = Number(productInventoryAmount.amount) + Number(amount);
+            newAmount = Number(productStockAmount.amount) + Number(amount);
           } else if (type === 'S') {
-            newAmount = Number(productInventoryAmount.amount) - Number(amount);
+            newAmount = Number(productStockAmount.amount) - Number(amount);
           }
 
-          await ProductInventoryAmount.update(
+          await ProductStockAmount.update(
             {
               product_id,
               size_id,
@@ -147,7 +144,7 @@ class InventoryOperationController {
             { fields, where: { product_id, size_id }, transaction }
           );
         } else {
-          await ProductInventoryAmount.create(
+          await ProductStockAmount.create(
             {
               product_id,
               size_id,
@@ -161,13 +158,13 @@ class InventoryOperationController {
         }
       };
 
-      const inventory_operation_products = await Promise.all(
+      const stock_operation_products = await Promise.all(
         resProduct.map(async p => {
-          await updateProductInventoryAmount(p.product_id, p.size_id, p.amount);
+          await updateProductStockAmount(p.product_id, p.size_id, p.amount);
 
           return {
             id: p.id,
-            inventory_operation_id: p.inventory_operation_id,
+            stock_operation_id: p.stock_operation_id,
             product_id: p.product_id,
             size_id: p.size_id,
             amount: p.amount,
@@ -183,7 +180,7 @@ class InventoryOperationController {
         type,
         date,
         total_amount,
-        inventory_operation_products,
+        stock_operation_products,
       });
     } catch (error) {
       await transaction.rollback();
@@ -192,17 +189,17 @@ class InventoryOperationController {
   }
 
   async delete(req, res) {
-    const inventoryOperation = await InventoryOperation.findByPk(req.params.id);
+    const stockOperation = await StockOperation.findByPk(req.params.id);
 
-    if (!inventoryOperation) {
+    if (!stockOperation) {
       return res.status(404).json({
-        error: 'Inventory operation with this given ID was not found.',
+        error: 'Stock operation with this given ID was not found.',
       });
     }
 
-    if (inventoryOperation.canceled) {
+    if (stockOperation.canceled) {
       return res.status(404).json({
-        error: 'Inventory operation already canceled.',
+        error: 'Stock operation already canceled.',
       });
     }
 
@@ -215,7 +212,7 @@ class InventoryOperationController {
         canceled,
         canceled_at,
         cancelation_user_id,
-      } = await inventoryOperation.update(
+      } = await stockOperation.update(
         {
           canceled: true,
           canceled_at: new Date(),
@@ -224,15 +221,13 @@ class InventoryOperationController {
         { transaction }
       );
 
-      const inventoryOperationsProducts = await InventoryOperationProduct.findAll(
-        {
-          where: { inventory_operation_id: id },
-          attributes: ['product_id', 'size_id', 'amount'],
-          transaction,
-        }
-      );
+      const stockOperationsProducts = await StockOperationProduct.findAll({
+        where: { stock_operation_id: id },
+        attributes: ['product_id', 'size_id', 'amount'],
+        transaction,
+      });
 
-      const updateProductInventoryAmount = async (
+      const updateProductStockAmount = async (
         product_id,
         size_id,
         amount
@@ -245,7 +240,7 @@ class InventoryOperationController {
           'updated_at',
         ];
 
-        const productInventoryAmount = await ProductInventoryAmount.findOne({
+        const productStockAmount = await ProductStockAmount.findOne({
           where: { product_id, size_id },
           attributes: ['product_id', 'size_id', 'amount'],
         });
@@ -253,12 +248,12 @@ class InventoryOperationController {
         let newAmount;
 
         if (type === 'S') {
-          newAmount = Number(productInventoryAmount.amount) + Number(amount);
+          newAmount = Number(productStockAmount.amount) + Number(amount);
         } else if (type === 'E') {
-          newAmount = Number(productInventoryAmount.amount) - Number(amount);
+          newAmount = Number(productStockAmount.amount) - Number(amount);
         }
 
-        await ProductInventoryAmount.update(
+        await ProductStockAmount.update(
           {
             product_id,
             size_id,
@@ -268,13 +263,13 @@ class InventoryOperationController {
         );
       };
 
-      const inventory_operation_products = await Promise.all(
-        inventoryOperationsProducts.map(async p => {
-          await updateProductInventoryAmount(p.product_id, p.size_id, p.amount);
+      const stock_operation_products = await Promise.all(
+        stockOperationsProducts.map(async p => {
+          await updateProductStockAmount(p.product_id, p.size_id, p.amount);
 
           return {
             id: p.id,
-            inventory_operation_id: p.inventory_operation_id,
+            stock_operation_id: p.stock_operation_id,
             product_id: p.product_id,
             size_id: p.size_id,
             amount: p.amount,
@@ -290,7 +285,7 @@ class InventoryOperationController {
         canceled,
         canceled_at,
         cancelation_user_id,
-        inventory_operation_products,
+        stock_operation_products,
       });
     } catch (error) {
       await transaction.rollback();
@@ -299,4 +294,4 @@ class InventoryOperationController {
   }
 }
 
-export default new InventoryOperationController();
+export default new StockOperationController();

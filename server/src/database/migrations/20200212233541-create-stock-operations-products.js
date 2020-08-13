@@ -1,16 +1,25 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('product_inventory_amount', {
+    return queryInterface.createTable('stock_operations_products', {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      stock_operation_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: 'stock_operations', key: 'id' },
+      },
       product_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true,
         references: { model: 'products', key: 'id' },
       },
       size_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true,
         references: { model: 'sizes', key: 'id' },
       },
       amount: {
@@ -29,6 +38,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('product_inventory_amount');
+    return queryInterface.dropTable('stock_operations_products');
   },
 };

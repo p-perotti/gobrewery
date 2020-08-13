@@ -1,30 +1,36 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('inventory_operations_products', {
+    return queryInterface.createTable('stock_operations', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      inventory_operation_id: {
-        type: Sequelize.INTEGER,
+      type: {
+        type: Sequelize.CHAR(1),
         allowNull: false,
-        references: { model: 'inventory_operations', key: 'id' },
       },
-      product_id: {
-        type: Sequelize.INTEGER,
+      date: {
+        type: Sequelize.DATE,
         allowNull: false,
-        references: { model: 'products', key: 'id' },
       },
-      size_id: {
+      user_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: { model: 'sizes', key: 'id' },
+        references: { model: 'users', key: 'id' },
       },
-      amount: {
+      total_amount: {
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      canceled: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      cancelation_user_id: {
+        type: Sequelize.INTEGER,
+        references: { model: 'users', key: 'id' },
       },
       created_at: {
         type: Sequelize.DATE,
@@ -38,6 +44,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('inventory_operations_products');
+    return queryInterface.dropTable('stock_operations');
   },
 };

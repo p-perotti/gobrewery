@@ -1,14 +1,14 @@
 import { Op, literal } from 'sequelize';
 import { parseISO, startOfDay, endOfDay, isBefore, isAfter } from 'date-fns';
 
-import InventoryOperation from '../../models/InventoryOperation';
-import InventoryOperationProduct from '../../models/InventoryOperationProduct';
+import StockOperation from '../../models/StockOperation';
+import StockOperationProduct from '../../models/StockOperationProduct';
 import Product from '../../models/Product';
 import Size from '../../models/Size';
 
 import Database from '../../../database';
 
-class InventoryOperationsController {
+class StockOperationsController {
   async index(req, res) {
     if (!req.query.startingDate || !req.query.endingDate) {
       return res.status(400).json({
@@ -31,11 +31,11 @@ class InventoryOperationsController {
         .json({ error: 'Ending date must be after starting date.' });
     }
 
-    const data = await InventoryOperationProduct.findAll({
+    const data = await StockOperationProduct.findAll({
       include: [
         {
-          model: InventoryOperation,
-          as: 'inventory_operation',
+          model: StockOperation,
+          as: 'stock_operation',
           attributes: [],
           where: {
             date: {
@@ -83,11 +83,11 @@ class InventoryOperationsController {
       data.map(async row => {
         const { product, size, inward, outward } = row.get();
 
-        const balance = await InventoryOperationProduct.findOne({
+        const balance = await StockOperationProduct.findOne({
           include: [
             {
-              model: InventoryOperation,
-              as: 'inventory_operation',
+              model: StockOperation,
+              as: 'stock_operation',
               attributes: [],
               where: {
                 date: {
@@ -142,4 +142,4 @@ class InventoryOperationsController {
   }
 }
 
-export default new InventoryOperationsController();
+export default new StockOperationsController();

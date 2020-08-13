@@ -3,7 +3,7 @@ const datefns = require('date-fns');
 module.exports = {
   up: QueryInterface => {
     return QueryInterface.bulkInsert(
-      'inventory_operations',
+      'stock_operations',
       [
         {
           type: 'E',

@@ -15,9 +15,9 @@ import ProductController from './app/controllers/ProductController';
 import ProductPriceController from './app/controllers/ProductPriceController';
 import ProductImageController from './app/controllers/ProductImageController';
 import CouponController from './app/controllers/CouponController';
-import InventoryOperationController from './app/controllers/InventoryOperationController';
+import StockOperationController from './app/controllers/StockOperationController';
 
-import DashboardTotalInventoryOperationsTodayController from './app/controllers/Dashboard/TotalInventoryOperationsTodayController';
+import DashboardTotalStockOperationsTodayController from './app/controllers/Dashboard/TotalStockOperationsTodayController';
 import DashboardTotalSalesTodayController from './app/controllers/Dashboard/TotalSalesTodayController';
 import DashboardLastDaysTotalSalesController from './app/controllers/Dashboard/LastDaysTotalSalesController';
 import DashboardLatestSalesController from './app/controllers/Dashboard/LatestSalesController';
@@ -26,7 +26,7 @@ import DashboardBestSellersByAmountController from './app/controllers/Dashboard/
 import BestSellersByLiterChartController from './app/controllers/Charts/BestSellersByLiterController';
 
 import SalesReportController from './app/controllers/Reports/SalesController';
-import InventoryOperationsReportController from './app/controllers/Reports/InventoryOperationsController';
+import StockOperationsReportController from './app/controllers/Reports/StockOperationsController';
 import TotalDiscountByCouponReportController from './app/controllers/Reports/TotalDiscountByCouponController';
 
 const routes = Router();
@@ -78,19 +78,19 @@ routes.get('/coupons/:id', CouponController.index);
 routes.post('/coupons', CouponController.store);
 routes.put('/coupons/:id', CouponController.update);
 
-routes.get('/inventory-operations', InventoryOperationController.index);
-routes.get('/inventory-operations/:id', InventoryOperationController.index);
-routes.post('/inventory-operations/', InventoryOperationController.store);
+routes.get('/stock-operations', StockOperationController.index);
+routes.get('/stock-operations/:id', StockOperationController.index);
+routes.post('/stock-operations/', StockOperationController.store);
 routes.delete(
-  '/inventory-operations/:id',
+  '/stock-operations/:id',
   administratorMiddleware,
-  InventoryOperationController.delete
+  StockOperationController.delete
 );
 
 routes.get(
-  '/dashboard/total-inventory-operations-today',
+  '/dashboard/total-stock-operations-today',
   administratorMiddleware,
-  DashboardTotalInventoryOperationsTodayController.index
+  DashboardTotalStockOperationsTodayController.index
 );
 
 routes.get(
@@ -130,9 +130,9 @@ routes.get(
 );
 
 routes.get(
-  '/reports/inventory-operations',
+  '/reports/stock-operations',
   administratorMiddleware,
-  InventoryOperationsReportController.index
+  StockOperationsReportController.index
 );
 
 routes.get(

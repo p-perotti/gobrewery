@@ -1,13 +1,13 @@
 import Sequelize, { Model } from 'sequelize';
 
-class InventoryOperationProduct extends Model {
+class StockOperationProduct extends Model {
   static init(sequelize) {
     super.init(
       {
         amount: Sequelize.DECIMAL(15, 2),
       },
       {
-        tableName: 'inventory_operations_products',
+        tableName: 'stock_operations_products',
         sequelize,
       }
     );
@@ -16,9 +16,9 @@ class InventoryOperationProduct extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.InventoryOperation, {
-      foreignKey: 'inventory_operation_id',
-      as: 'inventory_operation',
+    this.belongsTo(models.StockOperation, {
+      foreignKey: 'stock_operation_id',
+      as: 'stock_operation',
     });
     this.belongsTo(models.Product, {
       foreignKey: 'product_id',
@@ -31,4 +31,4 @@ class InventoryOperationProduct extends Model {
   }
 }
 
-export default InventoryOperationProduct;
+export default StockOperationProduct;

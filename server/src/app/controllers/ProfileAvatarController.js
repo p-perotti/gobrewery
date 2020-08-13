@@ -2,7 +2,7 @@ import { unlinkSync } from 'fs';
 import { resolve } from 'path';
 import UserAvatar from '../models/UserAvatar';
 
-class UserAvatarController {
+class ProfileAvatarController {
   async store(req, res) {
     if (!req.file) {
       return res.status(404).json({ error: 'Must upload a file.' });
@@ -70,4 +70,4 @@ class UserAvatarController {
   }
 }
 
-export default new UserAvatarController();
+export default new ProfileAvatarController();

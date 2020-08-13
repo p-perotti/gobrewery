@@ -7,9 +7,9 @@ import Product from '../app/models/Product';
 import ProductPrice from '../app/models/ProductPrice';
 import ProductImage from '../app/models/ProductImage';
 import Coupon from '../app/models/Coupon';
-import InventoryOperation from '../app/models/InventoryOperation';
-import InventoryOperationProduct from '../app/models/InventoryOperationProduct';
-import ProductInventoryAmount from '../app/models/ProductInventoryAmount';
+import StockOperation from '../app/models/StockOperation';
+import StockOperationProduct from '../app/models/StockOperationProduct';
+import ProductStockAmount from '../app/models/ProductStockAmount';
 import PaymentMethod from '../app/models/PaymentMethod';
 import Customer from '../app/models/Customer';
 import Sale from '../app/models/Sale';
@@ -25,9 +25,9 @@ const models = [
   ProductPrice,
   ProductImage,
   Coupon,
-  InventoryOperation,
-  InventoryOperationProduct,
-  ProductInventoryAmount,
+  StockOperation,
+  StockOperationProduct,
+  ProductStockAmount,
   PaymentMethod,
   Customer,
   Sale,

@@ -1,27 +1,27 @@
 import { Op } from 'sequelize';
 import { startOfDay } from 'date-fns';
 
-import InventoryOperation from '../../models/InventoryOperation';
+import StockOperation from '../../models/StockOperation';
 
 import Database from '../../../database';
 
-class TotalInventoryOperationsTodayController {
+class TotalStockOperationsTodayController {
   async index(req, res) {
     const { type } = req.query;
 
     if (!type) {
       return res.status(400).json({
-        error: 'Must specify the type of inventory operation.',
+        error: 'Must specify the type of stock operation.',
       });
     }
 
     if (type !== 'E' && type !== 'S') {
       return res
         .status(400)
-        .json({ error: 'Type of inventory operation must be one of (E, S).' });
+        .json({ error: 'Type of stock operation must be one of (E, S).' });
     }
 
-    const total = await InventoryOperation.findOne({
+    const total = await StockOperation.findOne({
       attributes: [
         [
           Database.connection.fn(
@@ -44,4 +44,4 @@ class TotalInventoryOperationsTodayController {
   }
 }
 
-export default new TotalInventoryOperationsTodayController();
+export default new TotalStockOperationsTodayController();

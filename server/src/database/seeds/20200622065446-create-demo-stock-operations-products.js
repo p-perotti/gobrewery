@@ -3,10 +3,10 @@ const datefns = require('date-fns');
 module.exports = {
   up: QueryInterface => {
     return QueryInterface.bulkInsert(
-      'inventory_operations_products',
+      'stock_operations_products',
       [
         {
-          inventory_operation_id: 1,
+          stock_operation_id: 1,
           product_id: 2,
           size_id: 2,
           amount: 240,
@@ -14,7 +14,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 6),
         },
         {
-          inventory_operation_id: 1,
+          stock_operation_id: 1,
           product_id: 2,
           size_id: 3,
           amount: 120,
@@ -22,7 +22,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 6),
         },
         {
-          inventory_operation_id: 1,
+          stock_operation_id: 1,
           product_id: 2,
           size_id: 7,
           amount: 10,
@@ -30,7 +30,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 6),
         },
         {
-          inventory_operation_id: 2,
+          stock_operation_id: 2,
           product_id: 5,
           size_id: 7,
           amount: 50,
@@ -38,7 +38,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 5),
         },
         {
-          inventory_operation_id: 3,
+          stock_operation_id: 3,
           product_id: 6,
           size_id: 7,
           amount: 50,
@@ -46,7 +46,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 5),
         },
         {
-          inventory_operation_id: 4,
+          stock_operation_id: 4,
           product_id: 2,
           size_id: 2,
           amount: 60,
@@ -54,7 +54,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          inventory_operation_id: 4,
+          stock_operation_id: 4,
           product_id: 2,
           size_id: 3,
           amount: 30,

@@ -3,10 +3,10 @@ const datefns = require('date-fns');
 module.exports = {
   up: QueryInterface => {
     return QueryInterface.bulkInsert(
-      'inventory_operations_products',
+      'stock_operations_products',
       [
         {
-          inventory_operation_id: 5,
+          stock_operation_id: 5,
           product_id: 2,
           size_id: 2,
           amount: 12,
@@ -14,7 +14,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 6),
         },
         {
-          inventory_operation_id: 6,
+          stock_operation_id: 6,
           product_id: 2,
           size_id: 3,
           amount: 2,
@@ -22,7 +22,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 6),
         },
         {
-          inventory_operation_id: 6,
+          stock_operation_id: 6,
           product_id: 2,
           size_id: 2,
           amount: 12,
@@ -30,7 +30,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 6),
         },
         {
-          inventory_operation_id: 7,
+          stock_operation_id: 7,
           product_id: 2,
           size_id: 3,
           amount: 6,
@@ -38,7 +38,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 6),
         },
         {
-          inventory_operation_id: 8,
+          stock_operation_id: 8,
           product_id: 2,
           size_id: 2,
           amount: 24,
@@ -46,7 +46,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 6),
         },
         {
-          inventory_operation_id: 9,
+          stock_operation_id: 9,
           product_id: 2,
           size_id: 3,
           amount: 2,
@@ -54,7 +54,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 6),
         },
         {
-          inventory_operation_id: 9,
+          stock_operation_id: 9,
           product_id: 2,
           size_id: 2,
           amount: 4,
@@ -62,7 +62,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 6),
         },
         {
-          inventory_operation_id: 10,
+          stock_operation_id: 10,
           product_id: 2,
           size_id: 2,
           amount: 12,
@@ -70,7 +70,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 5),
         },
         {
-          inventory_operation_id: 11,
+          stock_operation_id: 11,
           product_id: 2,
           size_id: 2,
           amount: 24,
@@ -78,7 +78,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 4),
         },
         {
-          inventory_operation_id: 12,
+          stock_operation_id: 12,
           product_id: 2,
           size_id: 3,
           amount: 6,
@@ -86,7 +86,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 4),
         },
         {
-          inventory_operation_id: 12,
+          stock_operation_id: 12,
           product_id: 2,
           size_id: 2,
           amount: 12,
@@ -94,7 +94,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 4),
         },
         {
-          inventory_operation_id: 13,
+          stock_operation_id: 13,
           product_id: 2,
           size_id: 2,
           amount: 48,
@@ -102,7 +102,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 3),
         },
         {
-          inventory_operation_id: 13,
+          stock_operation_id: 13,
           product_id: 2,
           size_id: 3,
           amount: 24,
@@ -110,7 +110,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 3),
         },
         {
-          inventory_operation_id: 14,
+          stock_operation_id: 14,
           product_id: 2,
           size_id: 2,
           amount: 48,
@@ -118,7 +118,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 2),
         },
         {
-          inventory_operation_id: 14,
+          stock_operation_id: 14,
           product_id: 2,
           size_id: 3,
           amount: 24,
@@ -126,7 +126,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 2),
         },
         {
-          inventory_operation_id: 15,
+          stock_operation_id: 15,
           product_id: 6,
           size_id: 7,
           amount: 10,
@@ -134,7 +134,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 2),
         },
         {
-          inventory_operation_id: 16,
+          stock_operation_id: 16,
           product_id: 2,
           size_id: 2,
           amount: 48,
@@ -142,7 +142,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 2),
         },
         {
-          inventory_operation_id: 16,
+          stock_operation_id: 16,
           product_id: 2,
           size_id: 3,
           amount: 24,
@@ -150,7 +150,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 2),
         },
         {
-          inventory_operation_id: 16,
+          stock_operation_id: 16,
           product_id: 5,
           size_id: 7,
           amount: 10,
@@ -158,7 +158,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 2),
         },
         {
-          inventory_operation_id: 17,
+          stock_operation_id: 17,
           product_id: 2,
           size_id: 3,
           amount: 6,
@@ -166,7 +166,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 2),
         },
         {
-          inventory_operation_id: 18,
+          stock_operation_id: 18,
           product_id: 2,
           size_id: 3,
           amount: 24,
@@ -174,7 +174,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 1),
         },
         {
-          inventory_operation_id: 18,
+          stock_operation_id: 18,
           product_id: 5,
           size_id: 7,
           amount: 10,
@@ -182,7 +182,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 1),
         },
         {
-          inventory_operation_id: 19,
+          stock_operation_id: 19,
           product_id: 2,
           size_id: 3,
           amount: 24,
@@ -190,7 +190,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 1),
         },
         {
-          inventory_operation_id: 19,
+          stock_operation_id: 19,
           product_id: 5,
           size_id: 7,
           amount: 10,
@@ -198,7 +198,7 @@ module.exports = {
           updated_at: datefns.subDays(new Date(), 1),
         },
         {
-          inventory_operation_id: 20,
+          stock_operation_id: 20,
           product_id: 2,
           size_id: 3,
           amount: 2,
@@ -206,7 +206,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          inventory_operation_id: 20,
+          stock_operation_id: 20,
           product_id: 2,
           size_id: 2,
           amount: 4,
@@ -214,7 +214,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          inventory_operation_id: 20,
+          stock_operation_id: 20,
           product_id: 2,
           size_id: 7,
           amount: 1,

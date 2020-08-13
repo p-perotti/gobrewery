@@ -1,13 +1,13 @@
 import Sequelize, { Model } from 'sequelize';
 
-class ProductInventoryAmount extends Model {
+class ProductStockAmount extends Model {
   static init(sequelize) {
     super.init(
       {
         amount: Sequelize.DECIMAL(15, 2),
       },
       {
-        tableName: 'product_inventory_amount',
+        tableName: 'product_stock_amount',
         sequelize,
       }
     );
@@ -27,4 +27,4 @@ class ProductInventoryAmount extends Model {
   }
 }
 
-export default ProductInventoryAmount;
+export default ProductStockAmount;
