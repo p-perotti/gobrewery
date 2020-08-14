@@ -184,6 +184,7 @@ function Dashboard() {
                 <Line
                   type="monotone"
                   dataKey="total"
+                  name="Total"
                   stroke={theme.palette.primary.main}
                   dot={false}
                 />
