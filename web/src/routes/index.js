@@ -27,7 +27,8 @@ import CouponForm from '~/pages/Coupons/CouponForm';
 import StockOperations from '~/pages/StockOperations';
 import StockOperationForm from '~/pages/StockOperations/StockOperationForm';
 
-import BestSellersByLiter from '~/pages/Charts/BestSellersByLiter';
+import BestSellersByLiterChart from '~/pages/Charts/BestSellersByLiter';
+import MonthlyStockOperationsByWeekChart from '~/pages/Charts/MonthlyStockOperationsByWeek';
 
 import SalesReport from '~/pages/Reports/Sales';
 import StockOperationsReport from '~/pages/Reports/StockOperations';
@@ -116,7 +117,15 @@ export default function Routes() {
       <Route
         path="/charts/best-sellers-by-liter"
         exact
-        component={BestSellersByLiter}
+        component={BestSellersByLiterChart}
+        isPrivate
+        isAdminRestricted
+      />
+
+      <Route
+        path="/charts/monthly-stock-operations-by-week"
+        exact
+        component={MonthlyStockOperationsByWeekChart}
         isPrivate
         isAdminRestricted
       />

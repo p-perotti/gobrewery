@@ -149,6 +149,14 @@ function AppMenu() {
                   >
                     <ListItemText primary="Produtos mais vendidos (por L)" />
                   </ListItem>
+                  <ListItem
+                    button
+                    className={classes.nested}
+                    component={Link}
+                    to="/charts/monthly-stock-operations-by-week"
+                  >
+                    <ListItemText primary="Movimentações de estoque semanal por mês" />
+                  </ListItem>
                 </List>
               </Collapse>
               <ListItem
