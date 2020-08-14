@@ -24,6 +24,7 @@ import DashboardLatestSalesController from './app/controllers/Dashboard/LatestSa
 import DashboardBestSellersByAmountController from './app/controllers/Dashboard/BestSellersByAmountController';
 
 import BestSellersByLiterChartController from './app/controllers/Charts/BestSellersByLiterController';
+import MonthlyStockOperationsByWeekChartController from './app/controllers/Charts/MonthlyStockOperationsByWeek';
 
 import SalesReportController from './app/controllers/Reports/SalesController';
 import StockOperationsReportController from './app/controllers/Reports/StockOperationsController';
@@ -121,6 +122,12 @@ routes.get(
   '/charts/best-sellers-by-liter',
   administratorMiddleware,
   BestSellersByLiterChartController.index
+);
+
+routes.get(
+  '/charts/monthly-stock-operations-by-week',
+  administratorMiddleware,
+  MonthlyStockOperationsByWeekChartController.index
 );
 
 routes.get(
