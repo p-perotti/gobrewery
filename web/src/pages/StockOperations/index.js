@@ -135,6 +135,12 @@ function StockOperations() {
             isFreeAction: true,
             onClick: (_event) => history.push('/stock-operation/new'),
           },
+          {
+            icon: 'visibility',
+            tooltip: 'Visualizar',
+            onClick: (_event, rowData) =>
+              history.push(`/stock-operation/${rowData.id}`),
+          },
           (rowData) => ({
             icon: 'cancel',
             tooltip: 'Cancelar',

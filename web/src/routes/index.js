@@ -113,6 +113,12 @@ export default function Routes() {
         component={StockOperationForm}
         isPrivate
       />
+      <Route
+        path="/stock-operation/:id"
+        exact
+        component={StockOperationForm}
+        isPrivate
+      />
 
       <Route
         path="/charts/best-sellers-by-liter"

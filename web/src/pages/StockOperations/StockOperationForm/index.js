@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
   Paper,
@@ -39,21 +39,30 @@ function StockOperationForm() {
 
   const dispatch = useDispatch();
 
+  const { id } = useParams();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [state, setState] = useState({
-    columns: [],
-    data: [],
+    initialValues: {
+      type: 'E',
+      date: new Date(),
+    },
+    canceled: false,
+    detailColumns: [],
+    detailData: [],
   });
 
   const loadValues = useCallback(async () => {
-    const resProducts = await api.get('products', { params: { active: true } });
+    const params = id ? { active: true } : {};
 
-    const resSizes = await api.get('sizes', { params: { active: true } });
+    const resProducts = await api.get('products', { params });
+
+    const resSizes = await api.get('sizes', { params });
 
     setState((prevState) => {
-      const columns = [...prevState.columns];
-      columns.push(
+      const detailColumns = [...prevState.detailColumns];
+      detailColumns.push(
         {
           title: 'Produto',
           field: 'product_id',
@@ -93,32 +102,59 @@ function StockOperationForm() {
           ),
         }
       );
-      return { ...prevState, columns };
+      return { ...prevState, detailColumns };
     });
-  }, []);
+
+    if (id) {
+      const res = await api.get(`stock-operations/${id}`, {
+        params: { products: true },
+      });
+
+      if (res.data) {
+        const { type, date, canceled, products } = res.data;
+
+        const detailData = products.map((row) => ({
+          product_id: row.product.id,
+          size_id: row.size.id,
+          amount: row.amount,
+        }));
+
+        setState((prevState) => {
+          return {
+            ...prevState,
+            initialValues: { type, date },
+            canceled,
+            detailData,
+          };
+        });
+      }
+    }
+  }, [id]);
 
   const handleSubmit = async (values) => {
     try {
-      setIsSubmitting(true);
+      if (!id) {
+        setIsSubmitting(true);
 
-      let totalAmount = 0;
+        let totalAmount = 0;
 
-      const stock_operation_products = state.data.map((data) => {
-        const { product_id, size_id, amount } = data;
-        totalAmount += amount;
-        return { product_id, size_id, amount };
-      });
+        const stock_operation_products = state.detailData.map((row) => {
+          const { product_id, size_id, amount } = row;
+          totalAmount += amount;
+          return { product_id, size_id, amount };
+        });
 
-      const data = {
-        ...values,
-        total_amount: totalAmount,
-        stock_operation_products,
-      };
+        const data = {
+          ...values,
+          total_amount: totalAmount,
+          stock_operation_products,
+        };
 
-      await api.post('stock-operations', data);
-      setIsSubmitting(false);
-      dispatch(showSnackbar('success', 'Salvo com sucesso.'));
-      history.push('/stock-operations');
+        await api.post('stock-operations', data);
+        setIsSubmitting(false);
+        dispatch(showSnackbar('success', 'Salvo com sucesso.'));
+        history.push('/stock-operations');
+      }
     } catch (error) {
       setIsSubmitting(false);
       dispatch(showSnackbar('error', 'Não foi possível salvar.'));
@@ -147,15 +183,13 @@ function StockOperationForm() {
     <Paper>
       <Loader loadFunction={loadValues}>
         <Formik
-          initialValues={{
-            type: 'E',
-            date: new Date(),
-          }}
+          enableReinitialize
+          initialValues={state.initialValues}
           onSubmit={handleSubmit}
         >
           <Form>
             <Typography variant="h6" color="primary" className={classes.title}>
-              Movimentação de estoque
+              Movimentação de estoque {state.canceled && '(cancelada)'}
             </Typography>
             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
               <Grid container spacing={1} className={classes.container}>
@@ -170,6 +204,7 @@ function StockOperationForm() {
                     ampm={false}
                     format="dd/MM/yyyy HH:mm"
                     cancelLabel="Cancelar"
+                    disabled={id}
                   />
                 </Grid>
                 <Grid item xs={2} className={classes.table}>
@@ -182,6 +217,7 @@ function StockOperationForm() {
                       inputProps={{
                         id: 'type-simple',
                       }}
+                      disabled={id}
                     >
                       <MenuItem value="E">Entrada</MenuItem>
                       <MenuItem value="S">Saída</MenuItem>
@@ -195,8 +231,8 @@ function StockOperationForm() {
                         Produtos
                       </Typography>
                     }
-                    columns={state.columns}
-                    data={state.data}
+                    columns={state.detailColumns}
+                    data={state.detailData}
                     localization={localization.ptBR}
                     options={{
                       actionsColumnIndex: -1,
@@ -211,64 +247,75 @@ function StockOperationForm() {
                     icons={{
                       Add: () => <AddCircle />,
                     }}
-                    editable={{
-                      onRowAdd: (newData) =>
-                        new Promise((resolve, reject) => {
-                          setTimeout(() => {
-                            if (validateProduct(newData)) {
+                    editable={
+                      !id && {
+                        onRowAdd: (newData) =>
+                          new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                              if (validateProduct(newData)) {
+                                setState((prevState) => {
+                                  const detailData = [...prevState.detailData];
+                                  detailData.push(newData);
+                                  return { ...prevState, detailData };
+                                });
+                                resolve();
+                              } else {
+                                reject();
+                              }
+                            }, 1);
+                          }),
+                        onRowUpdate: (newData, oldData) =>
+                          new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                              if (validateProduct(newData)) {
+                                if (oldData) {
+                                  setState((prevState) => {
+                                    const detailData = [
+                                      ...prevState.detailData,
+                                    ];
+                                    detailData[
+                                      detailData.indexOf(oldData)
+                                    ] = newData;
+                                    return { ...prevState, detailData };
+                                  });
+                                }
+                                resolve();
+                              } else {
+                                reject();
+                              }
+                            }, 1);
+                          }),
+                        onRowDelete: (oldData) =>
+                          new Promise((resolve) => {
+                            setTimeout(() => {
                               setState((prevState) => {
-                                const data = [...prevState.data];
-                                data.push(newData);
-                                return { ...prevState, data };
+                                const detailData = [...prevState.detailData];
+                                detailData.splice(
+                                  detailData.indexOf(oldData),
+                                  1
+                                );
+                                return { ...prevState, detailData };
                               });
                               resolve();
-                            } else {
-                              reject();
-                            }
-                          }, 1);
-                        }),
-                      onRowUpdate: (newData, oldData) =>
-                        new Promise((resolve, reject) => {
-                          setTimeout(() => {
-                            if (validateProduct(newData)) {
-                              if (oldData) {
-                                setState((prevState) => {
-                                  const data = [...prevState.data];
-                                  data[data.indexOf(oldData)] = newData;
-                                  return { ...prevState, data };
-                                });
-                              }
-                              resolve();
-                            } else {
-                              reject();
-                            }
-                          }, 1);
-                        }),
-                      onRowDelete: (oldData) =>
-                        new Promise((resolve) => {
-                          setTimeout(() => {
-                            setState((prevState) => {
-                              const data = [...prevState.data];
-                              data.splice(data.indexOf(oldData), 1);
-                              return { ...prevState, data };
-                            });
-                            resolve();
-                          }, 1);
-                        }),
-                    }}
+                            }, 1);
+                          }),
+                      }
+                    }
                   />
                 </Grid>
                 <Grid item xs={12} className={classes.buttons}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={isSubmitting}
-                    className={classes.button}
-                    startIcon={<Save />}
-                  >
-                    Salvar
-                  </Button>
+                  {!id && (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      disabled={isSubmitting}
+                      className={classes.button}
+                      startIcon={<Save />}
+                    >
+                      Salvar
+                    </Button>
+                  )}
                   <Button
                     type="button"
                     variant="outlined"
