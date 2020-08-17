@@ -28,6 +28,10 @@ class StockOperation extends Model {
       foreignKey: 'sale_id',
       as: 'sale',
     });
+    this.hasMany(models.StockOperationProduct, {
+      foreignKey: 'stock_operation_id',
+      as: 'products',
+    });
   }
 }
 

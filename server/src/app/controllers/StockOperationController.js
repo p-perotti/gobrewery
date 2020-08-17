@@ -3,6 +3,8 @@ import StockOperation from '../models/StockOperation';
 import StockOperationProduct from '../models/StockOperationProduct';
 import ProductStockAmount from '../models/ProductStockAmount';
 import User from '../models/User';
+import Product from '../models/Product';
+import Size from '../models/Size';
 
 import Database from '../../database';
 
@@ -24,6 +26,46 @@ class StockOperationController {
     ];
 
     if (req.params.id) {
+      if (Boolean(req.query.products) === true) {
+        const stockOperationsProducts = await StockOperation.findByPk(
+          req.params.id,
+          {
+            attributes,
+            include: [
+              {
+                model: User,
+                as: 'user',
+                attributes: ['id', 'name'],
+              },
+              {
+                model: User,
+                as: 'cancelation_user',
+                attributes: ['id', 'name'],
+              },
+              {
+                model: StockOperationProduct,
+                as: 'products',
+                include: [
+                  {
+                    model: Product,
+                    as: 'product',
+                    attributes: ['id', 'name'],
+                  },
+                  {
+                    model: Size,
+                    as: 'size',
+                    attributes: ['id', 'description'],
+                  },
+                ],
+                attributes: ['id', 'amount'],
+              },
+            ],
+          }
+        );
+
+        return res.json(stockOperationsProducts);
+      }
+
       const stockOperation = await StockOperation.findByPk(req.params.id, {
         attributes,
         include,
@@ -97,10 +139,9 @@ class StockOperationController {
         };
       });
 
-      const resProduct = await StockOperationProduct.bulkCreate(
-        reqProduct,
-        { transaction }
-      );
+      const resProduct = await StockOperationProduct.bulkCreate(reqProduct, {
+        transaction,
+      });
 
       if (totalAmount !== total_amount) {
         return res.status(404).json({
@@ -108,11 +149,7 @@ class StockOperationController {
         });
       }
 
-      const updateProductStockAmount = async (
-        product_id,
-        size_id,
-        amount
-      ) => {
+      const updateProductStockAmount = async (product_id, size_id, amount) => {
         const fields = [
           'product_id',
           'size_id',
@@ -227,11 +264,7 @@ class StockOperationController {
         transaction,
       });
 
-      const updateProductStockAmount = async (
-        product_id,
-        size_id,
-        amount
-      ) => {
+      const updateProductStockAmount = async (product_id, size_id, amount) => {
         const fields = [
           'product_id',
           'size_id',
