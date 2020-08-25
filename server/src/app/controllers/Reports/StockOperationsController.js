@@ -32,7 +32,7 @@ class StockOperationsController {
         .json({ error: 'Ending date must be after starting date.' });
     }
 
-    if (Boolean(req.query.synthetic) === true) {
+    if (req.query.synthetic && req.query.synthetic === 'true') {
       const products = await ProductStockAmount.findAll({
         include: [
           {

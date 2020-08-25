@@ -26,7 +26,7 @@ class StockOperationController {
     ];
 
     if (req.params.id) {
-      if (Boolean(req.query.products) === true) {
+      if (req.query.products && req.query.products === 'true') {
         const stockOperationsProducts = await StockOperation.findByPk(
           req.params.id,
           {
