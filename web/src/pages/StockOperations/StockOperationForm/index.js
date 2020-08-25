@@ -189,7 +189,7 @@ function StockOperationForm() {
         >
           <Form>
             <Typography variant="h6" color="primary" className={classes.title}>
-              Movimentação de estoque {state.canceled && '(cancelada)'}
+              Movimentação de estoque {state.canceled && '(Cancelada)'}
             </Typography>
             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
               <Grid container spacing={1} className={classes.container}>
