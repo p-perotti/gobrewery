@@ -48,7 +48,8 @@ function CouponForm() {
     expiration_date: new Date(),
     type: 'P',
     value: '',
-    limit: '',
+    discount_limitation: 0,
+    use_limit: '',
   });
 
   const loadValues = useCallback(async () => {
@@ -62,7 +63,8 @@ function CouponForm() {
           expiration_date,
           type,
           value,
-          limit,
+          discount_limitation,
+          use_limit,
         } = res.data;
         setInitialValues({
           name,
@@ -71,7 +73,8 @@ function CouponForm() {
           expiration_date: parseISO(expiration_date),
           type,
           value,
-          limit,
+          discount_limitation,
+          use_limit,
         });
       }
     }
@@ -88,7 +91,12 @@ function CouponForm() {
           ? field.lessThan(100, 'Percentual deve ser menor que 100.')
           : field
       ),
-    limit: Yup.number().moreThan(0),
+    discount_limitation: Yup.number()
+      .nullable()
+      .moreThan(0, 'Valor deve ser maior que 0.'),
+    use_limit: Yup.number()
+      .nullable()
+      .moreThan(0, 'Valor deve ser maior que 0.'),
   });
 
   const handleSubmit = async (values) => {
@@ -99,6 +107,11 @@ function CouponForm() {
 
       const expiration_date = endOfDay(values.expiration_date);
 
+      const discount_limitation =
+        values.discount_limitation === '' ? null : values.discount_limitation;
+
+      const use_limit = values.use_limit === '' ? null : values.use_limit;
+
       if (id) {
         await api.put(`coupons/${id}`, {
           name: values.name,
@@ -107,7 +120,8 @@ function CouponForm() {
           type: values.type,
           value: values.value,
           description: values.description,
-          limit: values.limit,
+          discount_limitation,
+          use_limit,
         });
       } else {
         await api.post('coupons', {
@@ -117,7 +131,8 @@ function CouponForm() {
           type: values.type,
           value: values.value,
           description: values.description,
-          limit: values.limit,
+          discount_limitation,
+          use_limit,
         });
       }
       setIsSubmitting(false);
@@ -149,7 +164,7 @@ function CouponForm() {
               </Typography>
               <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
                 <Grid container spacing={1} className={classes.container}>
-                  <Grid item xs={9}>
+                  <Grid item xs={6}>
                     <Field
                       component={TextField}
                       type="text"
@@ -163,9 +178,30 @@ function CouponForm() {
                   <Grid item xs={3}>
                     <Field
                       component={TextField}
+                      type="text"
+                      label={
+                        values.type === 'P'
+                          ? 'Máximo de desconto'
+                          : 'Mínimo de venda'
+                      }
+                      name="discount_limitation"
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                      InputProps={{
+                        inputComponent: NumberFormatInput,
+                        startAdornment: (
+                          <InputAdornment position="start">R$</InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Field
+                      component={TextField}
                       type="number"
-                      label="Limite"
-                      name="limit"
+                      label="Limite de uso"
+                      name="use_limit"
                       variant="outlined"
                       size="small"
                       fullWidth
@@ -217,7 +253,7 @@ function CouponForm() {
                     <Field
                       component={TextField}
                       type="text"
-                      label="Valor"
+                      label="Desconto"
                       name="value"
                       variant="outlined"
                       size="small"

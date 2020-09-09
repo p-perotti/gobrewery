@@ -129,7 +129,7 @@ function ProfileForm() {
                   <Field
                     component={TextField}
                     type="password"
-                    label="Senha Atual"
+                    label="Senha atual"
                     name="oldPassword"
                     variant="outlined"
                     size="small"
@@ -145,7 +145,7 @@ function ProfileForm() {
                   <Field
                     component={TextField}
                     type="password"
-                    label="Nova Senha"
+                    label="Nova senha"
                     name="password"
                     variant="outlined"
                     size="small"
@@ -161,7 +161,7 @@ function ProfileForm() {
                   <Field
                     component={TextField}
                     type="password"
-                    label="Confirmação de Senha"
+                    label="Confirmação de senha"
                     name="confirmPassword"
                     variant="outlined"
                     size="small"

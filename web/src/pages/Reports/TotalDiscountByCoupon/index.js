@@ -53,13 +53,11 @@ function TotalDiscountByCoupon() {
           th('Cupom'),
           th('Tipo'),
           th('Desconto'),
-          th('Disponibilizados'),
           th('Utilizados'),
           th('Desconto Total'),
         ],
       ];
 
-      let totalLimit = 0;
       let totalUsed = 0;
       let totalDiscount = 0;
 
@@ -69,13 +67,11 @@ function TotalDiscountByCoupon() {
           td(row.coupon.name, index),
           td(formatType(row.coupon.type), index),
           td(formatValue(row.coupon.type, row.coupon.value), index),
-          td(row.coupon.limit, index),
           td(row.used, index),
           td(formatCurrency(row.total_discount), index)
         );
         body.push(tableRow);
 
-        totalLimit += Number(row.coupon.limit);
         totalUsed += Number(row.used);
         totalDiscount += Number(row.total_discount);
       });
@@ -89,10 +85,6 @@ function TotalDiscountByCoupon() {
         }),
         td(''),
         td(''),
-        td(totalLimit, -1, {
-          fillColor: 'black',
-          color: 'white',
-        }),
         td(totalUsed, -1, {
           fillColor: 'black',
           color: 'white',
@@ -112,7 +104,7 @@ function TotalDiscountByCoupon() {
     generateReport(
       `Relatório de desconto total por cupom (${periodStart} à ${periodEnd})`,
       'portrait',
-      ['*', 'auto', 'auto', 'auto', 'auto', 'auto'],
+      ['*', 'auto', 'auto', 'auto', 'auto'],
       generateReportBody(data)
     );
   }

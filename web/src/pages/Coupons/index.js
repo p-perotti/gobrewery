@@ -94,7 +94,6 @@ function Coupons() {
             }
           },
         },
-        { title: 'Limite', field: 'limit' },
       ]}
       data={data}
       isLoading={isLoading}
