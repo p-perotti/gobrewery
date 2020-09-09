@@ -34,7 +34,7 @@ class TotalDiscountByCouponController {
         {
           model: Coupon,
           as: 'coupon',
-          attributes: ['id', 'name', 'type', 'value', 'limit'],
+          attributes: ['id', 'name', 'type', 'value'],
           required: true,
         },
       ],

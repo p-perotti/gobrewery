@@ -30,7 +30,10 @@ module.exports = {
         type: Sequelize.DECIMAL(15, 2),
         allowNull: false,
       },
-      limit: {
+      discount_limitation: {
+        type: Sequelize.DECIMAL(15, 2),
+      },
+      use_limit: {
         type: Sequelize.INTEGER,
       },
       created_at: {

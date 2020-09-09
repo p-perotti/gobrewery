@@ -12,7 +12,8 @@ class CouponController {
       'expiration_date',
       'type',
       'value',
-      'limit',
+      'discount_limitation',
+      'use_limit',
     ];
 
     if (req.params.id) {
@@ -46,7 +47,12 @@ class CouponController {
         .when('type', (type, field) =>
           type === 'P' ? field.lessThan(100) : field
         ),
-      limit: Yup.number().moreThan(0),
+      discount_limitation: Yup.number()
+        .nullable()
+        .moreThan(0),
+      use_limit: Yup.number()
+        .nullable()
+        .moreThan(0),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -83,7 +89,8 @@ class CouponController {
       expiration_date,
       type,
       value,
-      limit,
+      discount_limitation,
+      use_limit,
     } = await Coupon.create(req.body);
 
     return res.json({
@@ -94,7 +101,8 @@ class CouponController {
       expiration_date,
       type,
       value,
-      limit,
+      discount_limitation,
+      use_limit,
     });
   }
 
@@ -121,7 +129,12 @@ class CouponController {
         .when('type', (type, field) =>
           type === 'P' ? field.lessThan(100) : field
         ),
-      limit: Yup.number().moreThan(0),
+      discount_limitation: Yup.number()
+        .nullable()
+        .moreThan(0),
+      use_limit: Yup.number()
+        .nullable()
+        .moreThan(0),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -158,7 +171,8 @@ class CouponController {
       expiration_date,
       type,
       value,
-      limit,
+      discount_limitation,
+      use_limit,
     } = await coupon.update(req.body);
 
     return res.json({
@@ -169,7 +183,8 @@ class CouponController {
       expiration_date,
       type,
       value,
-      limit,
+      discount_limitation,
+      use_limit,
     });
   }
 }
