@@ -157,8 +157,12 @@ function StockOperations() {
 
   const handleGenerate = async () => {
     try {
+      const params = synthetic
+        ? { synthetic }
+        : { startingDate, endingDate, synthetic };
+
       const response = await api.get('reports/stock-operations', {
-        params: { startingDate, endingDate, synthetic },
+        params,
       });
 
       if (response.data && response.data.length > 0) {
