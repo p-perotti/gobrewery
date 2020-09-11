@@ -11,27 +11,6 @@ import Database from '../../../database';
 
 class StockOperationsController {
   async index(req, res) {
-    if (!req.query.startingDate || !req.query.endingDate) {
-      return res.status(400).json({
-        error: 'Starting and ending date request params must have value.',
-      });
-    }
-
-    const startingDate = startOfDay(parseISO(req.query.startingDate));
-    const endingDate = endOfDay(parseISO(req.query.endingDate));
-
-    if (isAfter(startingDate, endingDate)) {
-      return res
-        .status(400)
-        .json({ error: 'Starting date must be before ending date.' });
-    }
-
-    if (isBefore(endingDate, startingDate)) {
-      return res
-        .status(400)
-        .json({ error: 'Ending date must be after starting date.' });
-    }
-
     if (req.query.synthetic && req.query.synthetic === 'true') {
       const products = await ProductStockAmount.findAll({
         include: [
@@ -54,6 +33,27 @@ class StockOperationsController {
       });
 
       return res.json(products);
+    }
+
+    if (!req.query.startingDate || !req.query.endingDate) {
+      return res.status(400).json({
+        error: 'Starting and ending date request params must have value.',
+      });
+    }
+
+    const startingDate = startOfDay(parseISO(req.query.startingDate));
+    const endingDate = endOfDay(parseISO(req.query.endingDate));
+
+    if (isAfter(startingDate, endingDate)) {
+      return res
+        .status(400)
+        .json({ error: 'Starting date must be before ending date.' });
+    }
+
+    if (isBefore(endingDate, startingDate)) {
+      return res
+        .status(400)
+        .json({ error: 'Ending date must be after starting date.' });
     }
 
     const data = await StockOperationProduct.findAll({
