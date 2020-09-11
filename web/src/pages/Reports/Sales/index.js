@@ -211,7 +211,7 @@ function Sales() {
         params: { startingDate, endingDate, groupBy },
       });
 
-      if (response.data) {
+      if (response.data && response.data.length > 0) {
         switch (groupBy) {
           case 'sale': {
             reportBySale(response.data);
@@ -223,6 +223,13 @@ function Sales() {
           }
           default:
         }
+      } else {
+        dispatch(
+          showSnackbar(
+            'info',
+            'Nenhum resultado obtido com os filtros aplicados.'
+          )
+        );
       }
     } catch (error) {
       dispatch(showSnackbar('error', 'Não foi possível gerar relatório.'));

@@ -28,7 +28,7 @@ function StockOperations() {
 
   const [startingDate, setStartingDate] = useState(startOfMonth(new Date()));
   const [endingDate, setEndingDate] = useState(new Date());
-  const [synthetic, setSynthetic] = useState(true);
+  const [synthetic, setSynthetic] = useState(false);
 
   const handleChangeSynthetic = () => {
     setSynthetic(!synthetic);
@@ -69,11 +69,10 @@ function StockOperations() {
       return body;
     };
 
-    const periodStart = format(startingDate, 'dd/MM/yy', { locale: ptBR });
-    const periodEnd = format(endingDate, 'dd/MM/yy', { locale: ptBR });
-
     generateReport(
-      `Relatório resumido de estoque (${periodStart} à ${periodEnd})`,
+      `Relatório resumido de estoque (em ${format(new Date(), 'dd/MM/yy', {
+        locale: ptBR,
+      })})`,
       'portrait',
       ['*', '*', 'auto'],
       generateReportBody(data)
@@ -162,12 +161,19 @@ function StockOperations() {
         params: { startingDate, endingDate, synthetic },
       });
 
-      if (response.data) {
+      if (response.data && response.data.length > 0) {
         if (synthetic) {
           syntheticReport(response.data);
         } else {
           report(response.data);
         }
+      } else {
+        dispatch(
+          showSnackbar(
+            'info',
+            'Nenhum resultado obtido com os filtros aplicados.'
+          )
+        );
       }
     } catch (error) {
       dispatch(showSnackbar('error', 'Não foi possível gerar relatório.'));
@@ -181,36 +187,40 @@ function StockOperations() {
       </Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
         <Grid container spacing={1} className={classes.container}>
-          <Grid item xs={2}>
-            <DatePicker
-              label="Data Inicial"
-              inputVariant="outlined"
-              size="small"
-              fullWidth
-              ampm={false}
-              format="dd/MM/yyyy"
-              cancelLabel="Cancelar"
-              maxDate={endingDate}
-              maxDateMessage="Data inicial deve ser menor que a data final."
-              value={startingDate}
-              onChange={setStartingDate}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <DatePicker
-              label="Data Final"
-              inputVariant="outlined"
-              size="small"
-              fullWidth
-              ampm={false}
-              format="dd/MM/yyyy"
-              cancelLabel="Cancelar"
-              minDate={startingDate}
-              minDateMessage="Data final deve ser maior que a data inicial."
-              value={endingDate}
-              onChange={setEndingDate}
-            />
-          </Grid>
+          {!synthetic && (
+            <>
+              <Grid item xs={2}>
+                <DatePicker
+                  label="Data Inicial"
+                  inputVariant="outlined"
+                  size="small"
+                  fullWidth
+                  ampm={false}
+                  format="dd/MM/yyyy"
+                  cancelLabel="Cancelar"
+                  maxDate={endingDate}
+                  maxDateMessage="Data inicial deve ser menor que a data final."
+                  value={startingDate}
+                  onChange={setStartingDate}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <DatePicker
+                  label="Data Final"
+                  inputVariant="outlined"
+                  size="small"
+                  fullWidth
+                  ampm={false}
+                  format="dd/MM/yyyy"
+                  cancelLabel="Cancelar"
+                  minDate={startingDate}
+                  minDateMessage="Data final deve ser maior que a data inicial."
+                  value={endingDate}
+                  onChange={setEndingDate}
+                />
+              </Grid>
+            </>
+          )}
           <Grid item xs={2}>
             <FormControlLabel
               control={
@@ -223,7 +233,7 @@ function StockOperations() {
               label="Resumido"
             />
           </Grid>
-          <Grid item xs={6} className={classes.buttons}>
+          <Grid item xs={synthetic ? 10 : 6} className={classes.buttons}>
             <Button
               type="button"
               variant="contained"
