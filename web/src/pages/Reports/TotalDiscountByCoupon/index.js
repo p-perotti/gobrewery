@@ -115,8 +115,15 @@ function TotalDiscountByCoupon() {
         params: { startingDate, endingDate },
       });
 
-      if (response.data) {
+      if (response.data && response.data.length > 0) {
         report(response.data);
+      } else {
+        dispatch(
+          showSnackbar(
+            'info',
+            'Nenhum resultado obtido com os filtros aplicados.'
+          )
+        );
       }
     } catch (error) {
       dispatch(showSnackbar('error', 'Não foi possível gerar relatório.'));
