@@ -16,6 +16,7 @@ import ProductPriceController from './app/controllers/ProductPriceController';
 import ProductImageController from './app/controllers/ProductImageController';
 import CouponController from './app/controllers/CouponController';
 import StockOperationController from './app/controllers/StockOperationController';
+import ProductStockAmountController from './app/controllers/ProductStockAmountController';
 
 import DashboardTotalStockOperationsTodayController from './app/controllers/Dashboard/TotalStockOperationsTodayController';
 import DashboardTotalSalesTodayController from './app/controllers/Dashboard/TotalSalesTodayController';
@@ -87,6 +88,8 @@ routes.delete(
   administratorMiddleware,
   StockOperationController.delete
 );
+
+routes.get('/product-stock-amount', ProductStockAmountController.index);
 
 routes.get(
   '/dashboard/total-stock-operations-today',

@@ -172,6 +172,12 @@ class StockOperationController {
             newAmount = Number(productStockAmount.amount) - Number(amount);
           }
 
+          if (newAmount < 0) {
+            throw new Error(
+              `Operation results in negative stock balance. Product: ${product_id}. Size: ${size_id}`
+            );
+          }
+
           await ProductStockAmount.update(
             {
               product_id,
@@ -284,6 +290,12 @@ class StockOperationController {
           newAmount = Number(productStockAmount.amount) + Number(amount);
         } else if (type === 'E') {
           newAmount = Number(productStockAmount.amount) - Number(amount);
+        }
+
+        if (newAmount < 0) {
+          throw new Error(
+            `Cancelation results in negative stock balance, do a new operation to adjust it. Product: ${product_id}. Size: ${size_id}`
+          );
         }
 
         await ProductStockAmount.update(
