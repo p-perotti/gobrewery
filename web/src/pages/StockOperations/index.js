@@ -87,7 +87,12 @@ function StockOperations() {
     } catch (error) {
       setCancelationId();
       setIsSubmitting(false);
-      dispatch(showSnackbar('error', 'Não foi possível cancelar.'));
+      dispatch(
+        showSnackbar(
+          'error',
+          'Não foi possível cancelar, tente novamente ou realize uma movimentação de ajuste.'
+        )
+      );
     }
     handleLoad();
   };

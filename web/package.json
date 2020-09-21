@@ -20,7 +20,7 @@
     "formik-material-ui-pickers": "^0.0.8",
     "history": "^4.10.1",
     "immer": "^6.0.5",
-    "material-table": "^1.57.2",
+    "material-table": "1.67.1",
     "material-ui-image": "^3.2.3",
     "pdfmake": "^0.1.65",
     "prop-types": "^15.7.2",

@@ -3,6 +3,7 @@ const options = {
   pageSize: 10,
   pageSizeOptions: [10, 25, 50, 100],
   maxBodyHeight: 'calc(100vh - 230px)',
+  draggable: false,
 };
 
 const localization = {
