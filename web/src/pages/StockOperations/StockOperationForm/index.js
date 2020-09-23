@@ -162,41 +162,48 @@ function StockOperationForm() {
   };
 
   const handleSubmit = async (values) => {
-    try {
-      if (!id) {
-        setIsSubmitting(true);
-        if (values.type === 'S' && (await validateDetailData())) {
-          setIsSubmitting(false);
-          dispatch(
-            showSnackbar(
-              'warning',
-              'Ajuste a quantidade dos produtos indicados e tente novamente.'
-            )
-          );
-        } else {
-          let totalAmount = 0;
+    if (detailData.length === 0) {
+      dispatch(
+        showSnackbar('info', 'Nenhum produto na movimentação para salvar.')
+      );
+    } else {
+      try {
+        if (!id) {
+          setIsSubmitting(true);
 
-          const stock_operation_products = detailData.map(async (row) => {
-            const { product_id, size_id, amount } = row;
-            totalAmount += amount;
-            return { product_id, size_id, amount };
-          });
+          if (values.type === 'S' && (await validateDetailData())) {
+            setIsSubmitting(false);
+            dispatch(
+              showSnackbar(
+                'warning',
+                'Ajuste a quantidade dos produtos indicados e tente novamente.'
+              )
+            );
+          } else {
+            let totalAmount = 0;
 
-          const data = {
-            ...values,
-            total_amount: totalAmount,
-            stock_operation_products,
-          };
+            const stock_operation_products = detailData.map(async (row) => {
+              const { product_id, size_id, amount } = row;
+              totalAmount += amount;
+              return { product_id, size_id, amount };
+            });
 
-          await api.post('stock-operations', data);
-          setIsSubmitting(false);
-          dispatch(showSnackbar('success', 'Salvo com sucesso.'));
-          history.push('/stock-operations');
+            const data = {
+              ...values,
+              total_amount: totalAmount,
+              stock_operation_products,
+            };
+
+            await api.post('stock-operations', data);
+            setIsSubmitting(false);
+            dispatch(showSnackbar('success', 'Salvo com sucesso.'));
+            history.push('/stock-operations');
+          }
         }
+      } catch (error) {
+        setIsSubmitting(false);
+        dispatch(showSnackbar('error', 'Não foi possível salvar.'));
       }
-    } catch (error) {
-      setIsSubmitting(false);
-      dispatch(showSnackbar('error', 'Não foi possível salvar.'));
     }
   };
 
