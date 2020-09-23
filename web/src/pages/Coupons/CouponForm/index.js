@@ -18,7 +18,7 @@ import { Formik, Field, Form } from 'formik';
 import { TextField, Select } from 'formik-material-ui';
 import { DateTimePicker } from 'formik-material-ui-pickers';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { parseISO, startOfDay, endOfDay } from 'date-fns';
+import { parseISO, startOfDay, endOfDay, isBefore, isAfter } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import * as Yup from 'yup';
@@ -44,8 +44,8 @@ function CouponForm() {
   const [initialValues, setInitialValues] = useState({
     name: '',
     description: '',
-    starting_date: new Date(),
-    expiration_date: new Date(),
+    starting_date: startOfDay(new Date()),
+    expiration_date: endOfDay(new Date()),
     type: 'P',
     value: '',
     discount_limitation: 0,
@@ -100,47 +100,49 @@ function CouponForm() {
   });
 
   const handleSubmit = async (values) => {
-    try {
-      setIsSubmitting(true);
+    if (
+      isBefore(values.starting_date, values.expiration_date) &&
+      isAfter(values.expiration_date, values.starting_date)
+    ) {
+      try {
+        setIsSubmitting(true);
 
-      const starting_date = startOfDay(values.starting_date);
+        const discount_limitation =
+          values.discount_limitation === '' ? null : values.discount_limitation;
 
-      const expiration_date = endOfDay(values.expiration_date);
+        const use_limit = values.use_limit === '' ? null : values.use_limit;
 
-      const discount_limitation =
-        values.discount_limitation === '' ? null : values.discount_limitation;
+        if (id) {
+          await api.put(`coupons/${id}`, {
+            name: values.name,
+            starting_date: values.starting_date,
+            expiration_date: values.expiration_date,
+            type: values.type,
+            value: values.value,
+            description: values.description,
+            discount_limitation,
+            use_limit,
+          });
+        } else {
+          await api.post('coupons', {
+            name: values.name,
+            starting_date: values.starting_date,
+            expiration_date: values.starting_date,
+            type: values.type,
+            value: values.value,
+            description: values.description,
+            discount_limitation,
+            use_limit,
+          });
+        }
 
-      const use_limit = values.use_limit === '' ? null : values.use_limit;
-
-      if (id) {
-        await api.put(`coupons/${id}`, {
-          name: values.name,
-          starting_date,
-          expiration_date,
-          type: values.type,
-          value: values.value,
-          description: values.description,
-          discount_limitation,
-          use_limit,
-        });
-      } else {
-        await api.post('coupons', {
-          name: values.name,
-          starting_date,
-          expiration_date,
-          type: values.type,
-          value: values.value,
-          description: values.description,
-          discount_limitation,
-          use_limit,
-        });
+        setIsSubmitting(false);
+        dispatch(showSnackbar('success', 'Salvo com sucesso.'));
+        history.push('/coupons');
+      } catch (error) {
+        setIsSubmitting(false);
+        dispatch(showSnackbar('error', 'Não foi possível salvar.'));
       }
-      setIsSubmitting(false);
-      dispatch(showSnackbar('success', 'Salvo com sucesso.'));
-      history.push('/coupons');
-    } catch (error) {
-      setIsSubmitting(false);
-      dispatch(showSnackbar('error', 'Não foi possível salvar.'));
     }
   };
 
@@ -218,6 +220,9 @@ function CouponForm() {
                       ampm={false}
                       format="dd/MM/yyyy HH:mm"
                       cancelLabel="Cancelar"
+                      maxDate={values.expiration_date}
+                      maxDateMessage="Início do período deve ser menor que a expiração."
+                      strictCompareDates
                     />
                   </Grid>
                   <Grid item xs={3}>
@@ -231,6 +236,9 @@ function CouponForm() {
                       ampm={false}
                       format="dd/MM/yyyy HH:mm"
                       cancelLabel="Cancelar"
+                      minDate={values.starting_date}
+                      minDateMessage="Expiração do período deve ser maior que o início."
+                      strictCompareDates
                     />
                   </Grid>
                   <Grid item xs={3}>

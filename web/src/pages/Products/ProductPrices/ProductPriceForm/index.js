@@ -19,7 +19,7 @@ import { Formik, Field, Form } from 'formik';
 import { TextField, Select } from 'formik-material-ui';
 import { DateTimePicker } from 'formik-material-ui-pickers';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { parseISO, startOfDay, endOfDay } from 'date-fns';
+import { parseISO, startOfDay, endOfDay, isBefore, isAfter } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import * as Yup from 'yup';
@@ -48,8 +48,8 @@ function ProductPriceForm() {
   const [sizes, setSizes] = useState([]);
 
   const [initialValues, setInitialValues] = useState({
-    starting_date: new Date(),
-    expiration_date: new Date(),
+    starting_date: startOfDay(new Date()),
+    expiration_date: endOfDay(new Date()),
     price: '',
     description: '',
   });
@@ -97,36 +97,38 @@ function ProductPriceForm() {
   });
 
   const handleSubmit = async (values) => {
-    try {
-      setIsSubmitting(true);
+    if (
+      isBefore(values.starting_date, values.expiration_date) &&
+      isAfter(values.expiration_date, values.starting_date)
+    ) {
+      try {
+        setIsSubmitting(true);
 
-      const starting_date = startOfDay(values.starting_date);
+        if (id) {
+          await api.put(`products/${productId}/prices/${id}`, {
+            size_id: values.size,
+            starting_date: values.starting_date,
+            expiration_date: values.expiration_date,
+            price: values.price,
+            description: values.description,
+          });
+        } else {
+          await api.post(`products/${productId}/prices`, {
+            size_id: values.size,
+            starting_date: values.starting_date,
+            expiration_date: values.expiration_date,
+            price: values.price,
+            description: values.description,
+          });
+        }
 
-      const expiration_date = endOfDay(values.expiration_date);
-
-      if (id) {
-        await api.put(`products/${productId}/prices/${id}`, {
-          size_id: values.size,
-          starting_date,
-          expiration_date,
-          price: values.price,
-          description: values.description,
-        });
-      } else {
-        await api.post(`products/${productId}/prices`, {
-          size_id: values.size,
-          starting_date,
-          expiration_date,
-          price: values.price,
-          description: values.description,
-        });
+        setIsSubmitting(false);
+        dispatch(showSnackbar('success', 'Salvo com sucesso.'));
+        history.push(`/products/${productId}`);
+      } catch (error) {
+        setIsSubmitting(false);
+        dispatch(showSnackbar('error', 'Não foi possível salvar.'));
       }
-      setIsSubmitting(false);
-      dispatch(showSnackbar('success', 'Salvo com sucesso.'));
-      history.push(`/products/${productId}`);
-    } catch (error) {
-      setIsSubmitting(false);
-      dispatch(showSnackbar('error', 'Não foi possível salvar.'));
     }
   };
 
@@ -142,115 +144,125 @@ function ProductPriceForm() {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          <Form>
-            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
-              <Grid container spacing={1} className={classes.container}>
-                <Grid item xs={12}>
-                  <TextFieldMUI
-                    label="Produto"
-                    value={productName}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    disabled
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <FormControl variant="outlined" size="small" fullWidth>
-                    <InputLabel htmlFor="size-select">Tamanho</InputLabel>
+          {({ values }) => (
+            <Form>
+              <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptBR}>
+                <Grid container spacing={1} className={classes.container}>
+                  <Grid item xs={12}>
+                    <TextFieldMUI
+                      label="Produto"
+                      value={productName}
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl variant="outlined" size="small" fullWidth>
+                      <InputLabel htmlFor="size-select">Tamanho</InputLabel>
+                      <Field
+                        component={Select}
+                        label="Tamanho"
+                        name="size"
+                        inputProps={{
+                          id: 'size-select',
+                        }}
+                        disabled={sizes.length === 0}
+                      >
+                        {sizes.map((size) => (
+                          <MenuItem value={size.id}>
+                            {size.description}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={2}>
                     <Field
-                      component={Select}
-                      label="Tamanho"
-                      name="size"
-                      inputProps={{
-                        id: 'size-select',
+                      component={DateTimePicker}
+                      label="Início"
+                      name="starting_date"
+                      inputVariant="outlined"
+                      size="small"
+                      fullWidth
+                      ampm={false}
+                      format="dd/MM/yyyy HH:mm"
+                      cancelLabel="Cancelar"
+                      maxDate={values.expiration_date}
+                      maxDateMessage="Início do período deve ser menor que a expiração."
+                      strictCompareDates
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Field
+                      component={DateTimePicker}
+                      label="Expiração"
+                      name="expiration_date"
+                      inputVariant="outlined"
+                      size="small"
+                      fullWidth
+                      ampm={false}
+                      format="dd/MM/yyyy HH:mm"
+                      cancelLabel="Cancelar"
+                      minDate={values.starting_date}
+                      minDateMessage="Expiração do período deve ser maior que o início."
+                      strictCompareDates
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Field
+                      component={TextField}
+                      type="text"
+                      label="Preço"
+                      name="price"
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                      InputProps={{
+                        inputComponent: NumberFormatInput,
+                        startAdornment: (
+                          <InputAdornment position="start">R$</InputAdornment>
+                        ),
                       }}
-                      disabled={sizes.length === 0}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      component={TextField}
+                      type="text"
+                      label="Descrição"
+                      name="description"
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} className={classes.buttons}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      disabled={isSubmitting}
+                      className={classes.button}
+                      startIcon={<Save />}
                     >
-                      {sizes.map((size) => (
-                        <MenuItem value={size.id}>{size.description}</MenuItem>
-                      ))}
-                    </Field>
-                  </FormControl>
+                      Salvar
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outlined"
+                      color="primary"
+                      component={Link}
+                      to={`/products/${productId}`}
+                    >
+                      Voltar
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={2}>
-                  <Field
-                    component={DateTimePicker}
-                    label="Início"
-                    name="starting_date"
-                    inputVariant="outlined"
-                    size="small"
-                    fullWidth
-                    ampm={false}
-                    format="dd/MM/yyyy HH:mm"
-                    cancelLabel="Cancelar"
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <Field
-                    component={DateTimePicker}
-                    label="Expiração"
-                    name="expiration_date"
-                    inputVariant="outlined"
-                    size="small"
-                    fullWidth
-                    ampm={false}
-                    format="dd/MM/yyyy HH:mm"
-                    cancelLabel="Cancelar"
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <Field
-                    component={TextField}
-                    type="text"
-                    label="Preço"
-                    name="price"
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    InputProps={{
-                      inputComponent: NumberFormatInput,
-                      startAdornment: (
-                        <InputAdornment position="start">R$</InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    component={TextField}
-                    type="text"
-                    label="Descrição"
-                    name="description"
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} className={classes.buttons}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={isSubmitting}
-                    className={classes.button}
-                    startIcon={<Save />}
-                  >
-                    Salvar
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outlined"
-                    color="primary"
-                    component={Link}
-                    to={`/products/${productId}`}
-                  >
-                    Voltar
-                  </Button>
-                </Grid>
-              </Grid>
-            </MuiPickersUtilsProvider>
-          </Form>
+              </MuiPickersUtilsProvider>
+            </Form>
+          )}
         </Formik>
       </Loader>
       <Backdrop open={isSubmitting} className={classes.backdrop}>
