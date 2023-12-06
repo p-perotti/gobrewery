@@ -39,6 +39,7 @@ function Profile() {
   const dispatch = useDispatch();
 
   const avatar = useSelector((state) => state.user.avatar);
+  console.log(avatar)
   const isSubmitting = useSelector((state) => state.user.submitting);
 
   const [anchorEl, setAnchorEl] = useState(null);

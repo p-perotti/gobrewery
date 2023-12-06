@@ -9,7 +9,9 @@ class UserAvatar extends Model {
         url: {
           type: Sequelize.VIRTUAL,
           get() {
-            return `${process.env.APP_URL}/files/${this.path}`;
+            return process.env.IMAGE_STORAGE_TYPE === 'local'
+              ? `${process.env.APP_URL}/files/${this.path}`
+              : `${process.env.BUCKET_URL}/${this.path}`;
           },
         },
       },

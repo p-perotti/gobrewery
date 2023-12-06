@@ -2,6 +2,10 @@ import { unlinkSync } from 'fs';
 import { resolve } from 'path';
 import ProductImage from '../models/ProductImage';
 import Product from '../models/Product';
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import bucket from '../../config/bucket';
+
+const s3 = new S3Client(bucket);
 
 class ProductImageController {
   async index(req, res) {
@@ -25,12 +29,12 @@ class ProductImageController {
       return res.status(404).json({ error: 'Must upload a file.' });
     }
 
-    const { originalname, filename } = req.file;
+    const { originalname, filename, key } = req.file;
 
     const { id, product_id, url, name, path } = await ProductImage.create({
       product_id: productId,
       name: originalname,
-      path: filename,
+      path: process.env.IMAGE_STORAGE_TYPE === 'local' ? filename : key,
     });
 
     return res.json({ id, product_id, url, name, path });
@@ -46,9 +50,19 @@ class ProductImageController {
     const image = await ProductImage.findByPk(req.params.id);
 
     if (image) {
-      unlinkSync(
-        resolve(__dirname, '..', '..', '..', 'tmp', 'uploads', image.path)
-      );
+      if (process.env.IMAGE_STORAGE_TYPE === 'local') {
+        unlinkSync(
+          resolve(__dirname, '..', '..', '..', 'tmp', 'uploads', image.path)
+        );
+      } else {
+        await s3.send(
+          new DeleteObjectCommand({
+            Bucket: process.env.BUCKET_NAME,
+            Key: image.path,
+          })
+        );
+      }
+
       await image.destroy();
     } else {
       return res.status(404).json({

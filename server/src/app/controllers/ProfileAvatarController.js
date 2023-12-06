@@ -1,6 +1,10 @@
 import { unlinkSync } from 'fs';
 import { resolve } from 'path';
 import UserAvatar from '../models/UserAvatar';
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import bucket from '../../config/bucket';
+
+const s3 = new S3Client(bucket);
 
 class ProfileAvatarController {
   async store(req, res) {
@@ -8,7 +12,7 @@ class ProfileAvatarController {
       return res.status(404).json({ error: 'Must upload a file.' });
     }
 
-    const { originalname, filename } = req.file;
+    const { originalname, filename, key } = req.file;
 
     try {
       const currentAvatar = await UserAvatar.findOne({
@@ -18,31 +22,43 @@ class ProfileAvatarController {
       });
 
       if (currentAvatar) {
-        unlinkSync(
-          resolve(
-            __dirname,
-            '..',
-            '..',
-            '..',
-            'tmp',
-            'uploads',
-            currentAvatar.path
-          )
-        );
+        if (process.env.IMAGE_STORAGE_TYPE === 'local') {
+          unlinkSync(
+            resolve(
+              __dirname,
+              '..',
+              '..',
+              '..',
+              'tmp',
+              'uploads',
+              currentAvatar.path
+            )
+          );
+        } else {
+          await s3.send(
+            new DeleteObjectCommand({
+              Bucket: process.env.BUCKET_NAME,
+              Key: currentAvatar.path,
+            })
+          );
+        }
+
         await currentAvatar.destroy();
       }
 
       const { id, user_id, url, name, path } = await UserAvatar.create({
         user_id: req.userId,
         name: originalname,
-        path: filename,
+        path: process.env.IMAGE_STORAGE_TYPE === 'local' ? filename : key,
       });
 
       return res.json({ id, user_id, url, name, path });
     } catch (error) {
-      unlinkSync(
-        resolve(__dirname, '..', '..', '..', 'tmp', 'uploads', filename)
-      );
+      if (process.env.IMAGE_STORAGE_TYPE === 'local') {
+        unlinkSync(
+          resolve(__dirname, '..', '..', '..', 'tmp', 'uploads', filename)
+        );
+      }
 
       throw error;
     }
@@ -56,9 +72,19 @@ class ProfileAvatarController {
     });
 
     if (avatar) {
-      unlinkSync(
-        resolve(__dirname, '..', '..', '..', 'tmp', 'uploads', avatar.path)
-      );
+      if (process.env.IMAGE_STORAGE_TYPE === 'local') {
+        unlinkSync(
+          resolve(__dirname, '..', '..', '..', 'tmp', 'uploads', avatar.path)
+        );
+      } else {
+        await s3.send(
+          new DeleteObjectCommand({
+            Bucket: process.env.BUCKET_NAME,
+            Key: avatar.path,
+          })
+        );
+      }
+
       await avatar.destroy();
     } else {
       return res.status(404).json({
