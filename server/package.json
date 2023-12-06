@@ -6,6 +6,8 @@
   "author": "Patrick Alexis Perotti <patrickperotti0@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "babel src -d dist",
+    "start": "node dist/server.js",
     "dev": "nodemon src/server.js",
     "dev:debug": "nodemon --inspect src/server.js"
   },
@@ -25,6 +27,9 @@
     "yup": "^0.28.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.23.4",
+    "@babel/core": "^7.23.5",
+    "@babel/preset-env": "^7.23.5",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.10.0",
