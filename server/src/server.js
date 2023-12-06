@@ -1,3 +1,7 @@
 import app from './app';
 
-app.listen(3333, () => console.log('API listening at port 3333'));
+app.listen(process.env.APP_PORT, () => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`API listening at port ${process.env.APP_PORT}`);
+  }
+});
