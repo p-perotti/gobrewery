@@ -1,6 +1,6 @@
 # GoBrewery
 
-GoBrewery is an app with management features of an e-commerce related to a craft brewery and it was developed as the final project for the Systems Analysis and Development undergraduate program at UTFPR.
+GoBrewery is an app with management features of an e-commerce related to a craft brewery.
 
 <p align="center">
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/p-perotti/gobrewery">
