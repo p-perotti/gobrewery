@@ -1,6 +1,8 @@
 # GoBrewery
 
-GoBrewery is an app with management features of an e-commerce related to a craft brewery.
+<p align="center">
+  GoBrewery is an app with management features of an e-commerce related to a craft brewery.
+</p>
 
 <p align="center">
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/p-perotti/gobrewery">
