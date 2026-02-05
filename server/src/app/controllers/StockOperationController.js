@@ -144,9 +144,11 @@ class StockOperationController {
       });
 
       if (totalAmount !== total_amount) {
-        return res.status(404).json({
-          error: 'Total amount different from the sum of the product amounts.',
-        });
+        const error = new Error(
+          'Total amount different from the sum of the product amounts.'
+        );
+        error.statusCode = 400;
+        throw error;
       }
 
       const updateProductStockAmount = async (product_id, size_id, amount) => {
@@ -227,6 +229,9 @@ class StockOperationController {
       });
     } catch (error) {
       await transaction.rollback();
+      if (error.statusCode) {
+        return res.status(error.statusCode).json({ error: error.message });
+      }
       throw error;
     }
   }

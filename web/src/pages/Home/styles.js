@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const style = makeStyles((theme) => ({
+const style = makeStyles(() => ({
   container: {
     paddingTop: 'calc(50vh - 90px)',
     display: 'flex',

@@ -139,26 +139,23 @@ function StockOperationForm() {
   }, [id]);
 
   const validateDetailData = async () => {
-    const detailDataUpdate = [...detailData];
-
-    await Promise.all(
-      detailDataUpdate.map(async (row) => {
+    const detailDataUpdate = await Promise.all(
+      detailData.map(async (row) => {
         const res = await api.get('product-stock-amount', {
           params: { productId: row.product_id, sizeId: row.size_id },
         });
 
         if (res.data && res.data.amount < row.amount) {
-          detailDataUpdate[row.tableData.id] = {
-            ...row,
-            warning: true,
-          };
+          return { ...row, warning: true };
         }
+
+        return { ...row, warning: false };
       })
     );
 
-    setDetailData([...detailDataUpdate]);
+    setDetailData(detailDataUpdate);
 
-    return !detailData.find((row) => row.warning === true);
+    return !detailDataUpdate.some((row) => row.warning === true);
   };
 
   const handleSubmit = async (values) => {
@@ -171,7 +168,7 @@ function StockOperationForm() {
         if (!id) {
           setIsSubmitting(true);
 
-          if (values.type === 'S' && (await validateDetailData())) {
+          if (values.type === 'S' && !(await validateDetailData())) {
             setIsSubmitting(false);
             dispatch(
               showSnackbar(
@@ -179,26 +176,30 @@ function StockOperationForm() {
                 'Ajuste a quantidade dos produtos indicados e tente novamente.'
               )
             );
-          } else {
-            let totalAmount = 0;
-
-            const stock_operation_products = detailData.map(async (row) => {
-              const { product_id, size_id, amount } = row;
-              totalAmount += amount;
-              return { product_id, size_id, amount };
-            });
-
-            const data = {
-              ...values,
-              total_amount: totalAmount,
-              stock_operation_products,
-            };
-
-            await api.post('stock-operations', data);
-            setIsSubmitting(false);
-            dispatch(showSnackbar('success', 'Salvo com sucesso.'));
-            history.push('/stock-operations');
+            return;
           }
+
+          const stock_operation_products = detailData.map((row) => ({
+            product_id: row.product_id,
+            size_id: row.size_id,
+            amount: Number(row.amount || 0),
+          }));
+
+          const totalAmount = stock_operation_products.reduce(
+            (sum, row) => sum + row.amount,
+            0
+          );
+
+          const data = {
+            ...values,
+            total_amount: totalAmount,
+            stock_operation_products,
+          };
+
+          await api.post('stock-operations', data);
+          setIsSubmitting(false);
+          dispatch(showSnackbar('success', 'Salvo com sucesso.'));
+          history.push('/stock-operations');
         }
       } catch (error) {
         setIsSubmitting(false);

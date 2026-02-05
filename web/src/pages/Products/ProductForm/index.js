@@ -56,8 +56,8 @@ function ProductForm() {
     if (id) {
       const res = await api.get(`products/${id}`);
       if (res.data) {
-        const { name, description, active } = res.data;
-        setInitialValues({ name, description, active });
+        const { name, barcode, description, active } = res.data;
+        setInitialValues({ name, barcode, description, active });
       }
     }
   }, [id]);

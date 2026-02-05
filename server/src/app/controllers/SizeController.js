@@ -10,17 +10,21 @@ class SizeController {
       return res.json(productSize);
     }
 
-    const { active } = req.query;
+    const active =
+      req.query.active === undefined
+        ? undefined
+        : String(req.query.active).toLowerCase() === 'true';
+    const where = active === undefined ? {} : { active };
 
-    const where = active ? { active } : {};
+    const attributes =
+      active !== undefined
+        ? ['id', 'description']
+        : ['id', 'description', 'capacity', 'active'];
 
-    const attributes = active
-      ? ['id', 'description']
-      : ['id', 'description', 'capacity', 'active'];
-
-    const order = active
-      ? ['description']
-      : [['active', 'DESC'], 'description'];
+    const order =
+      active !== undefined
+        ? ['description']
+        : [['active', 'DESC'], 'description'];
 
     const sizes = await Size.findAll({
       attributes,

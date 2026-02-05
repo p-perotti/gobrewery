@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import AppContainer from '~/components/AppContainer';
-
-import { store } from '~/store';
 
 export default function RouteWrapper({
   component: Component,
@@ -12,8 +11,8 @@ export default function RouteWrapper({
   isAdminRestricted,
   ...rest
 }) {
-  const { signed } = store.getState().auth;
-  const { administrator } = store.getState().user;
+  const signed = useSelector((state) => state.auth.signed);
+  const administrator = useSelector((state) => state.user.administrator);
 
   if (!signed && isPrivate) {
     return <Redirect to="/" />;

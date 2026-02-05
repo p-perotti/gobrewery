@@ -1,7 +1,7 @@
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { unlinkSync } from 'fs';
 import { resolve } from 'path';
 import UserAvatar from '../models/UserAvatar';
-import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import bucket from '../../config/bucket';
 
 const s3 = new S3Client(bucket);

@@ -47,6 +47,9 @@ function ProductImages() {
 
   async function handleUploadImage(e) {
     try {
+      if (!e.target.files || !e.target.files[0]) {
+        return;
+      }
       setIsSubmitting(true);
       const data = new FormData();
       data.append('file', e.target.files[0]);

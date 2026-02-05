@@ -10,15 +10,19 @@ class ProductController {
       return res.json(product);
     }
 
-    const { active } = req.query;
+    const active =
+      req.query.active === undefined
+        ? undefined
+        : String(req.query.active).toLowerCase() === 'true';
+    const where = active === undefined ? {} : { active };
 
-    const where = active ? { active } : {};
+    const attributes =
+      active !== undefined
+        ? ['id', 'name']
+        : ['id', 'name', 'barcode', 'description', 'active'];
 
-    const attributes = active
-      ? ['id', 'name']
-      : ['id', 'name', 'barcode', 'description', 'active'];
-
-    const order = active ? ['name'] : [['active', 'DESC'], 'name'];
+    const order =
+      active !== undefined ? ['name'] : [['active', 'DESC'], 'name'];
 
     const products = await Product.findAll({
       attributes,

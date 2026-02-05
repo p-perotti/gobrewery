@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from 'recharts';
 import MaterialTable from 'material-table';
-import { format, parseISO, startOfDay, subDays, isEqual } from 'date-fns';
+import { format, parseISO, startOfDay, subDays, isSameDay } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { utcToZonedTime } from 'date-fns-tz';
 
@@ -82,7 +82,7 @@ function Dashboard() {
 
       const data = lastDays.map((day) => {
         const result = response.data.find((d) =>
-          isEqual(parseISO(d.date), day)
+          isSameDay(parseISO(d.date), day)
         );
 
         return {

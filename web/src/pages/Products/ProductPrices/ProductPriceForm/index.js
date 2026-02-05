@@ -55,7 +55,7 @@ function ProductPriceForm() {
   });
 
   const loadValues = useCallback(async () => {
-    const resSizes = await api.get('sizes', { query: { active: true } });
+    const resSizes = await api.get('sizes', { params: { active: true } });
 
     if (resSizes.data) {
       setSizes(resSizes.data);
@@ -129,6 +129,13 @@ function ProductPriceForm() {
         setIsSubmitting(false);
         dispatch(showSnackbar('error', 'Não foi possível salvar.'));
       }
+    } else {
+      dispatch(
+        showSnackbar(
+          'warning',
+          'A data de início deve ser menor que a data de expiração.'
+        )
+      );
     }
   };
 
@@ -171,7 +178,7 @@ function ProductPriceForm() {
                         disabled={sizes.length === 0}
                       >
                         {sizes.map((size) => (
-                          <MenuItem value={size.id}>
+                          <MenuItem key={size.id} value={size.id}>
                             {size.description}
                           </MenuItem>
                         ))}

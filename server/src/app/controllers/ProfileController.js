@@ -25,16 +25,40 @@ class ProfileController {
       ),
     });
 
-    if (!(await schema.isValid(req.body))) {
+    if (
+      !(await schema.isValid(req.body, { strict: true, stripUnknown: true }))
+    ) {
       return res.status(400).json({ error: 'Validation fails.' });
     }
 
-    const { reqEmail, oldPassword } = req.body;
+    const allowedFields = [
+      'name',
+      'email',
+      'oldPassword',
+      'password',
+      'confirmPassword',
+    ];
+    const unknownFields = Object.keys(req.body).filter(
+      key => !allowedFields.includes(key)
+    );
+
+    if (unknownFields.length > 0) {
+      return res.status(400).json({ error: 'Validation fails.' });
+    }
+
+    const payload = allowedFields.reduce((acc, key) => {
+      if (req.body[key] !== undefined) {
+        acc[key] = req.body[key];
+      }
+      return acc;
+    }, {});
+
+    const { email, oldPassword } = payload;
 
     const user = await User.findByPk(req.userId);
 
-    if (reqEmail && reqEmail !== user.email) {
-      const userExists = await User.findOne({ where: { reqEmail } });
+    if (email && email !== user.email) {
+      const userExists = await User.findOne({ where: { email } });
 
       if (userExists) {
         return res
@@ -47,12 +71,12 @@ class ProfileController {
       return res.status(400).json({ error: 'Password does not match.' });
     }
 
-    const { id, name, email } = await user.update(req.body);
+    const { id, name, email: updatedEmail } = await user.update(payload);
 
     return res.json({
       id,
       name,
-      email,
+      email: updatedEmail,
     });
   }
 }

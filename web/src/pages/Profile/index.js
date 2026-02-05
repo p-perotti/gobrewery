@@ -39,7 +39,6 @@ function Profile() {
   const dispatch = useDispatch();
 
   const avatar = useSelector((state) => state.user.avatar);
-  console.log(avatar)
   const isSubmitting = useSelector((state) => state.user.submitting);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -71,6 +70,9 @@ function Profile() {
   async function handleUpdateAvatar(e) {
     handleCloseMenu();
     try {
+      if (!e.target.files || !e.target.files[0]) {
+        return;
+      }
       const data = new FormData();
       data.append('file', e.target.files[0]);
       dispatch(updateAvatarRequest(data));

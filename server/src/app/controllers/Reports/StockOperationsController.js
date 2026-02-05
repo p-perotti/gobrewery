@@ -145,8 +145,8 @@ class StockOperationsController {
             product,
             size,
             previous_balance: Number(balance.previous),
-            in: Number(inward),
-            out: Number(outward),
+            inward: Number(inward),
+            outward: Number(outward),
             current_balance:
               Number(balance.previous) + (Number(inward) - Number(outward)),
           };

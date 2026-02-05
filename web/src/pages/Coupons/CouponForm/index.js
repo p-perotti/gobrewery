@@ -127,7 +127,7 @@ function CouponForm() {
           await api.post('coupons', {
             name: values.name,
             starting_date: values.starting_date,
-            expiration_date: values.starting_date,
+            expiration_date: values.expiration_date,
             type: values.type,
             value: values.value,
             description: values.description,
@@ -143,6 +143,13 @@ function CouponForm() {
         setIsSubmitting(false);
         dispatch(showSnackbar('error', 'Não foi possível salvar.'));
       }
+    } else {
+      dispatch(
+        showSnackbar(
+          'warning',
+          'A data inicial deve ser menor que a data de expiração.'
+        )
+      );
     }
   };
 

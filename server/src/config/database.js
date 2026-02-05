@@ -13,6 +13,6 @@ module.exports = {
     underscoredAll: true,
   },
   dialectOptions: {
-    ssl: true
-  }
+    ssl: true,
+  },
 };
