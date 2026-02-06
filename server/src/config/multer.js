@@ -24,7 +24,6 @@ const storageTypes = {
     s3: new S3Client(bucket),
     bucket: process.env.BUCKET_NAME,
     contentType: multerS3.AUTO_CONTENT_TYPE,
-    acl: 'public-read',
     key: (req, file, cb) => {
       crypto.randomBytes(16, (err, hash) => {
         if (err) return cb(err);
