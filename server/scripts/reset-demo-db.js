@@ -25,9 +25,7 @@ function main() {
     process.exit(1);
   }
 
-  run('yarn', ['db:migrate:undo:all']);
-  run('yarn', ['db:migrate']);
-  run('yarn', ['db:seed']);
+  run('yarn', ['db:reset']);
 }
 
 main();
