@@ -1,8 +1,11 @@
 import app from './app';
 
-app.listen(process.env.APP_PORT, () => {
+const port = process.env.APP_PORT;
+
+app.listen(port, () => {
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line no-console
-    console.log(`API listening at port ${process.env.APP_PORT}`);
+    console.log(`API listening at port ${port}`);
   }
 });
+
