@@ -4,7 +4,13 @@ WORKDIR /app
 
 COPY package.json yarn.lock config-overrides.js ./
 RUN yarn config set registry https://registry.npmjs.org && \
-  yarn install --network-timeout 600000
+  n=0; \
+  until [ "$n" -ge 3 ]; do \
+    yarn install --network-timeout 600000 && break; \
+    n=$((n + 1)); \
+    echo "yarn install failed, retrying (${n}/3)..." && sleep 10; \
+  done && \
+  [ "$n" -lt 3 ]
 
 COPY . ./
 
