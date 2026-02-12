@@ -1,5 +1,7 @@
 require('dotenv/config');
 
+const sslEnabled = String(process.env.DB_SSL).toLowerCase() === 'true';
+
 module.exports = {
   dialect: 'postgres',
   host: process.env.DB_HOST,
@@ -12,7 +14,12 @@ module.exports = {
     underscored: true,
     underscoredAll: true,
   },
-  dialectOptions: {
-    ssl: true,
-  },
+  dialectOptions: sslEnabled
+    ? {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      }
+    : undefined,
 };
