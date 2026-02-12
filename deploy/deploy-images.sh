@@ -24,6 +24,7 @@ fi
 
 compose -f "$COMPOSE_FILE" pull api web
 compose -f "$COMPOSE_FILE" up -d postgres
+compose -f "$COMPOSE_FILE" rm -sf api web || true
 compose -f "$COMPOSE_FILE" up -d api web
 
 echo "Image-based deployment completed."
