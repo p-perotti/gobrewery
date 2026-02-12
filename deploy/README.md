@@ -32,8 +32,8 @@ This folder contains the production deployment stack for self-hosting GoBrewery 
 1. Copy env templates:
    - `cp deploy/.env.api.example deploy/.env.api`
    - `cp deploy/.env.db.example deploy/.env.db`
-2. Fill secrets and public VM IP in `.env.api`:
-   - `APP_URL=http://<YOUR_VM_PUBLIC_IP>`
+2. Fill secrets and app URL in `.env.api`:
+   - `APP_URL=https://<your-domain>`
    - DB values must match `.env.db`.
    - For this migration: keep `IMAGE_STORAGE_TYPE=bucket`.
 3. Deploy stack:
@@ -42,8 +42,9 @@ This folder contains the production deployment stack for self-hosting GoBrewery 
    - `bash deploy/init-db.sh`
 5. Validate:
    - `bash deploy/check-health.sh`
+   - `https://<your-domain>/api/docs/`
 
-## GitHub Actions deploy (recommended for low-spec VM)
+## GitHub Actions deploy
 
 Workflow file: `.github/workflows/deploy-vm-ghcr.yml`
 
@@ -80,12 +81,12 @@ bash deploy/init-db.sh
 bash deploy/check-health.sh
 ```
 
-## Daily demo reset cron (04:00 UTC)
+## Daily demo reset cronjob
 
 Add to crontab:
 
 ```cron
-0 4 * * * /usr/bin/env bash -lc 'cd /opt/gobrewery && COMPOSE_FILE=/opt/gobrewery/deploy/docker-compose.prod.yml bash deploy/reset-demo.sh >> /opt/gobrewery/cron-reset.log 2>&1'
+0 3 * * * /usr/bin/env bash -lc 'cd /opt/gobrewery && COMPOSE_FILE=/opt/gobrewery/deploy/docker-compose.prod.yml bash deploy/reset-demo.sh >> /opt/gobrewery/cron-reset.log 2>&1'
 ```
 
 Adjust `/opt/gobrewery` to your actual repo path.
