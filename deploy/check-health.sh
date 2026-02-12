@@ -5,12 +5,17 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 COMPOSE_FILE="${COMPOSE_FILE:-$ROOT_DIR/deploy/docker-compose.yml}"
 
 compose() {
-  if docker compose version >/dev/null 2>&1; then
-    docker compose "$@"
-  else
-    docker-compose "$@"
-  fi
+  docker compose "$@"
 }
+
+require_compose_v2() {
+  docker compose version >/dev/null 2>&1 || {
+    echo "Docker Compose v2 is required. Install docker-compose-plugin."
+    exit 1
+  }
+}
+
+require_compose_v2
 
 compose -f "$COMPOSE_FILE" ps
 curl -fsS http://127.0.0.1/ >/dev/null

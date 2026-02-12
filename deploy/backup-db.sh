@@ -7,17 +7,22 @@ ENV_DB="$ROOT_DIR/deploy/.env.db"
 BACKUP_DIR="${BACKUP_DIR:-$ROOT_DIR/backups}"
 
 compose() {
-  if docker compose version >/dev/null 2>&1; then
-    docker compose "$@"
-  else
-    docker-compose "$@"
-  fi
+  docker compose "$@"
+}
+
+require_compose_v2() {
+  docker compose version >/dev/null 2>&1 || {
+    echo "Docker Compose v2 is required. Install docker-compose-plugin."
+    exit 1
+  }
 }
 
 if [[ ! -f "$ENV_DB" ]]; then
   echo "Missing deploy/.env.db file."
   exit 1
 fi
+
+require_compose_v2
 
 source "$ENV_DB"
 

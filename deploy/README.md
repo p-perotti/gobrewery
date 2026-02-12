@@ -51,7 +51,7 @@ What it does:
 
 - Builds API and web images on GitHub runner.
 - Pushes images to GHCR.
-- SSHes into VM and deploys with `docker-compose.prod.yml`.
+- SSHes into VM and deploys with `docker compose` + `docker-compose.prod.yml`.
 
 Required repository secrets:
 
@@ -66,7 +66,7 @@ One-time VM prerequisites for Actions deploy:
 1. Ensure env files exist on VM:
    - `/home/ubuntu/gobrewery/deploy/.env.api`
    - `/home/ubuntu/gobrewery/deploy/.env.db`
-2. Ensure Docker + docker-compose installed.
+2. Ensure Docker + Compose v2 plugin installed (`docker compose version` must work).
 3. Ensure VM path is `/home/ubuntu/gobrewery` (or adjust workflow script).
 
 Manual equivalent of Actions deploy:
