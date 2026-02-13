@@ -8,7 +8,6 @@
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/p-perotti/gobrewery">
   <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/p-perotti/gobrewery">
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/p-perotti/gobrewery">
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/p-perotti/gobrewery">
   <img alt="GitHub" src="https://img.shields.io/github/license/p-perotti/gobrewery">
   <a href="https://github.com/p-perotti/gobrewery/actions/workflows/deploy-vm-ghcr.yml">
     <img alt="Deploy workflow" src="https://github.com/p-perotti/gobrewery/actions/workflows/deploy-vm-ghcr.yml/badge.svg">
@@ -29,6 +28,13 @@
 - Frontend: [React](https://reactjs.org/), [Redux](https://redux.js.org/), [Redux-Saga](https://redux-saga.js.org/), [Material UI](https://mui.com/), [Formik](https://formik.org/), [Yup](https://www.npmjs.com/package/yup), [Recharts](https://recharts.org/), [pdfmake](http://pdfmake.org/#/)
 - Backend: [Node.js](https://nodejs.org/), [Express](https://expressjs.com/), [Sequelize](https://sequelize.org/), [PostgreSQL](https://www.postgresql.org/), [JWT](https://jwt.io/), [Multer](https://github.com/expressjs/multer)
 - Infrastructure: [Docker Compose](https://docs.docker.com/compose/), [GitHub Actions](https://github.com/features/actions), [GHCR](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
+
+## Live Access
+
+- App: [https://gobrewery.duckdns.org](https://gobrewery.duckdns.org)
+- API docs: [https://gobrewery.duckdns.org/api/docs/](https://gobrewery.duckdns.org/api/docs/)
+- OpenAPI JSON: [https://gobrewery.duckdns.org/api/openapi.json](https://gobrewery.duckdns.org/api/openapi.json)
+- Health: [https://gobrewery.duckdns.org/api/health](https://gobrewery.duckdns.org/api/health)
 
 ## Quick Start (Local)
 
@@ -84,13 +90,6 @@ If accessed through reverse proxy/domain with `/api` prefix:
 
 - `/api/docs`
 - `/api/openapi.json`
-
-## Live Access
-
-- App: [https://gobrewery.duckdns.org](https://gobrewery.duckdns.org)
-- API docs: [https://gobrewery.duckdns.org/api/docs/](https://gobrewery.duckdns.org/api/docs/)
-- OpenAPI JSON: [https://gobrewery.duckdns.org/api/openapi.json](https://gobrewery.duckdns.org/api/openapi.json)
-- Health: [https://gobrewery.duckdns.org/api/health](https://gobrewery.duckdns.org/api/health)
 
 ## Production Deploy
 
