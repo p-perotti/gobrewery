@@ -17,6 +17,7 @@ const options = {
     servers: [{ url: serverUrl }],
     tags: [
       { name: 'Auth', description: 'Authentication and token issuance.' },
+      { name: 'Health', description: 'Service health checks.' },
       { name: 'Profile', description: 'Current user profile and avatar.' },
       { name: 'Users', description: 'User management (admin-only).' },
       { name: 'Sizes', description: 'Product sizes and capacities.' },
@@ -570,7 +571,10 @@ const options = {
       },
     },
   },
-  apis: [path.resolve(__dirname, '..', 'routes.js')],
+  apis: [
+    path.resolve(__dirname, '..', 'routes.js'),
+    path.resolve(__dirname, '..', 'app.js'),
+  ],
 };
 
 module.exports = swaggerJSDoc(options);

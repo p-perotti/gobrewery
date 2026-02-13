@@ -23,7 +23,28 @@ class App {
   middlewares() {
     this.server.use(cors());
     this.server.use(express.json());
-    this.server.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
+    /**
+     * @openapi
+     * /health:
+     *   get:
+     *     summary: Health check
+     *     description: "Lightweight endpoint to verify API availability."
+     *     tags: [Health]
+     *     responses:
+     *       200:
+     *         description: "API is healthy"
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: string
+     *                   example: ok
+     */
+    this.server.get('/health', (req, res) =>
+      res.status(200).json({ status: 'ok' })
+    );
     this.server.get('/openapi.json', (req, res) => res.json(swaggerSpec));
     this.server.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     this.server.use(
