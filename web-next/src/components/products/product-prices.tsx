@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { format, parseISO } from "date-fns";
-import ptBR from "date-fns/locale/pt-BR";
+import { ptBR } from "date-fns/locale/pt-BR";
 import { toZonedTime } from "date-fns-tz";
 import api from "@/lib/api";
 import { queryKeys } from "@/lib/query-keys";

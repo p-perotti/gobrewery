@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { startOfMonth, format } from "date-fns";
-import ptBR from "date-fns/locale/pt-BR";
+import { ptBR } from "date-fns/locale/pt-BR";
 import { toast } from "sonner";
 import api from "@/lib/api";
 import { generateReport, td, th } from "@/lib/report";

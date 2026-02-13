@@ -27,7 +27,7 @@ import { Input } from "@/components/ui/input";
 const schema = z.object({
   description: z.string().min(1, "Obrigatório."),
   capacity: z.string().optional(),
-  active: z.boolean().default(true),
+  active: z.boolean(),
 });
 
 type FormValues = z.infer<typeof schema>;
