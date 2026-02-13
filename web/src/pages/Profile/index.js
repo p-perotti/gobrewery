@@ -39,6 +39,7 @@ function Profile() {
   const dispatch = useDispatch();
 
   const avatar = useSelector((state) => state.user.avatar);
+  const isGuest = useSelector((state) => state.user.guest);
   const isSubmitting = useSelector((state) => state.user.submitting);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -70,6 +71,11 @@ function Profile() {
   async function handleUpdateAvatar(e) {
     handleCloseMenu();
     try {
+      if (isGuest) {
+        dispatch(showSnackbar('warning', 'Acesso de visitante é somente leitura.'));
+        return;
+      }
+
       if (!e.target.files || !e.target.files[0]) {
         return;
       }
@@ -89,6 +95,10 @@ function Profile() {
   const handleCloseCancelDialog = () => setDialogOpen(false);
 
   const handleRemoveAvatarRequest = () => {
+    if (isGuest) {
+      dispatch(showSnackbar('warning', 'Acesso de visitante é somente leitura.'));
+      return;
+    }
     handleCloseMenu();
     setDialogOpen(true);
   };
@@ -116,6 +126,7 @@ function Profile() {
                     <IconButton
                       color="primary"
                       component="span"
+                      disabled={isGuest}
                       onClick={handleMenu}
                     >
                       <PhotoCamera />
@@ -136,14 +147,18 @@ function Profile() {
                           id="product-image-file"
                           type="file"
                           hidden
+                          disabled={isGuest}
                           onChange={handleUpdateAvatar}
                         />
-                        <MenuItem>
+                        <MenuItem disabled={isGuest}>
                           {avatar ? 'Alterar' : 'Adicionar'}...
                         </MenuItem>
                       </label>
                       {avatar && (
-                        <MenuItem onClick={handleRemoveAvatarRequest}>
+                        <MenuItem
+                          disabled={isGuest}
+                          onClick={handleRemoveAvatarRequest}
+                        >
                           Remover
                         </MenuItem>
                       )}
@@ -163,6 +178,7 @@ function Profile() {
                 <Button
                   variant="contained"
                   color="primary"
+                  disabled={isGuest}
                   component={Link}
                   to="/profile/edit"
                   startIcon={<Edit />}

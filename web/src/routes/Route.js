@@ -9,10 +9,12 @@ export default function RouteWrapper({
   component: Component,
   isPrivate,
   isAdminRestricted,
+  allowGuestReadOnly,
   ...rest
 }) {
   const signed = useSelector((state) => state.auth.signed);
   const administrator = useSelector((state) => state.user.administrator);
+  const guest = useSelector((state) => state.user.guest);
 
   if (!signed && isPrivate) {
     return <Redirect to="/" />;
@@ -25,7 +27,7 @@ export default function RouteWrapper({
     return <Redirect to="/home" />;
   }
 
-  if (!administrator && isAdminRestricted) {
+  if (!administrator && isAdminRestricted && !(guest && allowGuestReadOnly)) {
     return <Redirect to="/restricted" />;
   }
 
@@ -46,6 +48,7 @@ export default function RouteWrapper({
 RouteWrapper.propTypes = {
   isPrivate: PropTypes.bool,
   isAdminRestricted: PropTypes.bool,
+  allowGuestReadOnly: PropTypes.bool,
   component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
     .isRequired,
 };
@@ -53,4 +56,5 @@ RouteWrapper.propTypes = {
 RouteWrapper.defaultProps = {
   isPrivate: false,
   isAdminRestricted: false,
+  allowGuestReadOnly: false,
 };

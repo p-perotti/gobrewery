@@ -61,6 +61,7 @@ export default function Routes() {
         component={Users}
         isPrivate
         isAdminRestricted
+        allowGuestReadOnly
       />
       <Route
         path="/users/new"
@@ -68,6 +69,7 @@ export default function Routes() {
         component={UserForm}
         isPrivate
         isAdminRestricted
+        allowGuestReadOnly
       />
       <Route
         path="/users/:id"
@@ -75,6 +77,7 @@ export default function Routes() {
         component={UserForm}
         isPrivate
         isAdminRestricted
+        allowGuestReadOnly
       />
 
       <Route path="/sizes" exact component={Sizes} isPrivate />

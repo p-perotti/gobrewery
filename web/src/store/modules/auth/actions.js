@@ -5,6 +5,12 @@ export function signInRequest(email, password) {
   };
 }
 
+export function signInGuestRequest() {
+  return {
+    type: '@auth/SIGN_IN_GUEST_REQUEST',
+  };
+}
+
 export function signInSuccess(token, user) {
   return {
     type: '@auth/SIGN_IN_SUCCESS',

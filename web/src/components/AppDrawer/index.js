@@ -26,6 +26,7 @@ function AppMenu() {
   const classes = style();
 
   const administrator = useSelector((state) => state.user.administrator);
+  const guest = useSelector((state) => state.user.guest);
 
   const [registerOpen, setRegisterOpen] = useState(false);
   const [maintenanceOpen, setMaintenanceOpen] = useState(false);
@@ -65,7 +66,7 @@ function AppMenu() {
           </ListItem>
           <Collapse in={registerOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              {administrator && (
+              {(administrator || guest) && (
                 <ListItem
                   button
                   className={classes.nested}

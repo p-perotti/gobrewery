@@ -28,6 +28,23 @@ export function* signIn({ payload }) {
   }
 }
 
+export function* signInGuest() {
+  try {
+    const response = yield call(api.post, 'sessions/guest');
+
+    const { token, user } = response.data;
+
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+
+    yield put(signInSuccess(token, user));
+
+    history.push('/');
+  } catch (error) {
+    yield put(showSnackbar('warning', 'Acesso de visitante indisponível.'));
+    yield put(signFailure());
+  }
+}
+
 export function setToken({ payload }) {
   if (!payload) return;
 
@@ -45,5 +62,6 @@ export function signOut() {
 export default all([
   takeLatest('persist/REHYDRATE', setToken),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
+  takeLatest('@auth/SIGN_IN_GUEST_REQUEST', signInGuest),
   takeLatest('@auth/SIGN_OUT', signOut),
 ]);

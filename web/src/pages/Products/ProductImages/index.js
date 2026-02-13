@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Paper,
@@ -32,6 +32,7 @@ function ProductImages() {
   const classes = styles();
 
   const dispatch = useDispatch();
+  const isGuest = useSelector((state) => state.user.guest);
 
   const { id } = useParams();
 
@@ -47,6 +48,11 @@ function ProductImages() {
 
   async function handleUploadImage(e) {
     try {
+      if (isGuest) {
+        dispatch(showSnackbar('warning', 'Acesso de visitante é somente leitura.'));
+        return;
+      }
+
       if (!e.target.files || !e.target.files[0]) {
         return;
       }
@@ -66,6 +72,11 @@ function ProductImages() {
   const handleCloseCancelDialog = () => setDialogOpen(false);
 
   const handleDeleteRequest = (imageId) => {
+    if (isGuest) {
+      dispatch(showSnackbar('warning', 'Acesso de visitante é somente leitura.'));
+      return;
+    }
+
     setImageToDeleteId(imageId);
     setDialogOpen(true);
   };
@@ -104,7 +115,10 @@ function ProductImages() {
                     }}
                     titlePosition="top"
                     actionIcon={
-                      <IconButton onClick={() => handleDeleteRequest(image.id)}>
+                      <IconButton
+                        disabled={isGuest}
+                        onClick={() => handleDeleteRequest(image.id)}
+                      >
                         <Delete className={classes.white} />
                       </IconButton>
                     }
@@ -120,9 +134,15 @@ function ProductImages() {
             id="product-image-file"
             type="file"
             hidden
+            disabled={isGuest}
             onChange={handleUploadImage}
           />
-          <Fab color="primary" className={classes.fab} component="span">
+          <Fab
+            color="primary"
+            className={classes.fab}
+            component="span"
+            disabled={isGuest}
+          >
             <Add />
           </Fab>
         </label>

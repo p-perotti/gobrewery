@@ -34,6 +34,7 @@ This folder contains the production deployment stack for self-hosting GoBrewery 
    - `cp deploy/.env.db.example deploy/.env.db`
 2. Fill secrets and app URL in `.env.api`:
    - `APP_URL=https://<your-domain>`
+   - `ADMIN_SEED_PASSWORD=<strong-password>`
    - DB values must match `.env.db`.
    - For this migration: keep `IMAGE_STORAGE_TYPE=bucket`.
 3. Deploy stack:

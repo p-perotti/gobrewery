@@ -3,6 +3,7 @@ import produce from 'immer';
 const INITIAL_STATE = {
   avatar: null,
   administrator: null,
+  guest: false,
   submitting: false,
 };
 
@@ -11,6 +12,7 @@ export default function user(state = INITIAL_STATE, action) {
     switch (action.type) {
       case '@auth/SIGN_IN_SUCCESS': {
         draft.administrator = action.payload.user.administrator;
+        draft.guest = !!action.payload.user.guest;
         draft.avatar = action.payload.user.avatar
           ? action.payload.user.avatar.url
           : null;
@@ -44,6 +46,7 @@ export default function user(state = INITIAL_STATE, action) {
       }
       case '@auth/SIGN_OUT': {
         draft.administrator = null;
+        draft.guest = false;
         draft.avatar = null;
         break;
       }

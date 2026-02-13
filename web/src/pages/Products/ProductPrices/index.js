@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import MaterialTable from 'material-table';
 import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -16,6 +17,7 @@ import history from '~/services/history';
 
 function ProductPrices() {
   const { id } = useParams();
+  const guest = useSelector((state) => state.user.guest);
 
   const [data, setData] = useState([]);
 
@@ -64,15 +66,19 @@ function ProductPrices() {
           maxBodyHeight: 'calc(100vh - 325px)',
         }}
         actions={[
-          {
-            icon: 'add_circle',
-            tooltip: 'Adicionar',
-            isFreeAction: true,
-            onClick: (_event) => history.push(`/products/${id}/prices/new`),
-          },
+          ...(!guest
+            ? [
+                {
+                  icon: 'add_circle',
+                  tooltip: 'Adicionar',
+                  isFreeAction: true,
+                  onClick: (_event) => history.push(`/products/${id}/prices/new`),
+                },
+              ]
+            : []),
           {
             icon: 'edit',
-            tooltip: 'Editar',
+            tooltip: guest ? 'Visualizar' : 'Editar',
             onClick: (_event, rowData) =>
               history.push(
                 `/products/${rowData.product.id}/prices/${rowData.id}`

@@ -4,7 +4,7 @@ import User from '../models/User';
 class ProfileController {
   async index(req, res) {
     const user = await User.findByPk(req.userId, {
-      attributes: ['id', 'name', 'email', 'administrator'],
+      attributes: ['id', 'name', 'email', 'administrator', 'guest'],
     });
 
     return res.json(user);

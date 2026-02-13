@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Paper,
   Typography,
@@ -38,8 +38,10 @@ function ProductPriceForm() {
   const classes = style();
 
   const dispatch = useDispatch();
+  const isGuest = useSelector((state) => state.user.guest);
 
   const { productId, id } = useParams();
+  const isViewMode = isGuest && !!id;
 
   const [productName, setProductName] = useState('');
 
@@ -139,6 +141,17 @@ function ProductPriceForm() {
     }
   };
 
+  useEffect(() => {
+    if (isGuest && !id) {
+      dispatch(showSnackbar('info', 'Acesso de visitante é somente leitura.'));
+      history.replace(`/products/${productId}`);
+    }
+  }, [dispatch, id, isGuest, productId]);
+
+  if (isGuest && !id) {
+    return null;
+  }
+
   return (
     <Paper>
       <Typography variant="h6" color="primary" className={classes.title}>
@@ -175,7 +188,7 @@ function ProductPriceForm() {
                         inputProps={{
                           id: 'size-select',
                         }}
-                        disabled={sizes.length === 0}
+                        disabled={isViewMode || sizes.length === 0}
                       >
                         {sizes.map((size) => (
                           <MenuItem key={size.id} value={size.id}>
@@ -199,6 +212,7 @@ function ProductPriceForm() {
                       maxDate={values.expiration_date}
                       maxDateMessage="Início do período deve ser menor que a expiração."
                       strictCompareDates
+                      disabled={isViewMode}
                     />
                   </Grid>
                   <Grid item xs={2}>
@@ -215,6 +229,7 @@ function ProductPriceForm() {
                       minDate={values.starting_date}
                       minDateMessage="Expiração do período deve ser maior que o início."
                       strictCompareDates
+                      disabled={isViewMode}
                     />
                   </Grid>
                   <Grid item xs={2}>
@@ -226,6 +241,7 @@ function ProductPriceForm() {
                       variant="outlined"
                       size="small"
                       fullWidth
+                      disabled={isViewMode}
                       InputProps={{
                         inputComponent: NumberFormatInput,
                         startAdornment: (
@@ -243,19 +259,22 @@ function ProductPriceForm() {
                       variant="outlined"
                       size="small"
                       fullWidth
+                      disabled={isViewMode}
                     />
                   </Grid>
                   <Grid item xs={12} className={classes.buttons}>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      disabled={isSubmitting}
-                      className={classes.button}
-                      startIcon={<Save />}
-                    >
-                      Salvar
-                    </Button>
+                    {!isViewMode && (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        disabled={isSubmitting}
+                        className={classes.button}
+                        startIcon={<Save />}
+                      >
+                        Salvar
+                      </Button>
+                    )}
                     <Button
                       type="button"
                       variant="outlined"

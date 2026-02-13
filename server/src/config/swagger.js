@@ -72,6 +72,7 @@ const options = {
             name: { type: 'string', example: 'Jane Doe' },
             email: { type: 'string', format: 'email', example: 'jane@acme.com' },
             administrator: { type: 'boolean', example: true },
+            guest: { type: 'boolean', example: false },
             active: { type: 'boolean', example: true },
             avatar: {
               type: 'object',
@@ -102,6 +103,7 @@ const options = {
             password: { type: 'string', example: 'secret123' },
             name: { type: 'string', example: 'Jane Doe' },
             administrator: { type: 'boolean', example: false },
+            guest: { type: 'boolean', example: false },
             active: { type: 'boolean', example: true },
           },
         },
@@ -113,6 +115,7 @@ const options = {
             oldPassword: { type: 'string', example: 'oldSecret123' },
             password: { type: 'string', example: 'newSecret123' },
             passwordConfirmation: { type: 'string', example: 'newSecret123' },
+            guest: { type: 'boolean', example: false },
           },
         },
         Profile: {

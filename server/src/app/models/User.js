@@ -10,6 +10,7 @@ class User extends Model {
         password_hash: Sequelize.STRING,
         name: Sequelize.STRING,
         administrator: Sequelize.BOOLEAN,
+        guest: Sequelize.BOOLEAN,
         active: Sequelize.BOOLEAN,
       },
       { sequelize }

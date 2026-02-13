@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Paper,
   Tabs,
@@ -34,8 +34,10 @@ function ProductForm() {
   const classes = style();
 
   const dispatch = useDispatch();
+  const isGuest = useSelector((state) => state.user.guest);
 
   const { id } = useParams();
+  const isViewMode = isGuest && !!id;
 
   const [selectedTab, setSelectedTab] = useState('1');
 
@@ -83,6 +85,17 @@ function ProductForm() {
     }
   };
 
+  useEffect(() => {
+    if (isGuest && !id) {
+      dispatch(showSnackbar('info', 'Acesso de visitante é somente leitura.'));
+      history.replace('/products');
+    }
+  }, [dispatch, id, isGuest]);
+
+  if (isGuest && !id) {
+    return null;
+  }
+
   return (
     <Paper>
       <Typography variant="h6" color="primary" className={classes.title}>
@@ -119,6 +132,7 @@ function ProductForm() {
                       variant="outlined"
                       size="small"
                       fullWidth
+                      disabled={isViewMode}
                     />
                   </Grid>
                   <Grid item xs={3}>
@@ -130,6 +144,7 @@ function ProductForm() {
                       variant="outlined"
                       size="small"
                       fullWidth
+                      disabled={isViewMode}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -143,6 +158,7 @@ function ProductForm() {
                       multiline
                       rowsMax={5}
                       fullWidth
+                      disabled={isViewMode}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -152,22 +168,25 @@ function ProductForm() {
                           component={Switch}
                           name="active"
                           type="checkbox"
+                          disabled={isViewMode}
                         />
                       }
                       label="Ativo"
                     />
                   </Grid>
                   <Grid item xs={12} className={classes.buttons}>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      disabled={isSubmitting}
-                      className={classes.button}
-                      startIcon={<Save />}
-                    >
-                      Salvar
-                    </Button>
+                    {!isViewMode && (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        disabled={isSubmitting}
+                        className={classes.button}
+                        startIcon={<Save />}
+                      >
+                        Salvar
+                      </Button>
+                    )}
                     <Button
                       type="button"
                       variant="outlined"

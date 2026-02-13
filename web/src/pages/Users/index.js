@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import MaterialTable from 'material-table';
 import { options, localization } from '~/config/MaterialTableConfig';
@@ -11,6 +11,7 @@ import { showSnackbar } from '~/store/modules/ui/actions';
 
 function Users() {
   const dispatch = useDispatch();
+  const guest = useSelector((state) => state.user.guest);
 
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,15 +54,19 @@ function Users() {
       localization={localization.ptBR}
       options={options}
       actions={[
-        {
-          icon: 'add_circle',
-          tooltip: 'Adicionar',
-          isFreeAction: true,
-          onClick: (_event) => history.push('/users/new'),
-        },
+        ...(!guest
+          ? [
+              {
+                icon: 'add_circle',
+                tooltip: 'Adicionar',
+                isFreeAction: true,
+                onClick: (_event) => history.push('/users/new'),
+              },
+            ]
+          : []),
         {
           icon: 'edit',
-          tooltip: 'Editar',
+          tooltip: guest ? 'Visualizar' : 'Editar',
           onClick: (_event, rowData) => history.push(`/users/${rowData.id}`),
         },
       ]}

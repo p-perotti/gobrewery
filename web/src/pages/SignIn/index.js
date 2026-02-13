@@ -11,7 +11,10 @@ import {
 
 import style from './styles';
 
-import { signInRequest } from '~/store/modules/auth/actions';
+import {
+  signInRequest,
+  signInGuestRequest,
+} from '~/store/modules/auth/actions';
 
 export default function SignIn() {
   const classes = style();
@@ -26,6 +29,10 @@ export default function SignIn() {
   function handleSubmit(e) {
     e.preventDefault();
     dispatch(signInRequest(email, password));
+  }
+
+  function handleGuestAccess() {
+    dispatch(signInGuestRequest());
   }
 
   return (
@@ -74,10 +81,19 @@ export default function SignIn() {
             disabled={loading}
             className={classes.submit}
           >
-            Acessar
+            Entrar
             {loading && (
               <CircularProgress size={24} className={classes.progress} />
             )}
+          </Button>
+          <Button
+            fullWidth
+            variant="outlined"
+            color="primary"
+            disabled={loading}
+            onClick={handleGuestAccess}
+          >
+            Entrar como visitante
           </Button>
         </form>
       </Paper>

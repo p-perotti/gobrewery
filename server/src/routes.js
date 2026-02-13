@@ -5,6 +5,8 @@ import multerConfig from './config/multer';
 
 import authMiddleware from './app/middlewares/auth';
 import administratorMiddleware from './app/middlewares/administrator';
+import administratorOrGuestReadOnlyMiddleware from './app/middlewares/administratorOrGuestReadOnly';
+import guestReadOnlyMiddleware from './app/middlewares/guestReadOnly';
 
 import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
@@ -78,7 +80,40 @@ const upload = multer(multerConfig);
  *               error: User not found.
  */
 routes.post('/sessions', SessionController.store);
+/**
+ * @openapi
+ * /sessions/guest:
+ *   post:
+ *     summary: Authenticate guest user and issue JWT
+ *     description: "Issue a read-only guest session token."
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: "Authenticated as guest"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *             example:
+ *               user:
+ *                 id: 2
+ *                 name: Guest
+ *                 email: guest@gobrewery.com
+ *                 administrator: false
+ *                 guest: true
+ *               token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       401:
+ *         description: "Guest user unavailable"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               error: Guest user unavailable.
+ */
+routes.post('/sessions/guest', SessionController.guest);
 routes.use(authMiddleware);
+routes.use(guestReadOnlyMiddleware);
 
 /**
  * @openapi
@@ -239,8 +274,8 @@ routes.delete('/profile/avatar', ProfileAvatarController.delete);
  * @openapi
  * /users:
  *   get:
- *     summary: List users (admin)
- *     description: "Manage system users for portal access."
+ *     summary: List users (admin/guest read-only)
+ *     description: "Manage system users for portal access. Guests have read-only access."
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -312,14 +347,14 @@ routes.delete('/profile/avatar', ProfileAvatarController.delete);
  *             example:
  *               error: Invalid token.
  */
-routes.get('/users', administratorMiddleware, UserController.index);
+routes.get('/users', administratorOrGuestReadOnlyMiddleware, UserController.index);
 
 /**
  * @openapi
  * /users/{id}:
  *   get:
- *     summary: Get user by ID (admin)
- *     description: "Manage system users for portal access."
+ *     summary: Get user by ID (admin/guest read-only)
+ *     description: "Manage system users for portal access. Guests have read-only access."
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -410,7 +445,11 @@ routes.get('/users', administratorMiddleware, UserController.index);
  *             example:
  *               error: Invalid token.
  */
-routes.get('/users/:id', administratorMiddleware, UserController.index);
+routes.get(
+  '/users/:id',
+  administratorOrGuestReadOnlyMiddleware,
+  UserController.index
+);
 routes.post('/users', administratorMiddleware, UserController.store);
 routes.put('/users/:id', administratorMiddleware, UserController.update);
 

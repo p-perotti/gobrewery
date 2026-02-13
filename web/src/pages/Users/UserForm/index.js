@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Paper,
   Typography,
@@ -28,8 +28,10 @@ function UserForm() {
   const classes = style();
 
   const dispatch = useDispatch();
+  const isGuest = useSelector((state) => state.user.guest);
 
   const { id } = useParams();
+  const isViewMode = isGuest && !!id;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -73,6 +75,17 @@ function UserForm() {
     }
   };
 
+  useEffect(() => {
+    if (isGuest && !id) {
+      dispatch(showSnackbar('info', 'Acesso de visitante é somente leitura.'));
+      history.replace('/users');
+    }
+  }, [dispatch, id, isGuest]);
+
+  if (isGuest && !id) {
+    return null;
+  }
+
   return (
     <Paper>
       <Loader loadFunction={loadValues}>
@@ -96,6 +109,7 @@ function UserForm() {
                   variant="outlined"
                   size="small"
                   fullWidth
+                  disabled={isViewMode}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -107,12 +121,18 @@ function UserForm() {
                   variant="outlined"
                   size="small"
                   fullWidth
+                  disabled={isViewMode}
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
                   control={
-                    <Field component={Switch} name="active" type="checkbox" />
+                    <Field
+                      component={Switch}
+                      name="active"
+                      type="checkbox"
+                      disabled={isViewMode}
+                    />
                   }
                   label="Ativo"
                 />
@@ -122,22 +142,25 @@ function UserForm() {
                       component={Switch}
                       name="administrator"
                       type="checkbox"
+                      disabled={isViewMode}
                     />
                   }
                   label="Administrador"
                 />
               </Grid>
               <Grid item xs={12} className={classes.buttons}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  disabled={isSubmitting}
-                  className={classes.button}
-                  startIcon={<Save />}
-                >
-                  Salvar
-                </Button>
+                {!isViewMode && (
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    disabled={isSubmitting}
+                    className={classes.button}
+                    startIcon={<Save />}
+                  >
+                    Salvar
+                  </Button>
+                )}
                 <Button
                   type="button"
                   variant="outlined"
