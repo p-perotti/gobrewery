@@ -7,6 +7,9 @@ This folder contains the production deployment stack for self-hosting GoBrewery 
 - `postgres`: PostgreSQL 15 with persistent volume.
 - `api`: Node/Express backend built from `server/`.
 - `web`: React frontend static build served by Nginx.
+- The production `web` service joins the host's pre-existing external `edge`
+  network as `gobrewery-web`. The shared Caddy stack is managed independently
+  and is the only component that publishes ports 80 and 443.
 - Nginx reverse proxy routes:
   - `/` -> frontend SPA
   - `/api/*` -> backend API
@@ -37,11 +40,13 @@ This folder contains the production deployment stack for self-hosting GoBrewery 
    - `ADMIN_SEED_PASSWORD=<strong-password>`
    - DB values must match `.env.db`.
    - For this migration: keep `IMAGE_STORAGE_TYPE=bucket`.
-3. Deploy stack:
+3. Confirm that the host infrastructure has already created the external
+   `edge` network and started its shared Caddy stack.
+4. Deploy stack:
    - `bash deploy/deploy.sh`
-4. Initialize DB:
+5. Initialize DB:
    - `bash deploy/init-db.sh`
-5. Validate:
+6. Validate:
    - `bash deploy/check-health.sh`
    - `https://<your-domain>/api/docs/`
 
@@ -77,6 +82,7 @@ Manual equivalent of Actions deploy:
 export API_IMAGE=ghcr.io/<owner>/gobrewery-api:<tag>
 export WEB_IMAGE=ghcr.io/<owner>/gobrewery-web:<tag>
 export COMPOSE_FILE=/home/ubuntu/gobrewery/deploy/docker-compose.prod.yml
+export HEALTH_BASE_URL=https://gobrewery.duckdns.org
 bash deploy/deploy-images.sh
 bash deploy/init-db.sh
 bash deploy/check-health.sh

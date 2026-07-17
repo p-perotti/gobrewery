@@ -27,6 +27,11 @@ fi
 
 require_compose_v2
 
+if ! docker network inspect edge >/dev/null 2>&1; then
+  echo "Missing external edge network. Deploy the shared OCI edge stack first."
+  exit 1
+fi
+
 compose -f "$COMPOSE_FILE" pull api web
 compose -f "$COMPOSE_FILE" up -d postgres
 compose -f "$COMPOSE_FILE" rm -sf api web || true

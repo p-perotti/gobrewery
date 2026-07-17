@@ -17,6 +17,8 @@ require_compose_v2() {
 
 require_compose_v2
 
+HEALTH_BASE_URL="${HEALTH_BASE_URL:-http://127.0.0.1}"
+
 retry_curl() {
   local url="$1"
   local attempts="${2:-12}"
@@ -33,8 +35,8 @@ retry_curl() {
 }
 
 compose -f "$COMPOSE_FILE" ps
-retry_curl "http://127.0.0.1/"
-retry_curl "http://127.0.0.1/api/health"
-retry_curl "http://127.0.0.1/api/docs/"
+retry_curl "$HEALTH_BASE_URL/"
+retry_curl "$HEALTH_BASE_URL/api/health"
+retry_curl "$HEALTH_BASE_URL/api/docs/"
 
 echo "Health checks passed."
