@@ -27,6 +27,7 @@ This folder contains the production deployment stack for self-hosting GoBrewery 
 - `deploy-images.sh`: Pull GHCR images and start services.
 - `init-db.sh`: Run migrations + seeds.
 - `reset-demo.sh`: Run demo reset (`db:reset:cron`).
+- `cron/run-demo-reset.sh`: Fail-closed runner used by the daily production job.
 - `backup-db.sh`: On-demand DB backup script.
 - `check-health.sh`: Basic post-deploy health checks.
 
@@ -71,10 +72,14 @@ Required repository secrets:
 One-time VM prerequisites for Actions deploy:
 
 1. Ensure env files exist on VM:
-   - `/home/ubuntu/gobrewery/deploy/.env.api`
-   - `/home/ubuntu/gobrewery/deploy/.env.db`
+   - `/srv/gobrewery/.env`
+   - `/srv/gobrewery/deploy/.env.api`
+   - `/srv/gobrewery/deploy/.env.db`
 2. Ensure Docker + Compose v2 plugin installed (`docker compose version` must work).
-3. Ensure VM path is `/home/ubuntu/gobrewery` (or adjust workflow script).
+3. Ensure VM path is `/srv/gobrewery`.
+
+The root `.env` must persist non-empty, immutable `API_IMAGE` and `WEB_IMAGE`
+references so unattended Compose commands can resolve the production model.
 
 Manual equivalent of Actions deploy:
 
@@ -93,10 +98,19 @@ bash deploy/check-health.sh
 Add to crontab:
 
 ```cron
-0 3 * * * /usr/bin/env bash -lc 'cd /opt/gobrewery && COMPOSE_FILE=/opt/gobrewery/deploy/docker-compose.prod.yml bash deploy/reset-demo.sh >> /opt/gobrewery/cron-reset.log 2>&1'
+0 3 * * * /usr/bin/env bash -lc '/srv/gobrewery/deploy/cron/run-demo-reset.sh >> /srv/gobrewery/cron-reset.log 2>&1'
 ```
 
-Adjust `/opt/gobrewery` to your actual repo path.
+The host timezone must be `Etc/UTC`; Debian cron schedules jobs in the daemon's
+timezone and does not support a per-user scheduling timezone. Verify this gate
+before installing the entry:
+
+```bash
+test "$(timedatectl show -p Timezone --value)" = "Etc/UTC"
+```
+
+Install this entry only on the active production host. Remove the previous
+host's entry during cutover so the destructive reset cannot run twice.
 
 ## Backup (prepared, manual)
 
