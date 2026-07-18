@@ -81,7 +81,7 @@ Manual equivalent of Actions deploy:
 ```bash
 export API_IMAGE=ghcr.io/<owner>/gobrewery-api:<tag>
 export WEB_IMAGE=ghcr.io/<owner>/gobrewery-web:<tag>
-export COMPOSE_FILE=/home/ubuntu/gobrewery/deploy/docker-compose.prod.yml
+export COMPOSE_FILE=/srv/gobrewery/deploy/docker-compose.prod.yml
 export HEALTH_BASE_URL=https://gobrewery.duckdns.org
 bash deploy/deploy-images.sh
 bash deploy/init-db.sh
