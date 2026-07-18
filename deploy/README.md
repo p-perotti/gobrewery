@@ -80,6 +80,8 @@ One-time VM prerequisites for Actions deploy:
 
 The root `.env` must persist non-empty, immutable `API_IMAGE` and `WEB_IMAGE`
 references so unattended Compose commands can resolve the production model.
+The deployment workflow replaces this file only after its external health
+checks pass.
 
 Manual equivalent of Actions deploy:
 
