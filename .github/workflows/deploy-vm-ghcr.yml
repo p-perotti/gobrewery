@@ -78,7 +78,7 @@ jobs:
           script: |
             set -euo pipefail
             cd /srv/gobrewery
-            git pull --ff-only
+            git pull --ff-only origin master
 
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
 
