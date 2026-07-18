@@ -10,13 +10,18 @@ on:
       - "deploy/**"
       - ".github/workflows/deploy-vm-ghcr.yml"
   workflow_dispatch:
+  repository_dispatch:
+    types:
+      - vercel.deployment.success
 
 permissions:
   contents: read
+  deployments: write
   packages: write
 
 jobs:
   build-and-push:
+    if: github.event_name != 'repository_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -60,10 +65,11 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/gobrewery-web:latest
 
   deploy:
+    if: github.event_name != 'repository_dispatch'
     runs-on: ubuntu-latest
     needs: build-and-push
     environment:
-      name: production-oci
+      name: OCI
       url: https://gobrewery.duckdns.org
     steps:
       - name: Deploy on VM
@@ -98,3 +104,35 @@ jobs:
             runtime_env="$(mktemp /srv/gobrewery/.env.XXXXXX)"
             printf 'API_IMAGE=%s\nWEB_IMAGE=%s\n' "$API_IMAGE" "$WEB_IMAGE" > "$runtime_env"
             mv "$runtime_env" /srv/gobrewery/.env
+
+  record-vercel-deployment:
+    if: >-
+      github.event_name == 'repository_dispatch' &&
+      github.event.client_payload.environment == 'production' &&
+      github.event.client_payload.git.ref == 'web-next'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record Vercel deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const payload = context.payload.client_payload;
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: payload.git.sha,
+              environment: 'Vercel',
+              auto_merge: false,
+              required_contexts: [],
+              transient_environment: false,
+              production_environment: true,
+            });
+
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: 'success',
+              environment: 'Vercel',
+              environment_url: payload.url,
+            });
