@@ -43,7 +43,10 @@ class App {
      *                   example: ok
      */
     this.server.get('/health', (req, res) =>
-      res.status(200).json({ status: 'ok' })
+      res.status(200).json({
+        status: 'ok',
+        revision: process.env.APP_RELEASE_SHA || 'development',
+      })
     );
     this.server.get('/openapi.json', (req, res) => res.json(swaggerSpec));
     this.server.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

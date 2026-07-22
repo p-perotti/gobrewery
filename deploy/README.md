@@ -1,129 +1,115 @@
-# VM Deployment (Oracle Ubuntu)
+# Deployment
 
-This folder contains the production deployment stack for self-hosting GoBrewery on a single Ubuntu VM using Docker Compose.
+Gobrewery has two independent production destinations:
 
-## What gets deployed
+- `OCI`: the API and web images run on the shared ARM64 host through the pinned
+  reusable workflow in `p-perotti/oracle-infra`.
+- `Vercel`: the `web-next` deployment is only recorded from Vercel's
+  `repository_dispatch` event. It does not use the OCI host lock or credentials.
 
-- `postgres`: PostgreSQL 15 with persistent volume.
-- `api`: Node/Express backend built from `server/`.
-- `web`: React frontend static build served by Nginx.
-- The production `web` service joins the host's pre-existing external `edge`
-  network as `gobrewery-web`. The shared Caddy stack is managed independently
-  and is the only component that publishes ports 80 and 443.
-- Nginx reverse proxy routes:
-  - `/` -> frontend SPA
-  - `/api/*` -> backend API
+The production database is PostgreSQL in the isolated `gobrewery` Compose
+project. Its named volume is not part of a release and is never recreated by an
+application promotion. The shared Caddy edge is also independent: only `web`
+joins the external `edge` network, while `api` and `postgres` remain private.
 
-## Files
+## OCI release flow
 
-- `docker-compose.yml`: Runtime topology (local image build on VM).
-- `docker-compose.prod.yml`: Runtime topology (prebuilt GHCR images).
-- `Dockerfile.api`: Backend image.
-- `Dockerfile.web`: Frontend+Nginx image.
-- `nginx.conf`: Proxy and SPA routing.
-- `.env.api.example`: Backend environment template.
-- `.env.db.example`: PostgreSQL environment template.
-- `deploy.sh`: Build and start services.
-- `deploy-images.sh`: Pull GHCR images and start services.
-- `init-db.sh`: Run migrations + seeds.
-- `reset-demo.sh`: Run demo reset (`db:reset:cron`).
-- `cron/run-demo-reset.sh`: Fail-closed runner used by the daily production job.
-- `backup-db.sh`: On-demand DB backup script.
-- `check-health.sh`: Basic post-deploy health checks.
+`.github/workflows/deploy-vm-ghcr.yml` runs for every push to `master` so its
+jobs remain visible. A change containing executable paths:
 
-## First-time setup
+1. builds the API and web and verifies the deployment contracts;
+2. publishes both ARM64 images to GHCR by immutable digest;
+3. packages the Compose model, release manifest, health boundary and reset
+   runner as one immutable artifact;
+4. calls `oracle-infra/.github/workflows/deploy.yml` by full commit SHA;
+5. promotes only `api` and `web`, then proves the source SHA through public
+   HTTPS.
 
-1. Copy env templates:
-   - `cp deploy/.env.api.example deploy/.env.api`
-   - `cp deploy/.env.db.example deploy/.env.db`
-2. Fill secrets and app URL in `.env.api`:
-   - `APP_URL=https://<your-domain>`
-   - `ADMIN_SEED_PASSWORD=<strong-password>`
-   - DB values must match `.env.db`.
-   - For this migration: keep `IMAGE_STORAGE_TYPE=bucket`.
-3. Confirm that the host infrastructure has already created the external
-   `edge` network and started its shared Caddy stack.
-4. Deploy stack:
-   - `bash deploy/deploy.sh`
-5. Initialize DB:
-   - `bash deploy/init-db.sh`
-6. Validate:
-   - `bash deploy/check-health.sh`
-   - `https://<your-domain>/api/docs/`
+A change containing only Markdown is classified at job level and does not
+publish images, create a release artifact or touch the host. Promotion,
+redeploy, recovery and controlled failure all enter the same common host
+entrypoint and therefore share its lock, health checks, smoke test and rollback
+policy.
 
-## GitHub Actions deploy
-
-Workflow file: `.github/workflows/deploy-vm-ghcr.yml`
-
-What it does:
-
-- Builds API and web images on GitHub runner.
-- Pushes images to GHCR.
-- SSHes into VM and deploys with `docker compose` + `docker-compose.prod.yml`.
-
-Required repository secrets:
-
-- `VM_HOST`: Oracle VM public IP.
-- `VM_USER`: SSH user (e.g. `ubuntu`).
-- `VM_SSH_KEY`: private key content for VM SSH.
-- `GHCR_USERNAME`: account/username with GHCR read access on VM deploy step.
-- `GHCR_TOKEN`: PAT with at least `read:packages` (and `repo` if package visibility requires it).
-
-One-time VM prerequisites for Actions deploy:
-
-1. Ensure env files exist on VM:
-   - `/srv/gobrewery/.env`
-   - `/srv/gobrewery/deploy/.env.api`
-   - `/srv/gobrewery/deploy/.env.db`
-2. Ensure Docker + Compose v2 plugin installed (`docker compose version` must work).
-3. Ensure VM path is `/srv/gobrewery`.
-
-The root `.env` must persist non-empty, immutable `API_IMAGE` and `WEB_IMAGE`
-references so unattended Compose commands can resolve the production model.
-The deployment workflow replaces this file only after its external health
-checks pass.
-
-Manual equivalent of Actions deploy:
+Manual operations reuse an artifact from a successful `master` release:
 
 ```bash
-export API_IMAGE=ghcr.io/<owner>/gobrewery-api:<tag>
-export WEB_IMAGE=ghcr.io/<owner>/gobrewery-web:<tag>
-export COMPOSE_FILE=/srv/gobrewery/deploy/docker-compose.prod.yml
-export HEALTH_BASE_URL=https://gobrewery.duckdns.org
-bash deploy/deploy-images.sh
-bash deploy/init-db.sh
-bash deploy/check-health.sh
+gh workflow run deploy-vm-ghcr.yml \
+  --ref master \
+  -f operation=redeploy \
+  -f sha=<full-40-character-release-sha>
 ```
 
-## Daily demo reset cronjob
+`operation` can be `redeploy`, `recovery`, `failure-drill` or
+`rollback-failure-drill`. The first drill is expected to fail the promotion
+after startup and restore the previously active pair of image digests. The
+second also forces rollback failure so the critical diagnostic can be proved
+before an immediate manual recovery.
 
-Add to crontab:
+## Configuration boundaries
+
+The caller's GitHub environment `OCI` contains the non-sensitive transport
+variables only:
+
+- variables `DEPLOY_SSH_HOST`, `DEPLOY_SSH_USER` and
+  `DEPLOY_SSH_KNOWN_HOSTS`;
+
+The dedicated `DEPLOY_SSH_PRIVATE_KEY` is a repository secret passed by name to
+the reusable workflow. GitHub does not forward caller environment secrets
+through `workflow_call`, so the key cannot live only in the environment.
+
+The registry login uses the run-scoped `GITHUB_TOKEN`. No permanent GHCR token
+or application credential is required in GitHub.
+
+The host is the exclusive source of runtime configuration:
+
+- public values: `/etc/gobrewery/runtime.env`;
+- secrets: individual mode-restricted files under
+  `/etc/gobrewery/secrets/`.
+
+Compose grants the database password only to PostgreSQL and API. API alone also
+receives the application, bucket and admin-reset secrets. Web receives none.
+The versioned API entrypoint loads those files, applies pending migrations and
+starts the process without printing secret values.
+
+Release payloads and state live under `/srv/gobrewery/releases` and
+`/srv/gobrewery/state`; `/srv/gobrewery/current` points to the active immutable
+payload. Runtime values and secrets are never copied into a release.
+
+## Daily demo reset
+
+Production has exactly one reset entry, owned by the deployment account:
 
 ```cron
-0 3 * * * /usr/bin/env bash -lc '/srv/gobrewery/deploy/cron/run-demo-reset.sh >> /srv/gobrewery/cron-reset.log 2>&1'
+0 3 * * * /usr/bin/env bash -lc '/srv/gobrewery/current/cron/run-demo-reset.sh >> /srv/gobrewery/cron-reset.log 2>&1'
 ```
 
-The host timezone must be `Etc/UTC`; Debian cron schedules jobs in the daemon's
-timezone and does not support a per-user scheduling timezone. Verify this gate
-before installing the entry:
+The runner follows the active release and uses the same `/etc/gobrewery`
+configuration. `ALLOW_DB_RESET=true` remains a fail-closed application gate.
+The host timezone is `Etc/UTC`.
 
-```bash
-test "$(timedatectl show -p Timezone --value)" = "Etc/UTC"
-```
+## Local Compose workflow
 
-Install this entry only on the active production host. Remove the previous
-host's entry during cutover so the destructive reset cannot run twice.
+The remaining direct scripts are for a developer machine only and must not be
+installed or invoked on a production host:
 
-## Backup (prepared, manual)
+- `docker-compose.yml`, `deploy.sh` and `init-db.sh`: build and initialize a
+  local stack from source;
+- `check-health.sh`: check a local stack;
+- `backup-db.sh`: create an on-demand local database dump.
 
-Run on demand:
+Copy `.env.api.example` and `.env.db.example` to their untracked counterparts
+for that local workflow. Production does not read these files.
 
-```bash
-bash deploy/backup-db.sh
-```
+## Release files
 
-Optional custom backup directory:
+- `docker-compose.prod.yml`: isolated production topology consumed from an
+  immutable release;
+- `build-release.sh`: constructs the permission-preserving release artifact;
+- `api-entrypoint.sh`: loads API secret files and applies migrations;
+- `smoke-test.sh`: proves root, API docs, API health and exact release SHA;
+- `cron/run-demo-reset.sh`: the single production reset entrypoint;
+- `tests/`: executable release and Compose boundary contracts.
 
-```bash
-BACKUP_DIR=/opt/gobrewery/backups bash deploy/backup-db.sh
-```
+Shared lock, retention, rollback, recovery, filesystem gates and edge ownership
+are documented in the existing `p-perotti/oracle-infra` README.

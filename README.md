@@ -21,7 +21,7 @@
 
 - `server/`: Node.js + Express API
 - `web/`: React
-- `deploy/`: Docker/VM deployment (including GitHub Actions)
+- `deploy/`: local Compose tooling and the immutable OCI release contract
 
 ## Tech Stack
 
@@ -93,7 +93,15 @@ If accessed through reverse proxy/domain with `/api` prefix:
 
 ## Production Deploy
 
-For VM deployment (Oracle Ubuntu + Docker Compose + GitHub Actions), see:
+Pushes to `master` deploy executable changes to the `OCI` environment through
+the pinned reusable workflow in `p-perotti/oracle-infra`. API and web are
+published together as immutable ARM64 digests; the public health response
+identifies the active source revision. Markdown-only changes do not form an OCI
+release.
+
+The separate Vercel deployment for `web-next` keeps its own `Vercel`
+environment and lifecycle. For triggers, runtime configuration, manual
+recovery, rollback and the daily reset contract, see:
 
 - `deploy/README.md`
 

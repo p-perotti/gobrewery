@@ -1,11 +1,21 @@
 name: gobrewery
 
+x-logging: &gobrewery-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
 services:
   postgres:
     image: postgres:15-alpine
     restart: unless-stopped
     env_file:
-      - .env.db
+      - ${APP_RUNTIME_ENV_FILE:?APP_RUNTIME_ENV_FILE must identify the host runtime config}
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -13,20 +23,49 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+    logging: *gobrewery-logging
 
   api:
-    image: ${API_IMAGE}
+    image: ${GOBREWERY_API_IMAGE:?GOBREWERY_API_IMAGE must identify an immutable image}
     restart: unless-stopped
+    entrypoint: ["/bin/sh", "/opt/gobrewery/api-entrypoint.sh"]
+    command: ["yarn", "start"]
     env_file:
-      - .env.api
+      - ${APP_RUNTIME_ENV_FILE:?APP_RUNTIME_ENV_FILE must identify the host runtime config}
+    environment:
+      APP_RELEASE_SHA: ${RELEASE_ID:?RELEASE_ID must identify the active release}
+      DB_PASS_FILE: /run/secrets/db_password
+      APP_SECRET_FILE: /run/secrets/app_secret
+      BUCKET_ACCESS_KEY_ID_FILE: /run/secrets/bucket_access_key_id
+      BUCKET_SECRET_ACCESS_KEY_FILE: /run/secrets/bucket_secret_access_key
+      ADMIN_SEED_PASSWORD_FILE: /run/secrets/admin_seed_password
+    secrets:
+      - db_password
+      - app_secret
+      - bucket_access_key_id
+      - bucket_secret_access_key
+      - admin_seed_password
+    volumes:
+      - ./api-entrypoint.sh:/opt/gobrewery/api-entrypoint.sh:ro
     depends_on:
       postgres:
         condition: service_healthy
     expose:
       - "3333"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+    logging: *gobrewery-logging
 
   web:
-    image: ${WEB_IMAGE}
+    image: ${GOBREWERY_WEB_IMAGE:?GOBREWERY_WEB_IMAGE must identify an immutable image}
     restart: unless-stopped
     depends_on:
       - api
@@ -37,6 +76,12 @@ services:
       edge:
         aliases:
           - gobrewery-web
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+    logging: *gobrewery-logging
 
 networks:
   edge:
@@ -45,3 +90,16 @@ networks:
 
 volumes:
   pgdata:
+    name: gobrewery_pgdata
+
+secrets:
+  db_password:
+    file: ${APP_SECRETS_DIR:?APP_SECRETS_DIR must identify host secrets}/db-password
+  app_secret:
+    file: ${APP_SECRETS_DIR:?APP_SECRETS_DIR must identify host secrets}/app-secret
+  bucket_access_key_id:
+    file: ${APP_SECRETS_DIR:?APP_SECRETS_DIR must identify host secrets}/bucket-access-key-id
+  bucket_secret_access_key:
+    file: ${APP_SECRETS_DIR:?APP_SECRETS_DIR must identify host secrets}/bucket-secret-access-key
+  admin_seed_password:
+    file: ${APP_SECRETS_DIR:?APP_SECRETS_DIR must identify host secrets}/admin-seed-password
