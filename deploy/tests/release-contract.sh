@@ -75,7 +75,7 @@ for contract in \
 done
 grep -E 'oracle-infra/\.github/workflows/deploy\.yml@[0-9a-f]{40}' "$workflow" >/dev/null \
   || fail 'common workflow is not pinned by full SHA'
-grep -F 'oracle-infra/.github/workflows/deploy.yml@a17f7d4a469450f1cc566dba6a2e46db058a5be2' "$workflow" >/dev/null \
+grep -F 'oracle-infra/.github/workflows/deploy.yml@51f3f07df4ba643ccca826a2c4a355ed460b3b68' "$workflow" >/dev/null \
   || fail 'common workflow is not pinned to the reviewed private materializer release'
 if grep -Eq 'VM_(HOST|USER|SSH_KEY)|GHCR_(USERNAME|TOKEN)|appleboy/ssh-action|gobrewery-(api|web):latest' "$workflow"; then
   fail 'workflow still requires legacy transport or mutable images'
