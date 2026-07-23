@@ -2,9 +2,10 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const repoRoot = resolve(import.meta.dirname, "../..");
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const configRoot = mkdtempSync(join(tmpdir(), "gobrewery-compose-contract-"));
 const secretsDir = join(configRoot, "secrets");
 mkdirSync(secretsDir);
