@@ -30,6 +30,8 @@ PATH="$work_root/bin:$PATH" FAKE_RELEASE_SHA="$(printf '2%.0s' {1..40})" GOBREWE
 wrong_status=$?
 set -e
 [[ "$wrong_status" -ne 0 ]] || fail 'wrong public revision passed smoke'
+grep -F 'root=true docs=true health=true revision=false' "$work_root/wrong.out" >/dev/null \
+  || fail 'smoke failure did not identify the rejected public boundary'
 
 classifier="$repo_root/deploy/classify-release.sh"
 [[ -x "$classifier" ]] || fail 'release classifier is missing'
