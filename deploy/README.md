@@ -81,12 +81,13 @@ payload. Runtime values and secrets are never copied into a release.
 Production has exactly one reset entry, owned by the deployment account:
 
 ```cron
-0 3 * * * /usr/bin/env bash -lc '/srv/gobrewery/current/cron/run-demo-reset.sh >> /srv/gobrewery/cron-reset.log 2>&1'
+0 3 * * * /usr/bin/env bash -lc '/srv/gobrewery/current/cron/run-demo-reset.sh >> /srv/gobrewery/cron-reset.log 2>&1' # gobrewery-cron
 ```
 
-The runner follows the active release and uses the same `/etc/gobrewery`
-configuration. `ALLOW_DB_RESET=true` remains a fail-closed application gate.
-The host timezone is `Etc/UTC`.
+The marker makes ownership and duplicate detection explicit. The runner follows
+the active release and uses the same `/etc/gobrewery` configuration.
+`ALLOW_DB_RESET=true` remains a fail-closed application gate. The host timezone
+is `Etc/UTC`.
 
 ## Local Compose workflow
 
