@@ -251,7 +251,7 @@ jobs:
       actions: read
       contents: read
       packages: read
-    uses: p-perotti/oracle-infra/.github/workflows/deploy.yml@94a5655dff17f1caedac4ae9cba60db7f23d1ad7
+    uses: p-perotti/oracle-infra/.github/workflows/deploy.yml@a17f7d4a469450f1cc566dba6a2e46db058a5be2
     with:
       environment_name: OCI
       environment_url: https://gobrewery.duckdns.org
